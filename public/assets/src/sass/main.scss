@@ -1,0 +1,71 @@
+// Partials
+@use "../sass/partials/variables";
+@use "../sass/partials/reset";
+@use "../sass/partials/images";
+@use "../sass/partials/buttons";
+@use "../sass/partials/icons";
+@use "../sass/partials/comments";
+@use "../sass/partials/texts";
+
+// Templates
+@use "../sass/templates/content";
+
+html {
+  overflow-x: hidden;
+}
+
+::selection {
+  background-color: variables.$quaternaryColor;
+  color: variables.$tertiaryColor;
+}
+
+body {
+  color: variables.$primaryColor;
+  @include variables.font-sel("primary", 500, left);
+  @include variables.font-size(variables.$f_xxsmall);
+}
+.site-container {
+  position: relative;
+  overflow: hidden;
+  max-width: 2000px;
+  margin: 0 auto;
+}
+
+.screen-reader-text {
+  border: 0;
+  clip: rect(1px, 1px, 1px, 1px);
+  clip-path: inset(50%);
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+  width: 1px;
+  word-wrap: normal !important;
+}
+
+.screen-reader-text:focus {
+  background-color: #ddd;
+  clip: auto !important;
+  clip-path: none;
+  color: #444;
+  display: block;
+  font-size: 1em;
+  height: auto;
+  left: 5px;
+  line-height: normal;
+  padding: 15px 23px 14px;
+  text-decoration: none;
+  top: 5px;
+  width: auto;
+  z-index: 100000;
+}
+
+.reveal-disabled {
+  opacity: 0;
+}
+
+.reveal-enabled {
+  opacity: 1;
+  transition: all 0.4s;
+}

@@ -1,0 +1,96 @@
+<?php
+
+// Disable Gutenberg editor for specific post type
+function prefix_disable_gutenberg($current_status, $post_type)
+{
+    $f_disable_gutenberg = get_field('disable_gutenberg_posttype', 'option');
+    if ($f_disable_gutenberg) {
+        foreach ($f_disable_gutenberg as $key => $disable_gutenberg) {
+            if ($post_type === $disable_gutenberg) return false;
+        }
+    }
+    return $current_status;
+}
+add_filter('use_block_editor_for_post_type', 'prefix_disable_gutenberg', 10, 2);
+
+
+// Auto Add parameters for vimeo iframe
+function auto_add_vimeo_args($provider, $url, $args)
+{
+    if (strpos($provider, '//vimeo.com/') !== false) {
+        $args = array(
+            'title' => 0,
+            'byline' => 0,
+            'portrait' => 0,
+            'badge' => 0,
+            'sidedock' => 0,
+            'controls' => 0,
+            'allow' => 'autoplay',
+            'muted' => 0,
+            'loop' => 1,
+        );
+        $provider = add_query_arg($args, $provider);
+    }
+    return $provider;
+}
+add_filter('oembed_fetch_url', 'auto_add_vimeo_args', 10, 3);
+
+
+// remove heartbeat monitor error
+add_filter('wpe_heartbeat_allowed_pages', function ($pages) {
+    global $pagenow;
+    $pages[] =  $pagenow;
+    return $pages;
+});
+
+
+// Add class to menu items.
+function add_menu_link_class($atts, $item, $args)
+{
+    if (property_exists($args, 'link_class')) {
+        $atts['class'] = $args->link_class;
+    }
+    return $atts;
+}
+add_filter('nav_menu_link_attributes', 'add_menu_link_class', 1, 3);
+
+
+// Modify Header for page
+function last_modified_header($headers)
+{
+    //Check if we are in a single post of any type (archive pages has not modified date)
+    if (is_singular() && !is_admin()) {
+        $post_id = get_queried_object_id();
+        if ($post_id) {
+            header("Last-Modified: " . get_the_modified_time("D, d M Y H:i:s", $post_id));
+        }
+    }
+}
+add_action('template_redirect', 'last_modified_header');
+
+
+// Enable WP Login Style
+function wpb_login_logo()
+{
+    $theme      = wp_get_theme();
+    $version    = $theme->get('version');
+    $assets_dir = get_stylesheet_directory_uri();
+    wp_enqueue_style('ronik-login', $assets_dir . '/admin-scripts/css/wp-admin.css', array(), $version);
+
+?>
+    <style type="text/css">
+        #login h1 a,
+        .login h1 a {
+            /* background-image: url(http://path/to/your/custom-logo.png); */
+            height: 100px;
+            width: 300px;
+            background-size: 300px 100px;
+            background-repeat: no-repeat;
+            padding-bottom: 10px;
+        }
+    </style>
+    <div class="video">
+        <iframe id="background-video" src="https://player.vimeo.com/video/391604277?background=1"></iframe>
+    </div>
+<?php }
+add_action('login_enqueue_scripts', 'wpb_login_logo');
