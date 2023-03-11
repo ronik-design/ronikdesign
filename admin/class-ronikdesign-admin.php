@@ -179,11 +179,10 @@ class Ronikdesign_Admin
 		foreach (glob(dirname(__FILE__) . '/wp-functions/*.php') as $file) {
 			include $file;
 		}
-
 		// Include the two-factor-auth.
-		// foreach (glob(dirname(__FILE__) . '/two-factor-auth/*.php') as $file) {
-		// 	include $file;
-		// }
+		foreach (glob(dirname(__FILE__) . '/two-factor-auth/*.php') as $file) {
+			include $file;
+		}
 	}
 
 

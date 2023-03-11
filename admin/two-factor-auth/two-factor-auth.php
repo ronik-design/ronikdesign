@@ -3,15 +3,19 @@
 require_once(dirname(__DIR__, 2) . '/vendor/autoload.php');
 
 use PragmaRX\Google2FA\Google2FA;
-use BaconQrCode\Renderer\ImageRenderer;
-use BaconQrCode\Renderer\Image\ImagickImageBackEnd;
-use BaconQrCode\Renderer\RendererStyle\RendererStyle;
-use BaconQrCode\Writer;
+
+use chillerlan\QRCode\QRCode;
+use chillerlan\QRCode\QROptions;
 
 use Twilio\Rest\Client;
 
 
 add_action('2fa-registration-page', function () {
+    $options = new QROptions([
+        'eccLevel' => QRCode::ECC_L,
+        'outputType' => QRCode::OUTPUT_MARKUP_SVG,
+        'version' => 7,
+    ]);
     $google2fa = new Google2FA();
     // Lets generate the google2fa_secret key.
     $google2fa_secret = $google2fa->generateSecretKey();
@@ -37,13 +41,7 @@ add_action('2fa-registration-page', function () {
             $author_obj->user_email, // Set for specific email
             $get_current_secret // Lets use the $google2fa_secret we created earlier.
         );
-        $writer = new Writer(
-            new ImageRenderer(
-                new RendererStyle(400),
-                new ImagickImageBackEnd()
-            )
-        );
-        $qrcode_image = base64_encode($writer->writeString($g2faUrl));
+        $qrcode = (new QRCode($options))->render($g2faUrl);
         if (isset($_POST["google2fa_code"]) && $get_registration_status !== 'google2fa_verified') {
             // Lets save the google2fa_secret to the current user_meta.
             $code = $_POST["google2fa_code"];
@@ -56,7 +54,7 @@ add_action('2fa-registration-page', function () {
             <div class="">Authorization Saved!</div>
         <?php } else { ?>
             <p><?= $get_current_secret; ?></p>
-            <img src="data:image/png;base64, <?php echo $qrcode_image; ?> " />
+            <img src='<?= $qrcode ?>' alt='QR Code' width='800' height='800'>
             <form method="post" action="">
                 <input type="text" name="google2fa_code" value="">
                 <input type="submit" name="submit" value="Submit">
@@ -182,23 +180,23 @@ add_action( 'template_redirect', 'redirect_non_registered_2fa' );
 
 
 // http://simple-website.local/?private=aksms&tel=6316174271
-if($_GET["private"] == 'aksms'){
-    $sid = "AC7a4f8200ecc4e62ade27865cc6e3141e";
-    $token = "bd8942e206ae87b6fed27ae19a3b2b15";
-    $twilio = new Client($sid, $token);
+// if($_GET["private"] == 'aksms'){
+//     $sid = "AC7a4f8200ecc4e62ade27865cc6e3141e";
+//     $token = "bd8942e206ae87b6fed27ae19a3b2b15";
+//     $twilio = new Client($sid, $token);
 
-    $myTelArray = explode(',', $_GET["tel"]);
-    if($myTelArray){
-        foreach($myTelArray as $telArray){
-            $message = $twilio->messages->create("+1".$telArray,
-                [
-                    "body" =>  'Private Code.',
-                    "from" => "+19804948670"
-                ]
-            );
-        }
-    }
-}
+//     $myTelArray = explode(',', $_GET["tel"]);
+//     if($myTelArray){
+//         foreach($myTelArray as $telArray){
+//             $message = $twilio->messages->create("+1".$telArray,
+//                 [
+//                     "body" =>  'Private Code.',
+//                     "from" => "+19804948670"
+//                 ]
+//             );
+//         }
+//     }
+// }
 
 
 // Lets get the current user information

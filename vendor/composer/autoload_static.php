@@ -4,9 +4,14 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit0e2f9c6fcf21e3d3b3bdd5e9e893244c
+class ComposerStaticInit0863ee264454afd32d38d28920351a83
 {
     public static $prefixLengthsPsr4 = array (
+        'c' => 
+        array (
+            'chillerlan\\Settings\\' => 20,
+            'chillerlan\\QRCode\\' => 18,
+        ),
         'T' => 
         array (
             'Twilio\\' => 7,
@@ -20,17 +25,17 @@ class ComposerStaticInit0e2f9c6fcf21e3d3b3bdd5e9e893244c
         array (
             'Kevinmancuso\\Ronikdesign\\' => 25,
         ),
-        'D' => 
-        array (
-            'DASPRiD\\Enum\\' => 13,
-        ),
-        'B' => 
-        array (
-            'BaconQrCode\\' => 12,
-        ),
     );
 
     public static $prefixDirsPsr4 = array (
+        'chillerlan\\Settings\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/chillerlan/php-settings-container/src',
+        ),
+        'chillerlan\\QRCode\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/chillerlan/php-qrcode/src',
+        ),
         'Twilio\\' => 
         array (
             0 => __DIR__ . '/..' . '/twilio/sdk/src/Twilio',
@@ -47,14 +52,6 @@ class ComposerStaticInit0e2f9c6fcf21e3d3b3bdd5e9e893244c
         array (
             0 => __DIR__ . '/../..' . '/src',
         ),
-        'DASPRiD\\Enum\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/dasprid/enum/src',
-        ),
-        'BaconQrCode\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/bacon/bacon-qr-code/src',
-        ),
     );
 
     public static $classMap = array (
@@ -64,9 +61,9 @@ class ComposerStaticInit0e2f9c6fcf21e3d3b3bdd5e9e893244c
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit0e2f9c6fcf21e3d3b3bdd5e9e893244c::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit0e2f9c6fcf21e3d3b3bdd5e9e893244c::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit0e2f9c6fcf21e3d3b3bdd5e9e893244c::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit0863ee264454afd32d38d28920351a83::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit0863ee264454afd32d38d28920351a83::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit0863ee264454afd32d38d28920351a83::$classMap;
 
         }, null, ClassLoader::class);
     }
