@@ -59,6 +59,53 @@
 			}
 		});
 	}
+	/* initSvgMigrations */
+	function initSvgMigrations($) {
+		if(!$("body").hasClass("dyn-svg-migrations") ){
+			return false;
+		}
+		setTimeout(() => {
+            console.log("Delayed for 1 second.");
+            $( "img" ).each(function( index ) {
+                var str = $(this).attr('src');
+                if( str.includes('.svg') ){
+                    if(jQuery("img[src='"+str+"']").length !== 0){
+                        console.log( jQuery("img[src='"+str+"']") );
+                        var $img = jQuery(this);
+                        var imgID = $img.attr('id');
+                        var imgClass = $img.attr('class');
+                        var imgURL = $img.attr('src');
+                        var imgWIDTH = $img.width();
+                        var imgHEIGHT = $img.height();
+                        jQuery.get(imgURL, function(data) {
+                            // Get the SVG tag, ignore the rest
+                            var $svg = jQuery(data).find('svg');
+                            // Add replaced image's ID to the new SVG
+                            if(typeof imgID !== 'undefined') {
+                                $svg = $svg.attr('id', imgID);
+                            }
+                            // Add replaced image's classes to the new SVG
+                            if(typeof imgWIDTH !== 'undefined') {
+                                $svg = $svg.attr('width', imgWIDTH );
+                            }
+                            // Add replaced image's classes to the new SVG
+                            if(typeof imgHEIGHT !== 'undefined') {
+                                $svg = $svg.attr('height', imgHEIGHT );
+                            }
+                            // Add replaced image's classes to the new SVG
+                            if(typeof imgClass !== 'undefined') {
+                                $svg = $svg.attr('class', imgClass+' replaced-svg');
+                            }
+                            // Remove any invalid XML tags as per http://validator.w3.org
+                            $svg = $svg.removeAttr('xmlns:a');
+                            // Replace image with new SVG
+                            $img.replaceWith($svg);
+                        }, 'xml');
+                    }
+                }
+            });
+        }, 1000);
+	}
 
 	// Lazy load images in aswell as image compression.
 	function lazyLoader() {
@@ -135,12 +182,13 @@
     }
 
 	// Load JS once windows is loaded. 
-	$( window ).load(function() {
+	$(window).on('load', function(){
 		// SetTimeOut just incase things havent initialized just yet.
 		setTimeout(() => {
 			lazyLoader($);
 			initEnhanceMouseFocus($);
 			initSmoothScrolling($);
+			initSvgMigrations($);
 			dynExtLink();
 		}, 50);
 	});

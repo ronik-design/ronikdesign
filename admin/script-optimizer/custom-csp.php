@@ -46,9 +46,18 @@ if ($f_csp_enable) {
     function ronik_body_class($classes)
     {
         $classes[] = 'csp-enabled';
+
         return $classes;
     }
-    add_filter('body_class', 'ronik_body_class');
+    // add_filter('body_class', 'ronik_body_class');
+
+    function hook_csp() {
+        ?>
+        <span data-csp="<?php echo CSP_NONCE; ?>" style="opacity:0;position:absolute;left:-3000px;top:-3000px;height:0;overflow:hidden;"></span>
+        <?php
+    }
+    add_action('wp_head', 'hook_csp');
+
 
     /**
      * We only want to trigger when user is not logged in.
@@ -129,7 +138,7 @@ if ($f_csp_enable) {
             // $nonce = 'random123';
             $deferHandles = apply_filters('deferred_scripts', []);
             if (in_array($handle, $deferHandles)) {
-                $html = trim(str_replace("<script", '<script type="text/javascript" defer nonce="' . CSP_NONCE . '"', $html));
+                $html = trim(str_replace("<script", '<script type="text/javascript"  nonce="' . CSP_NONCE . '"', $html));
                 // $html = trim(str_replace("type='text/javascript'", 'type="text/javascript" defer nonce="'.$nonce.'"', $html));
             } else {
                 // Internal

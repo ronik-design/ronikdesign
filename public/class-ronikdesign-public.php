@@ -98,9 +98,11 @@ class Ronikdesign_Public
 		 * between the defined hooks and the functions defined in this
 		 * class.
 		 */
+		wp_enqueue_script($this->plugin_name.'jquery', 'https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js', array(), null, true);
+		$scriptName = $this->plugin_name.'jquery';
 
-		wp_enqueue_script($this->plugin_name, plugin_dir_url(__FILE__) . 'js/ronikdesign-public.js', array('jquery'), $this->version, false);
-		wp_enqueue_script($this->plugin_name . '2', plugin_dir_url(__FILE__) . 'assets/dist/app.min.js', array('jquery'), $this->version, false);
+		wp_enqueue_script($this->plugin_name, plugin_dir_url(__FILE__) . 'js/ronikdesign-public.js', array($scriptName), $this->version, false);
+		wp_enqueue_script($this->plugin_name . '2', plugin_dir_url(__FILE__) . 'assets/dist/app.min.js', array($scriptName), $this->version, false);
 
 		// Ajax & Nonce
 		wp_localize_script($this->plugin_name, 'wpVars', array(
@@ -190,13 +192,20 @@ class Ronikdesign_Public
 	{
 		$f_custom_js_settings = get_field('custom_js_settings', 'options');
 
-		if ($f_custom_js_settings['dynamic_external_link']) {
-			$classes[] = 'dyn-external-link';
+		if( !empty($f_custom_js_settings) ){
+			if ($f_custom_js_settings['dynamic_external_link']) {
+				$classes[] = 'dyn-external-link';
+			}
+
+			if ($f_custom_js_settings['smooth_scroll']) {
+				$classes[] = 'smooth-scroll';
+			}
+
+			if ($f_custom_js_settings['dynamic_svg_migrations']) {
+				$classes[] = 'dyn-svg-migrations';
+			}
 		}
 
-		if ($f_custom_js_settings['smooth_scroll']) {
-			$classes[] = 'smooth-scroll';
-		}
 		return $classes;
 	}
 }

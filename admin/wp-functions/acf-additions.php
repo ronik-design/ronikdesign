@@ -274,7 +274,7 @@ add_action('acf/render_field/type=text', 'ronik_acf_character_limit_markup'); //
 add_action('acf/render_field/type=textarea', 'ronik_acf_character_limit_markup'); // add counter to textarea fields
 
 // Dynamic Post Loader to select.
-function ronik_acf_post_loader($field)
+function ronik_acf_post_load($field)
 {
     // render settings for other field types (hide/show settings based on whether multi-select is enabled)
     acf_render_field_setting($field, array(
@@ -284,10 +284,10 @@ function ronik_acf_post_loader($field)
         'ui' => 1,
     ));
 }
-add_action('acf/render_field_settings/type=select', 'ronik_acf_post_loader' , 10); // add Dynamic Post Loader to select
+add_action('acf/render_field_settings/type=select', 'ronik_acf_post_load' , 10); // add Dynamic Post Loader to select
 
 // Dynamic Post Loader to select.
-function acf_post_loader($field)
+function ronik_acf_post_loader($field)
 {
     if( !array_key_exists('dyn_post_loader', $field)  ){
         // return the field
@@ -314,4 +314,4 @@ function acf_post_loader($field)
     // return the field
     return $field;
 }
-add_filter('acf/load_field/type=select', 'acf_post_loader', 11);
+add_filter('acf/load_field/type=select', 'ronik_acf_post_loader', 11);

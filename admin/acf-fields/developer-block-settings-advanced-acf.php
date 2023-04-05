@@ -3,7 +3,7 @@
 if (function_exists('acf_add_local_field_group')) :
 
     acf_add_local_field_group(array(
-        'key' => 'group_624ddd9f382ef',
+        'key' => 'group_624ddd9f382ef_ronikdesign',
         'title' => 'CLONE: Advanced Settings',
         'fields' => array(
             array(

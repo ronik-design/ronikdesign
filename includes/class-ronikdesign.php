@@ -87,7 +87,13 @@ class Ronikdesign
 		if (is_plugin_active('advanced-custom-fields-pro/acf.php')) {
 			$this->define_admin_hooks();
 			$this->define_public_hooks();
+		} else {
+			if(!empty(get_mu_plugins()['acf.php'])){
+				$this->define_admin_hooks();
+				$this->define_public_hooks();
+			}
 		}
+		
 	}
 
 	/**
@@ -173,14 +179,23 @@ class Ronikdesign
 		$this->loader->add_action('acf/init', $plugin_admin, 'my_acf_op_init_fields', 10);
 		$this->loader->add_action('acf/init', $plugin_admin, 'my_acf_op_functions', 20);
 
-		$this->loader->add_action('admin_menu', $plugin_admin, 'remove_menus', 99);
+		// $this->loader->add_action('admin_menu', $plugin_admin, 'remove_menus', 99);
 		$this->loader->add_filter('upload_mimes', $plugin_admin, 'roniks_add_svg_mime_types', 99);
 
 		// $this->loader->add_action( 'admin_init', $plugin_admin, 'remove_acf_options_page', 99);
 
 		// Add Ajax
-		$this->loader->add_action('wp_ajax_nopriv_do_sync', $plugin_admin, 'ajax_do_init_page_migration');
+		$this->loader->add_action('wp_ajax_nopriv_do_init_page_migration', $plugin_admin, 'ajax_do_init_page_migration');
 		$this->loader->add_action('wp_ajax_do_init_page_migration', $plugin_admin, 'ajax_do_init_page_migration');
+
+		$this->loader->add_action('wp_ajax_nopriv_do_init_unused_media_migration', $plugin_admin, 'ajax_do_init_unused_media_migration');
+		$this->loader->add_action('wp_ajax_do_init_unused_media_migration', $plugin_admin, 'ajax_do_init_unused_media_migration');
+
+		$this->loader->add_action('wp_ajax_nopriv_do_init_remove_unused_media', $plugin_admin, 'ajax_do_init_remove_unused_media');
+		$this->loader->add_action('wp_ajax_do_init_remove_unused_media', $plugin_admin, 'ajax_do_init_remove_unused_media');
+
+
+		
 	}
 
 	/**

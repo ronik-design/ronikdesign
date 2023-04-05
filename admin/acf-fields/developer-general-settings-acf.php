@@ -2,9 +2,121 @@
 if (function_exists('acf_add_local_field_group')) :
 
 	acf_add_local_field_group(array(
-		'key' => 'group_5632d1b054c5b',
+		'key' => 'group_5632d1b054c5b_ronikdesign',
 		'title' => 'Site Options',
 		'fields' => array(
+
+			array(
+				'key' => 'field_63b73d357ba4ef_ronikdesign',
+				'label' => 'Media Cleaner Field',
+				'name' => '',
+				'type' => 'tab',
+				'instructions' => '',
+				'required' => 0,
+				'conditional_logic' => 0,
+				'wrapper' => array(
+					'width' => '',
+					'class' => '',
+					'id' => '',
+				),
+				'placement' => 'left',
+				'endpoint' => 0,
+			),
+			array(
+				'key' => 'field_63b73e5f551152_ronikdesign',
+				'label' => 'Media Cleaner Field',
+				'name' => 'page_media_cleaner_field',
+				'type' => 'repeater',
+				'instructions' => 'Media Cleaner will go through all unattached JPG, PNG, and GIF files. </br>
+				Based on media size this may take a while. Please click the "Init Unused Media Migration" then review the selected images for deletion. </br>
+				Then click "Init Deletion of Unused Media". Please backup site before clicking the button! </br>
+				Keep in mind that if any pages or post are in the trash. The images that are attached to those pages will be deleted. </br>
+				Also please keep in mind that the older the website the higher possibility of a huge number of images being detached.
+				',
+				'required' => 0,
+				'conditional_logic' => 0,
+				'wrapper' => array(
+					'width' => '',
+					'class' => '',
+					'id' => '',
+				),
+				'collapsed' => '',
+				'min' => 0,
+				'max' => 0,
+				'layout' => 'block',
+				'button_label' => '',
+				'sub_fields' => array(
+					array(
+						'key' => 'field_63dbeb7889cfe2_ronikdesign',
+						'label' => 'Image ID',
+						'name' => 'image_id',
+						'type' => 'text',
+						'instructions' => '',
+						'required' => 0,
+						'conditional_logic' => 0,
+						'wrapper' => array(
+							'width' => '33.33',
+							'class' => '',
+							'id' => '',
+						),
+						'return_format' => 'array',
+					),
+					array(
+						'key' => 'field_63dbec2589cff2_ronikdesign',
+						'label' => 'Image URL',
+						'name' => 'image_url',
+						'type' => 'text',
+						'instructions' => '',
+						'required' => 0,
+						'conditional_logic' => 0,
+						'wrapper' => array(
+							'width' => '33.33',
+							'class' => '',
+							'id' => '',
+						),
+						'return_format' => 'array',
+					),
+					array(
+						'key' => 'field_63dc0c7d33e781_ronikdesign',
+						'label' => 'Thumbnail Preview',
+						'name' => 'thumbnail_preview',
+						'type' => 'image',
+						'instructions' => '',
+						'required' => 0,
+						'conditional_logic' => 0,
+						'wrapper' => array(
+							'width' => '33.33',
+							'class' => '',
+							'id' => '',
+						),
+						'default_value' => '',
+						'placeholder' => '',
+						'prepend' => '',
+						'append' => '',
+						'maxlength' => '',
+					),
+				),
+			),
+			array(
+				'key' => 'field_63dc084a0d9162_ronikdesign',
+				'label' => '',
+				'name' => '',
+				'type' => 'message',
+				'instructions' => '',
+				'required' => 0,
+				'conditional_logic' => 0,
+				'wrapper' => array(
+					'width' => '',
+					'class' => '',
+					'id' => 'page_media_cleaner_field',
+				),
+				'message' => '',
+				'new_lines' => 'wpautop',
+				'esc_html' => 0,
+			),
+
+
+			
 
 			array(
 				'key' => 'field_63b73d357ba4e_ronikdesign',
@@ -19,7 +131,7 @@ if (function_exists('acf_add_local_field_group')) :
 					'class' => '',
 					'id' => '',
 				),
-				'placement' => 'top',
+				'placement' => 'left',
 				'endpoint' => 0,
 			),
 			array(
@@ -103,7 +215,7 @@ if (function_exists('acf_add_local_field_group')) :
 				'wrapper' => array(
 					'width' => '',
 					'class' => '',
-					'id' => 'page_url_migration',
+					'id' => 'page_url_migration_ronikdesign',
 				),
 				'message' => '',
 				'new_lines' => 'wpautop',
@@ -124,7 +236,7 @@ if (function_exists('acf_add_local_field_group')) :
 					'class' => '',
 					'id' => '',
 				),
-				'placement' => 'top',
+				'placement' => 'left',
 				'endpoint' => 0,
 			),
 
@@ -216,7 +328,7 @@ if (function_exists('acf_add_local_field_group')) :
 					'class' => '',
 					'id' => '',
 				),
-				'placement' => 'top',
+				'placement' => 'left',
 				'endpoint' => 0,
 			),
 			array(
@@ -317,7 +429,7 @@ if (function_exists('acf_add_local_field_group')) :
 					'class' => '',
 					'id' => '',
 				),
-				'placement' => 'top',
+				'placement' => 'left',
 				'endpoint' => 0,
 			),
 			array(
@@ -453,7 +565,7 @@ https://fonts.googleapis.com/',
 					'class' => '',
 					'id' => '',
 				),
-				'placement' => 'top',
+				'placement' => 'left',
 				'endpoint' => 0,
 			),
 			array(
@@ -788,7 +900,7 @@ https://fonts.googleapis.com/',
 					'class' => '',
 					'id' => '',
 				),
-				'placement' => 'top',
+				'placement' => 'left',
 				'endpoint' => 0,
 			),
 
@@ -846,6 +958,26 @@ https://fonts.googleapis.com/',
 						'ui_on_text' => '',
 						'ui_off_text' => '',
 					),
+
+					array(
+						'key' => 'field_6372afa6da3f202_ronikdesign',
+						'label' => 'Dynamic SVG Swap',
+						'name' => 'dynamic_svg_migrations',
+						'type' => 'true_false',
+						'instructions' => 'Replace all SVG images src with inline SVG',
+						'required' => 0,
+						'conditional_logic' => 0,
+						'wrapper' => array(
+							'width' => '50',
+							'class' => '',
+							'id' => '',
+						),
+						'message' => '',
+						'default_value' => 1,
+						'ui' => 1,
+						'ui_on_text' => '',
+						'ui_off_text' => '',
+					),
 				),
 			),
 
@@ -865,7 +997,7 @@ https://fonts.googleapis.com/',
 					'class' => '',
 					'id' => '',
 				),
-				'placement' => 'top',
+				'placement' => 'left',
 				'endpoint' => 0,
 			),
 
@@ -912,7 +1044,7 @@ https://fonts.googleapis.com/',
 					'class' => '',
 					'id' => '',
 				),
-				'placement' => 'top',
+				'placement' => 'left',
 				'endpoint' => 0,
 			),
 
@@ -958,7 +1090,7 @@ https://fonts.googleapis.com/',
 				array(
 					'param' => 'options_page',
 					'operator' => '==',
-					'value' => 'acf-options-developer-settings',
+					'value' => 'developer-settings',
 				),
 			),
 		),

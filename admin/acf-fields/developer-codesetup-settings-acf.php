@@ -3,7 +3,7 @@
 if( function_exists('acf_add_local_field_group') ):
 
     acf_add_local_field_group(array(
-        'key' => 'group_63e6a449c38dd',
+        'key' => 'group_63e6a449c38dd_ronikdesign',
         'title' => 'Code Template',
         'fields' => array(
             array(
@@ -81,16 +81,23 @@ if( function_exists('acf_add_local_field_group') ):
                             Function listed below. Please copy code example below:
                             </br>
 
-                            The ronik_svgplaceholder(); function creates a blank svg placeholder with the provided ACF image size.
+                            The 
+                            <code> $helper = new RonikHelper; </code>
+                            
+                            "image" = First parameter can be either a acf set array or a image url.
+                            "adv" = Second parameter Will create all the necessary code and will output the image. If set to false function will return just a barebone svg.
+                            "customClass" = Third parameter will create the custom class for the created code.
+                            
+                            <code> $helper->ronik_svgplaceholder("image", true, "customClass"); </code>
 
-                            <code>src="" | ronik_svgplaceholder($f_image);</code>
 
-                            <code>data-width="" | $f_image["width"];</code>
-                            <code>data-height="" | $f_image["height"];</code>
-                            <code>alt="" | $f_image["alt"];</code>
-                            <code>data-src="" | $f_image["url"];</code>
 
-                            <code><img data-width="" data-height="" class="lzy_img reveal-disabled" src="<?= ronik_svgplaceholder($f_image["image"]); ?>" data-src="<?= $f_image["image"]["url"]; ?>" alt="<?= $f_image["image"]["alt"]; ?>"></code>
+                            Function creates a blank svg placeholder with the provided ACF image size.
+
+                            <code>$helper->ronik_svgplaceholder($f_image, false, "customClass");</code>
+
+                            
+
                         </div>
                         <div class="acf-setup-instruction__img"><img src="'.plugin_dir_url( __DIR__ ) . 'screenshots/standard-image.jpg'.'"></div>
                     </div>

@@ -97,8 +97,12 @@ class Ronikdesign_Admin
 		 * between the defined hooks and the functions defined in this
 		 * class.
 		 */
+		
+		wp_enqueue_script($this->plugin_name.'jquery', 'https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js', array(), null, true);
+		$scriptName = $this->plugin_name.'jquery';
 
-		wp_enqueue_script($this->plugin_name, plugin_dir_url(__FILE__) . 'js/ronikdesign-admin.js', array('jquery'), $this->version, false);
+
+		wp_enqueue_script($this->plugin_name, plugin_dir_url(__FILE__) . 'js/ronikdesign-admin.js', array($scriptName), $this->version, false);
 		// Ajax & Nonce
 		wp_localize_script($this->plugin_name, 'wpVars', array(
 			'ajaxURL' => admin_url('admin-ajax.php'),
@@ -124,8 +128,12 @@ class Ronikdesign_Admin
 		 * between the defined hooks and the functions defined in this
 		 * class.
 		 */
+		
+		wp_enqueue_script($this->plugin_name.'jquery', 'https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js', array(), null, true);
+		$scriptName = $this->plugin_name.'jquery';
 
-		wp_enqueue_script($this->plugin_name . '-acf', plugin_dir_url(__FILE__) . 'js/acf/admin.js', array('jquery'), $this->version, false);
+
+		wp_enqueue_script($this->plugin_name . '-acf', plugin_dir_url(__FILE__) . 'js/acf/admin.js', array($scriptName), $this->version, false);
 	}
 
 
@@ -142,6 +150,8 @@ class Ronikdesign_Admin
 			$parent = acf_add_options_page(array(
 				'page_title'  => __('Developer General Settings'),
 				'menu_title'  => __('Developer Settings'),
+				'menu_slug'     => 'developer-settings',
+				// 'parent_slug' => $parent['menu_slug'],
 				'redirect'    => false,
 			));
 			// Add sub page.
@@ -163,6 +173,10 @@ class Ronikdesign_Admin
 
 	function my_acf_op_functions()
 	{
+		// if( class_exists('ACF') ){
+		// 	return;
+		// }
+
 		// Include the Script Optimizer.
 		foreach (glob(dirname(__FILE__) . '/script-optimizer/*.php') as $file) {
 			include $file;
@@ -180,7 +194,11 @@ class Ronikdesign_Admin
 			include $file;
 		}
 		// Include the two-factor-auth.
-		foreach (glob(dirname(__FILE__) . '/two-factor-auth/*.php') as $file) {
+		// foreach (glob(dirname(__FILE__) . '/two-factor-auth/*.php') as $file) {
+		// 	include $file;
+		// }
+		// Include the password reset.
+		foreach (glob(dirname(__FILE__) . '/password-reset/*.php') as $file) {
 			include $file;
 		}
 	}
@@ -278,4 +296,345 @@ class Ronikdesign_Admin
 		// Send sucess message!
 		wp_send_json_success('Done');
 	}
+
+
+
+
+
+
+	/**
+	 * Init Unused Media Migration.
+	 */
+	function ajax_do_init_unused_media_migration()
+	{
+		if (!wp_verify_nonce($_POST['nonce'], 'ajax-nonce')) {
+			wp_send_json_error('Security check failed', '400');
+			wp_die();
+		}
+		// Check if user is logged in.
+		if (!is_user_logged_in()) {
+			return;
+		}
+
+		function recursive_delete($number){
+			$offsetValue = $number * 20;
+			// This will allow us to collect all the image ids.
+			$image_ids = array();
+			$image_ids_two = array();
+
+			// We receive all the attachments that does not have a post_parent.
+			error_log(print_r('Attachment Check' , true));
+			$attachments = get_posts( array(
+				'post_type' => 'attachment',
+				// 'posts_per_page' => 2,
+				'offset' => $offsetValue,
+				'numberposts' => 20, // Do not add more then 150.
+				'fields' => 'ids',
+				'post_parent' => 0,
+				'post_mime_type' => array(
+					"jpg" => "image/jpeg",
+					"jpeg" => "image/jpeg",
+					"jpe" => "image/jpeg",
+					"gif" => "image/gif",
+					"png" => "image/png",
+				),
+			));
+			if ($attachments) {
+				foreach ($attachments as $attachmentID){
+					$image_ids[] = $attachmentID;
+				}
+			}
+			// Lets output all the missing image ids.
+			error_log(print_r($image_ids , true));
+			error_log(print_r('Looping through all IDS.' , true));
+			if($image_ids){
+				foreach($image_ids as $key => $image_id){
+					// lets get the image ID. Search through the wp_posts data table. This is not ideal, but is the only good way to search for imageid for gutenberg blocks.
+					error_log(print_r('Image ID wp_posts Check' , true));
+					$args_id = array(
+						// 'fields' => 'ids',
+						'post_type'  => 'any',
+						'post_status'  => 'any',
+						'posts_per_page' => -1,
+						's'  => ':'.$image_id,
+					);
+					$f_postsid = get_posts( $args_id );
+					if($f_postsid){
+						foreach($f_postsid as $key => $posts){
+							if($posts->ID){
+								// error_log(print_r($image_id , true));
+								// Lets remove the found image from the array.
+								if (($key = array_search($image_id, $image_ids)) !== false) {
+									unset($image_ids[$key]);
+								}
+								error_log(print_r('Image ID wp_posts Check Found missing ID: '.$image_id , true));
+							}
+						}
+					}
+					$image_ids = array_values(array_filter($image_ids)); // 'reindex' array to cleanup...
+					sleep(.25);
+
+					// error_log(print_r($image_ids , true));
+					// lets get the attached file name. Search through the wp_posts data table. This is not ideal, but is the only good way to search for imageid for gutenberg blocks. Plus any images that are inserted into posts manually.
+					error_log(print_r('Attached file wp_posts Check' , true));
+					$f_attached_file = get_attached_file( $image_id );
+					$pieces = explode('/', $f_attached_file ) ;
+					$args_attached = array(
+						'post_type'  => 'any',
+						'post_status'  => 'any',
+						'posts_per_page' => -1,
+						's'  => end($pieces),
+					);
+					$f_postsattached = get_posts( $args_attached );
+					if($f_postsattached){
+						foreach($f_postsattached as $key => $posts){
+							if($posts->ID){
+								// error_log(print_r($image_id , true));
+								// Lets remove the found image from the array.
+								if (($key = array_search($image_id, $image_ids)) !== false) {
+									unset($image_ids[$key]);
+								}
+								error_log(print_r('Attached file wp_posts Check Found missing ID: '.$image_id , true));
+							}
+						}
+					}
+					$image_ids = array_values(array_filter($image_ids)); // 'reindex' array to cleanup...
+					sleep(.25);
+
+					// error_log(print_r($image_ids , true));
+					// Lets Search through all posts for the featured thumbnail.
+					error_log(print_r('Featured Image Check' , true));
+					$args = array(
+						'post_type'  => 'any',
+						'post_status'  => 'any',
+						'posts_per_page' => -1,
+						'meta_query' => array(
+							array(
+								'key' => '_thumbnail_id',
+								'value' => $image_id,
+								'compare' => '=='
+							)
+						),
+					);
+					$f_posts = get_posts( $args );
+					if($f_posts){
+						foreach($f_posts as $key => $posts){
+							if($posts->ID){
+								// Lets remove the found image from the array.
+								if (($key = array_search($image_id, $image_ids)) !== false) {
+									unset($image_ids[$key]);
+								}
+								error_log(print_r('Featured Image Check Found missing ID: '.$image_id , true));
+							}
+						}
+					}
+					$image_ids = array_values(array_filter($image_ids)); // 'reindex' array to cleanup...
+					sleep(.25);
+
+					// error_log(print_r($image_ids , true));
+					// This part is critical we check all the postmeta for any image ids in the acf serialized array. AKA any repeater fields or gallery fields.
+					error_log(print_r('Postmeta ACF Repeater Check' , true));
+					$argstwo = array(
+						'fields' => 'ids',
+						'post_type'  => 'any',
+						'post_status'  => 'any',
+						'posts_per_page' => -1,
+						'meta_query' => array(
+							array(
+							'value' => sprintf(':"%s";', $image_id),
+							'compare' => 'LIKE',
+							)
+						),
+					);
+					$f_poststwo = get_posts( $argstwo );
+					if($f_poststwo){
+						foreach($f_poststwo as $key => $posts){
+							if($posts->ID){
+								error_log(print_r($image_id , true));
+								// Lets remove the found image from the array.
+								if (($key = array_search($image_id, $image_ids)) !== false) {
+									unset($image_ids[$key]);
+								}
+								error_log(print_r('Acf serialized array ID, Check Found missing ID: '.$image_id , true));
+							}
+						}
+					}
+					$image_ids = array_values(array_filter($image_ids)); // 'reindex' array to cleanup...
+					sleep(.25);
+
+					// error_log(print_r($image_ids , true));
+					// This part is critical we check all the postmeta for any image ids in the acf serialized array. AKA any repeater fields or gallery fields.
+					error_log(print_r('Postmeta ACF Repeater Check attached file.' , true));
+					$argsthree = array(
+						'fields' => 'ids',
+						'post_type'  => 'any',
+						'post_status'  => 'any',
+						'posts_per_page' => -1,
+						'meta_query' => array(
+							array(
+								'value' => sprintf(':"%s";', get_attached_file($image_id)),
+								'compare' => 'LIKE',
+							)
+						),
+					);
+					$f_poststhree = get_posts( $argsthree );
+					if($f_poststhree){
+						foreach($f_poststhree as $key => $posts){
+							if($posts->ID){
+								error_log(print_r($image_id , true));
+								// Lets remove the found image from the array.
+								if (($key = array_search($image_id, $image_ids)) !== false) {
+									unset($image_ids[$key]);
+								}
+								error_log(print_r('Acf serialized array attached, Check Found missing ID: '.$image_id , true));
+							}
+						}
+					}
+					$image_ids = array_values(array_filter($image_ids)); // 'reindex' array to cleanup...
+					sleep(.25);
+
+					// error_log(print_r($image_ids , true));
+					// This part is critical we check all the postmeta for any image ids in the meta value
+					error_log(print_r('Postmeta ACF Check' , true));
+					$argsfour = array(
+						'fields' => 'ids',
+						'post_type'  => 'any',
+						'post_status'  => 'any',
+						'posts_per_page' => -1,
+						'meta_query' => array(
+							array(
+							'value' => $image_id,
+							'compare' => '==',
+							)
+						),
+					);
+					$f_postsfour = get_posts( $argsfour );
+					if($f_postsfour){
+						foreach($f_postsfour as $key => $posts){
+							if($posts->ID){
+								// error_log(print_r($image_id , true));
+								// Lets remove the found image from the array.
+								if (($key = array_search($image_id, $image_ids)) !== false) {
+									unset($image_ids[$key]);
+								}
+								error_log(print_r('Acf postmeta, Check Found missing ID: '.$image_id , true));
+							}
+						}
+					}
+					$image_ids = array_values(array_filter($image_ids)); // 'reindex' array to cleanup...
+					sleep(.25);
+
+					// This part is critical we check all the php files within the active theme directory.
+					error_log(print_r('PHP file check.' , true));
+					$image_ids_two[] = receiveAllFiles($image_id);
+				}
+			}
+
+			$image_ids_cleaned1 = array_values(array_filter($image_ids)); // 'reindex' array to cleanup...
+			$image_ids_cleaned2 = array_values(array_filter($image_ids_two)); // 'reindex' array to cleanup...
+			$result = array_diff($image_ids_cleaned1, $image_ids_cleaned2);
+
+			// $result = $image_ids_cleaned1;
+
+			return array_values(array_filter($result));
+		}
+		// Warning this script will slow down the entire server. Use only a small amount at a time.
+		// foreach (range(0, 1) as $number) {
+		// 	recursive_delete($number);
+		// }
+		$f_results = recursive_delete(0);
+		error_log(print_r('recursive_delete Completed' , true));
+
+		if($f_results){
+			// Get the array count..
+			update_option( 'options_page_media_cleaner_field' , count($f_results) );
+			foreach( $f_results as $key => $f_result ){
+				update_option('options_page_media_cleaner_field_' . $key . '_image_id',  $f_result);
+				update_option('options_page_media_cleaner_field_' . $key . '_image_url', get_attached_file($f_result) );
+				update_option('options_page_media_cleaner_field_' . $key . '_thumbnail_preview', $f_result);
+
+				if( $f_result == end($f_results) ){
+					// Sleep for 2 seconds...
+					sleep(2);
+					// Send sucess message!
+					wp_send_json_success('Done');
+				}
+			}
+		} else {
+			// If no rows are found send the error message!
+			wp_send_json_error('No rows found!');
+		}
+	}
+
+
+
+	/**
+	 * Init Remove Unused Media .
+	*/
+	function ajax_do_init_remove_unused_media()
+	{
+		if (!wp_verify_nonce($_POST['nonce'], 'ajax-nonce')) {
+			wp_send_json_error('Security check failed', '400');
+			wp_die();
+		}
+		// Check if user is logged in.
+		if (!is_user_logged_in()) {
+			return;
+		}
+
+		$f_media_cleaner = get_field('page_media_cleaner_field', 'options');
+		if($f_media_cleaner){
+			foreach($f_media_cleaner as $key => $media_cleaner){
+
+				// First lets copy the full image to the ronikdetached folder.
+				$upload_dir   = wp_upload_dir();
+				$link = wp_get_attachment_image_url( $media_cleaner['image_id'], 'full' );
+				$file_path = str_replace( $upload_dir['baseurl'], $upload_dir['basedir'], $link);
+				$file_name = explode('/', $link);	
+				
+				//Year in YYYY format.
+				$year = date("Y");
+				//Month in mm format, with leading zeros.
+				$month = date("m");
+				//Day in dd format, with leading zeros.
+				$day = date("d");
+				//The folder path for our file should be YYYY/MM/DD
+				$directory = dirname(__FILE__, 2).'/ronikdetached/'."$year/$month/$day/";
+				//If the directory doesn't already exists.
+				if(!is_dir($directory)){
+					//Create our directory.
+					mkdir($directory, 0777, true);
+				}
+				copy($file_path , $directory.end($file_name));
+
+				// Delete attachment from database only, not file
+				$delete_attachment = wp_delete_attachment( $media_cleaner['image_id'] , true);
+				if($delete_attachment){
+					//Delete attachment file from disk
+					unlink( get_attached_file( $media_cleaner['image_id'] ) );
+					error_log(print_r('File Deleted', true));
+					update_option('options_page_media_cleaner_field_' . $key . '_image_id',  '');
+					update_option('options_page_media_cleaner_field_' . $key . '_image_url', '' );
+					update_option('options_page_media_cleaner_field_' . $key . '_thumbnail_preview', '');
+				}
+
+				if( $media_cleaner == end($f_media_cleaner) ){
+					// Get the array count..
+					update_option( 'options_page_media_cleaner_field' , '' );
+					sleep(1);				
+					// Send sucess message!
+					wp_send_json_success('Done');
+				}
+
+			}
+		} else {
+			// If no rows are found send the error message!
+			wp_send_json_error('No rows found!');
+		}
+		// Send sucess message!
+		wp_send_json_success('Done');
+	}
+
+
+
 }

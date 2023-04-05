@@ -79,6 +79,25 @@ function wpb_login_logo()
 
 ?>
     <style type="text/css">
+         #login .video, .login .video{
+            position: absolute;
+            width: 100vw;
+            height: 100vh;
+            z-index: -1;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            right: 0;
+        }
+        #login .video #background-video, .login .video #background-video{
+            position: relative;
+            width: 150%;
+            height: 150%;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
         #login h1 a,
         .login h1 a {
             /* background-image: url(http://path/to/your/custom-logo.png); */
@@ -88,6 +107,29 @@ function wpb_login_logo()
             background-repeat: no-repeat;
             padding-bottom: 10px;
         }
+        
+        /* Lets fix the weird input issue */
+        #user_login, #user_pass {
+            padding: 0 10px;
+            width: calc(100% - 20px);
+        }        
+
+
+        #wp-submit{
+            padding: 10px;
+            border: none;
+            background-color: blue;
+            color: #fff;
+            border-radius: 5px;
+            cursor: pointer;
+            opacity: 1;
+            transition: all .4s;
+        }
+        #wp-submit:hover{
+            opacity: .5;
+        }
+
+
     </style>
     <div class="video">
         <iframe id="background-video" src="https://player.vimeo.com/video/391604277?background=1"></iframe>

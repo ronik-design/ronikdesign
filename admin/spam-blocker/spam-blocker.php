@@ -7,7 +7,7 @@ if (!function_exists('is_plugin_active')) {
 }
 
 $ronik_spam_buster = get_field( 'gform_spam_buster', 'options' );
-if( $ronik_spam_buster['enable_spam_buster']){
+if( !empty($ronik_spam_buster['enable_spam_buster']) ){
     if ( is_plugin_active( 'gravityforms/gravityforms.php' ) ) {
         //plugin is activated, do something
         add_filter( 'gform_entry_is_spam', 'filter_gform_entry_is_spam_ip_rate_limit', 11, 3 );

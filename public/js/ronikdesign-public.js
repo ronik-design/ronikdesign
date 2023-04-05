@@ -28,13 +28,21 @@ function verificationProcess($validationType, $validationValue){
 	});
 }
 
+// This is critical if site has inline-js. We gather all script tags and add nonce from our span
+function addNonce(){
+	$get_csp = $("span").data( 'csp' )
+	$("script").each(function(){
+		$(this).attr('nonce', $get_csp);
+	})
+}
+
 (function( $ ) {
 	'use strict';
-	// Load JS once windows is loaded. 
-	$( window ).load(function() {
+	// Load JS once windows is loaded.
+	$(window).on('load', function(){
 		// SetTimeOut just incase things havent initialized just yet.
 		setTimeout(() => {
-
+			addNonce();
 		}, 50);
 	});
 })( jQuery );
