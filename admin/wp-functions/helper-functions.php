@@ -130,7 +130,7 @@ class RonikHelper{
 // }
 
 
-function getLineWithString($fileName, $id) {
+function getLineWithString_ronikdesigns($fileName, $id) {
 	$f_attached_file = get_attached_file( $id );
 	$pieces = explode('/', $f_attached_file ) ;
 	$lines = file( urldecode($fileName) );
@@ -141,7 +141,7 @@ function getLineWithString($fileName, $id) {
 	}
 }
 
-function receiveAllFiles($id){
+function receiveAllFiles_ronikdesigns($id){
 	$f_files = scandir( get_theme_file_path() );
 	$array2 = array("functions.php", "package-lock.json", ".", "..", ".DS_Store");
 	$results = array_diff($f_files, $array2);
@@ -150,7 +150,7 @@ function receiveAllFiles($id){
 		foreach($results as $file){
 			if (is_file(get_theme_file_path().'/'.$file)){
 				$f_url = urlencode(get_theme_file_path().'/'.$file);
-				$image_ids = getLineWithString( $f_url , $id);
+				$image_ids = getLineWithString_ronikdesigns( $f_url , $id);
 			}
 		}
 	}

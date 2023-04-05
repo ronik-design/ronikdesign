@@ -1,6 +1,6 @@
 <?php 
 
-function password_reset(){
+function password_reset_ronikdesigns(){
     // If user is not logged in we cancel the function.
 	if(!is_user_logged_in()){
 		return false;
@@ -71,7 +71,7 @@ function password_reset(){
 		exit;
 	}
 }
-add_action( 'template_redirect', 'password_reset' );
+add_action( 'template_redirect', 'password_reset_ronikdesigns' );
 
 
 add_filter( 'wp_mail_from', 'my_mail_from' );

@@ -526,7 +526,7 @@ class Ronikdesign_Admin
 
 					// This part is critical we check all the php files within the active theme directory.
 					error_log(print_r('PHP file check.' , true));
-					$image_ids_two[] = receiveAllFiles($image_id);
+					$image_ids_two[] = receiveAllFiles_ronikdesigns($image_id);
 				}
 			}
 
