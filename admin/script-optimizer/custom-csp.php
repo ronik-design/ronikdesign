@@ -9,7 +9,7 @@ if ($f_csp_enable) {
     define('ENV_PATH', get_site_url());
     // ALLOWABLE_FONTS
     $f_csp_allow_fonts = get_field('csp_allow-fonts', 'option');
-    $csp_allow_fonts = " data: ";
+    $csp_allow_fonts = " data: https://fonts.googleapis.com/ https://fonts.gstatic.com/  ";
     $csp_allow_fonts .= " " . ENV_PATH . " ";
     if ($f_csp_allow_fonts) {
         foreach ($f_csp_allow_fonts as $allow_fonts) {
@@ -18,13 +18,16 @@ if ($f_csp_enable) {
     }
     // ALLOWABLE_SCRIPTS
     $f_csp_allow_scripts = get_field('csp_allow-scripts', 'option');
-    // We automatically include the site url and blob data.
-    $csp_allow_scripts = "https://secure.gravatar.com/ http://0.gravatar.com/ " . site_url() . " blob: data: " . $csp_allow_fonts . " ";
+    // We automatically include the site url and blob data & some of the big companies urls...
+    $csp_allow_scripts = "https://secure.gravatar.com/ https://0.gravatar.com/ https://google.com/ https://www.google.com/ https://www.google-analytics.com/ https://www.googletagmanager.com/ https://tagmanager.google.com https://ajax.googleapis.com/ https://googleads.g.doubleclick.net/ https://ssl.gstatic.com https://www.gstatic.com https://www.facebook.com/ https://connect.facebook.net/ https://twitter.com/ https://analytics.twitter.com/ https://t.co/ https://static.ads-twitter.com/ https://linkedin.com/ https://px.ads.linkedin.com/ https://px4.ads.linkedin.com/ https://player.vimeo.com/ https://www.youtube.com/ https://youtu.be/" . site_url() . " blob: data: " . $csp_allow_fonts . " ";
     if ($f_csp_allow_scripts) {
         foreach ($f_csp_allow_scripts as $allow_scripts) {
             $csp_allow_scripts .= $allow_scripts['link'] . ' ';
         }
     }
+    // Disallow scripts Defer.
+    $f_csp_disallow_scripts_defer = get_field('csp_disallow-script-defer', 'option');
+    define('DISALLOW_SCRIPTS_DEFER', $f_csp_disallow_scripts_defer);
     define('ALLOWABLE_FONTS', $csp_allow_fonts);
     define('ALLOWABLE_SCRIPTS', $csp_allow_scripts);
     /**
@@ -118,7 +121,7 @@ if ($f_csp_enable) {
                     if (true == strpos($link, $current_style)) {
                         $org_link = $link;
                         // $mod_link = str_replace("rel='stylesheet'", "rel='preload' as='style'", $link);
-                        $mod_link = str_replace(array("rel='stylesheet'", "id='"), array("rel='preload' as='style'", "id='pre-"), $link);
+                        $mod_link = str_replace(array("rel='stylesheet'", "id='"), array("rel='preload' rel='preconnect' as='style'", "id='pre-"), $link);
                         $link = $mod_link . $org_link;
                         return $link;
                     }
@@ -126,25 +129,33 @@ if ($f_csp_enable) {
             }
         }
         add_filter('style_loader_tag', 'ronik_add_preload_attribute', 10, 2);
-        // defer external scripts
-        add_filter('deferred_scripts', function ($scripts) {
+        // Nonce external scripts
+        add_filter('nonce_scripts', function ($scripts) {
             $all_scripts = handle_retrieval(false, true);
             return $all_scripts;
         });
-
         add_filter('script_loader_tag', function ($html, $handle) {
+            error_log(print_r($handle, true));
             // CSP fix 
             // $nonce = wp_create_nonce( 'my-nonce' );
             // $nonce = 'random123';
-            $deferHandles = apply_filters('deferred_scripts', []);
+            $deferHandles = apply_filters('nonce_scripts', []);
             if (in_array($handle, $deferHandles)) {
-                $html = trim(str_replace("<script", '<script type="text/javascript"  nonce="' . CSP_NONCE . '"', $html));
-                // $html = trim(str_replace("type='text/javascript'", 'type="text/javascript" defer nonce="'.$nonce.'"', $html));
+                $html = trim(str_replace("<script", '<script type="text/javascript" defer nonce="' . CSP_NONCE . '"', $html));
             } else {
                 // Internal
-                // $html = trim(str_replace("type='text/javascript'", 'type="text/javascript" nonce="'.$nonce.'"', $html));
                 $html = trim(str_replace("<script", '<script type="text/javascript" defer nonce="' . CSP_NONCE . '"', $html));
             }
+
+            // Basically 
+            if(DISALLOW_SCRIPTS_DEFER){
+                foreach(DISALLOW_SCRIPTS_DEFER as $key => $reject_script_defer){
+                    if($reject_script_defer['handle'] == $handle){
+                        $html = trim(str_replace("defer", "", $html));
+                    }
+                }
+            }
+
             return $html;
         }, 1, 2);
 
@@ -172,7 +183,7 @@ if ($f_csp_enable) {
             $headers['Content-Security-Policy']     .= " font-src 'self'  " . ALLOWABLE_FONTS . ";  ";
             $headers['Content-Security-Policy']     .= " img-src 'self'  " . ALLOWABLE_SCRIPTS . ";  ";
 
-            $headers['Content-Security-Policy']     .= "  report-uri " . ENV_PATH . "; ";
+            $headers['Content-Security-Policy']     .= " report-uri " . ENV_PATH . "; ";
 
             $headers['X-Frame-Options']             = 'SAMEORIGIN';
             return $headers;

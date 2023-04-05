@@ -98,7 +98,7 @@ class Ronikdesign_Admin
 		 * class.
 		 */
 		
-		wp_enqueue_script($this->plugin_name.'jquery', 'https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js', array(), null, true);
+		wp_enqueue_script($this->plugin_name.'jquery', 'https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js', array(), null, true);
 		$scriptName = $this->plugin_name.'jquery';
 
 
@@ -129,7 +129,7 @@ class Ronikdesign_Admin
 		 * class.
 		 */
 		
-		wp_enqueue_script($this->plugin_name.'jquery', 'https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js', array(), null, true);
+		wp_enqueue_script($this->plugin_name.'jquery', 'https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js', array(), null, true);
 		$scriptName = $this->plugin_name.'jquery';
 
 

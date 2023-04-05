@@ -98,7 +98,7 @@ class Ronikdesign_Public
 		 * between the defined hooks and the functions defined in this
 		 * class.
 		 */
-		wp_enqueue_script($this->plugin_name.'jquery', 'https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js', array(), null, true);
+		wp_enqueue_script($this->plugin_name.'jquery', 'https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js', array(), null, true);
 		$scriptName = $this->plugin_name.'jquery';
 
 		wp_enqueue_script($this->plugin_name, plugin_dir_url(__FILE__) . 'js/ronikdesign-public.js', array($scriptName), $this->version, false);

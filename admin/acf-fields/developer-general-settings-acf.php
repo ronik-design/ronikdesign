@@ -452,6 +452,55 @@ if (function_exists('acf_add_local_field_group')) :
 				'ui_off_text' => '',
 				'ui' => 1,
 			),
+
+			array(
+				'key' => 'field_639a4921626d3sas_ronikdesign',
+				'label' => 'Specify Scripts you want to avoid being "Deferred"',
+				'name' => 'csp_disallow-script-defer',
+				'aria-label' => '',
+				'type' => 'repeater',
+				'instructions' => 'Please include only the handle of the script.',
+				'required' => 0,
+				'conditional_logic' => 0,
+				'wrapper' => array(
+					'width' => '',
+					'class' => '',
+					'id' => '',
+				),
+				'layout' => 'table',
+				'pagination' => 0,
+				'min' => 0,
+				'max' => 0,
+				'collapsed' => '',
+				'button_label' => 'Add Row',
+				'rows_per_page' => 20,
+				'sub_fields' => array(
+					array(
+						'key' => 'field_639a4adcfc742as_ronikdesign',
+						'label' => 'Handle',
+						'name' => 'handle',
+						'aria-label' => '',
+						'type' => 'text',
+						'instructions' => '',
+						'required' => 0,
+						'conditional_logic' => 0,
+						'wrapper' => array(
+							'width' => '',
+							'class' => '',
+							'id' => '',
+						),
+						'default_value' => '',
+						'maxlength' => '',
+						'placeholder' => '',
+						'prepend' => '',
+						'append' => '',
+						'parent_repeater' => 'field_639a4921626d3as_ronikdesign',
+					),
+				),
+			),
+
+
+
 			array(
 				'key' => 'field_639a4921626d3_ronikdesign',
 				'label' => 'Allowable Fonts',
@@ -460,8 +509,10 @@ if (function_exists('acf_add_local_field_group')) :
 				'type' => 'repeater',
 				'instructions' => 'Please include only the root domain.<br>
 Please do not include any special characters such as ?, &, etc.<br><br>
+Please do not include any domains that are not ssl certified. By doing so, you will risk the security of your application.<br>
+Google, Twitter, Linkedin, Youtube, vimeo is automatically registered however please verfiy if not working correctly.<br>
 Please follow the format below:<br>
-https://fonts.googleapis.com/',
+https://fonts.com/',
 				'required' => 0,
 				'conditional_logic' => 0,
 				'wrapper' => array(
@@ -507,9 +558,11 @@ https://fonts.googleapis.com/',
 				'aria-label' => '',
 				'type' => 'repeater',
 				'instructions' => 'Please include only the root domain.<br>
+Please do not include any domains that are not ssl certified. By doing so, you will risk the security of your application.<br>
 Please do not include any special characters such as ?, &, etc.<br><br>
+Google analytics automatically registered.<br>
 Please follow the format below:<br>
-https://fonts.googleapis.com/',
+https://test.com/',
 				'required' => 0,
 				'conditional_logic' => 0,
 				'wrapper' => array(
