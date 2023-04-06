@@ -69,3 +69,43 @@ body {
   opacity: 1;
   transition: all 0.4s;
 }
+
+.ronik-password__container{
+  position: relative;
+
+  .adv-passwordchecker{
+
+  }
+  .ronik-password__message{
+    padding: 5px;
+    position: relative;
+    display: inline-block;
+    color: #525252;
+    border-radius: 5px;
+    font-size: 14px;
+    font-weight: 400;
+    font-style: italic;
+    transition: all .4s;
+
+    &.weak-password{
+      background-color: #ff00006b;
+    }
+    &.medium-password{
+      background-color: #ffff0099;
+    }
+    &.strong-password{
+      background-color: #00ff4099;
+    }
+  }
+  .ronik-password__message-additional{
+    padding: 5px;
+    position: relative;
+    display: inline-block;
+    color: #525252;
+    border-radius: 5px;
+    font-size: 14px;
+    font-weight: 400;
+    font-style: italic;
+    transition: all .4s;
+  }
+}

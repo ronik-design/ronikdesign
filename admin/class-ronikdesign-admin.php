@@ -98,11 +98,14 @@ class Ronikdesign_Admin
 		 * class.
 		 */
 		
-		wp_enqueue_script($this->plugin_name.'jquery', 'https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js', array(), null, true);
-		$scriptName = $this->plugin_name.'jquery';
+		 if ( ! wp_script_is( 'jquery', 'enqueued' )) {
+			wp_enqueue_script($this->plugin_name.'jquery', 'https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js', array(), null, true);
+			$scriptName = $this->plugin_name.'jquery';
+			wp_enqueue_script($this->plugin_name, plugin_dir_url(__FILE__) . 'js/ronikdesign-admin.js', array($scriptName), $this->version, false);
+		} else {
+			wp_enqueue_script($this->plugin_name, plugin_dir_url(__FILE__) . 'js/ronikdesign-admin.js', array(), $this->version, false);
+		}
 
-
-		wp_enqueue_script($this->plugin_name, plugin_dir_url(__FILE__) . 'js/ronikdesign-admin.js', array($scriptName), $this->version, false);
 		// Ajax & Nonce
 		wp_localize_script($this->plugin_name, 'wpVars', array(
 			'ajaxURL' => admin_url('admin-ajax.php'),
@@ -129,11 +132,14 @@ class Ronikdesign_Admin
 		 * class.
 		 */
 		
-		wp_enqueue_script($this->plugin_name.'jquery', 'https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js', array(), null, true);
-		$scriptName = $this->plugin_name.'jquery';
-
-
-		wp_enqueue_script($this->plugin_name . '-acf', plugin_dir_url(__FILE__) . 'js/acf/admin.js', array($scriptName), $this->version, false);
+		if ( ! wp_script_is( 'jquery', 'enqueued' )) {
+			wp_enqueue_script($this->plugin_name.'jquery', 'https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js', array(), null, true);
+			$scriptName = $this->plugin_name.'jquery';
+			wp_enqueue_script($this->plugin_name . '-acf', plugin_dir_url(__FILE__) . 'js/acf/admin.js', array($scriptName), $this->version, false);
+	
+		} else {
+			wp_enqueue_script($this->plugin_name . '-acf', plugin_dir_url(__FILE__) . 'js/acf/admin.js', array(), $this->version, false);
+		}
 	}
 
 

@@ -189,7 +189,8 @@
 			initEnhanceMouseFocus($);
 			initSmoothScrolling($);
 			initSvgMigrations($);
-			dynExtLink();
+			dynExtLink($);
+			checkPasswordStrength($);
 		}, 50);
 	});
 })( jQuery );

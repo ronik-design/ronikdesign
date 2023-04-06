@@ -393,3 +393,38 @@ body {
   opacity: 1;
   transition: all 0.4s;
 }
+
+.ronik-password__container {
+  position: relative;
+}
+.ronik-password__container .ronik-password__message {
+  padding: 5px;
+  position: relative;
+  display: inline-block;
+  color: #525252;
+  border-radius: 5px;
+  font-size: 14px;
+  font-weight: 400;
+  font-style: italic;
+  transition: all 0.4s;
+}
+.ronik-password__container .ronik-password__message.weak-password {
+  background-color: rgba(255, 0, 0, 0.4196078431);
+}
+.ronik-password__container .ronik-password__message.medium-password {
+  background-color: rgba(255, 255, 0, 0.6);
+}
+.ronik-password__container .ronik-password__message.strong-password {
+  background-color: rgba(0, 255, 64, 0.6);
+}
+.ronik-password__container .ronik-password__message-additional {
+  padding: 5px;
+  position: relative;
+  display: inline-block;
+  color: #525252;
+  border-radius: 5px;
+  font-size: 14px;
+  font-weight: 400;
+  font-style: italic;
+  transition: all 0.4s;
+}
