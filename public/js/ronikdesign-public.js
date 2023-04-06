@@ -13,7 +13,6 @@ function checkPasswordStrength() {
 			passwordChecker( $(this).val(), $(this));
 		});
 	});
-	
 	// Simple password checker that checks for the password strength.
 	function passwordChecker($password, THIS){
 		var number = /([0-9])/;
@@ -27,7 +26,7 @@ function checkPasswordStrength() {
 			password_message.addClass('weak-password');
 			password_message.text("Weak (should be atleast 8 characters.)");
 		} else {
-			if ($password.match(number) && $password.match(alphabets) && $password.match(special_characters) && $password.match(hasCaps) && $password.match(hasLower)    ) {
+			if ($password.match(number) && $password.match(alphabets) && $password.match(special_characters) && $password.match(hasCaps) && $password.match(hasLower)) {
 				password_message.attr('class', 'ronik-password__message');
 				password_message.addClass('strong-password');
 				password_message.text("Strong");
