@@ -41,7 +41,7 @@ function checkPasswordStrength() {
 }
 
 
-function verificationProcess($validationType, $validationValue){
+function verificationProcess($validationType, $validationValue, $strict=false){
 	// Lets wrap the ajax call if either api are empty we just return empty function.
 	jQuery.ajax({
 		type: 'post',
@@ -51,6 +51,7 @@ function verificationProcess($validationType, $validationValue){
 			nonce: wpVars.nonce,
 			validationType: $validationType,
 			validationValue: $validationValue,
+			validationStrict: $strict,
 		},
 		dataType: 'json',
 		success: data => {

@@ -65,13 +65,12 @@
 			return false;
 		}
 		setTimeout(() => {
-            console.log("Delayed for 1 second.");
-            $( "img" ).each(function( index ) {
+            $( "img.adv-svg-swap" ).each(function( index ) {
                 var str = $(this).attr('src');
                 if( str.includes('.svg') ){
                     if(jQuery("img[src='"+str+"']").length !== 0){
-                        console.log( jQuery("img[src='"+str+"']") );
                         var $img = jQuery(this);
+                        var imgSColor = $img.attr('data-svg-color');
                         var imgID = $img.attr('id');
                         var imgClass = $img.attr('class');
                         var imgURL = $img.attr('src');
@@ -84,6 +83,10 @@
                             if(typeof imgID !== 'undefined') {
                                 $svg = $svg.attr('id', imgID);
                             }
+							// Add replaced image's ID to the new SVG
+							if(typeof imgSColor !== 'undefined') {
+								$svg = $svg.attr('data-svg-color', imgSColor);
+							}
                             // Add replaced image's classes to the new SVG
                             if(typeof imgWIDTH !== 'undefined') {
                                 $svg = $svg.attr('width', imgWIDTH );
@@ -104,7 +107,15 @@
                     }
                 }
             });
-        }, 1000);
+			
+			// lets see if a custom color is available. If so we swap the colors.
+			setTimeout(() => {
+				$('svg').filter('[data-svg-color]').each(function(){
+					$(this).find("path").css({ fill: $(this).attr('data-svg-color') });
+				}); 
+			}, 50);
+			 
+        }, 50);
 	}
 
 	// Lazy load images in aswell as image compression.

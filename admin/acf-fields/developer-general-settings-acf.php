@@ -277,7 +277,7 @@ if (function_exists('acf_add_local_field_group')) :
 			array(
 				'key' => 'field_638e453234177_ronikdesign',
 				'label' => 'Abstract API Email',
-				'name' => 'abstract_api_email',
+				'name' => 'abstract_api_email_ronikdesign',
 				'type' => 'text',
 				'instructions' => 'To retrieve api key please visit this <a href="https://app.abstractapi.com/api/email-validation/settings" target="_blank">link</a>.',
 				'required' => 0,
@@ -296,7 +296,7 @@ if (function_exists('acf_add_local_field_group')) :
 			array(
 				'key' => 'field_638e454234178_ronikdesign',
 				'label' => 'Abstract API Phone',
-				'name' => 'abstract_api_phone',
+				'name' => 'abstract_api_phone_ronikdesign',
 				'type' => 'text',
 				'instructions' => 'To retrieve api key please visit this <a href="https://app.abstractapi.com/api/phone-validation/settings" target="_blank">link</a>.',
 				'required' => 0,

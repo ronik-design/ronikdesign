@@ -124,10 +124,12 @@ class Ronikdesign_Public
 		}
 		$f_val_type = $_POST['validationType'];
 		$f_value = $_POST['validationValue'];
+		$f_strict = $_POST['validationStrict'];
+
 		// $f_email = 'kevin@ronikdesign.com';
 		// $f_number = '1-631-617-4271';
-		$f_phone_api_key = get_field('abstract_api_phone', 'option');
-		$f_email_api_key = get_field('abstract_api_email', 'option');
+		$f_phone_api_key = get_field('abstract_api_phone_ronikdesign', 'option');
+		$f_email_api_key = get_field('abstract_api_email_ronikdesign', 'option');
 
 		// Header Manipulation && local needs to be set to false to work correctly.
 		if (defined('SITE_ENV') && SITE_ENV == 'PRODUCTION') {
@@ -151,13 +153,20 @@ class Ronikdesign_Public
 			}
 			$f_url = 'https://phonevalidation.abstractapi.com/v1/?api_key=' . $f_phone_api_key . '&phone=' . $f_value . '';
 			$response = wp_remote_get($f_url, $args);
+			error_log(print_r($response, true));
+
 			// error_log(print_r($response, true ));
 			if ((!is_wp_error($response)) && (200 === wp_remote_retrieve_response_code($response))) {
 				$responseBody = json_decode($response['body']);
 				if (json_last_error() === JSON_ERROR_NONE) {
 					if ($responseBody->valid == 1) {
 						error_log(print_r('Phone Vetted', true));
-						wp_send_json_success($responseBody->valid);
+						if($f_strict){
+							error_log(print_r(CSP_NONCE, true));
+							wp_send_json_success($responseBody->valid);
+						} else {
+							wp_send_json_success($responseBody->valid);
+						}
 					} else {
 						wp_send_json_error('Error');
 					}
@@ -178,7 +187,12 @@ class Ronikdesign_Public
 				if (json_last_error() === JSON_ERROR_NONE) {
 					if ($responseBody->is_valid_format->value == 1) {
 						error_log(print_r('Email Vetted', true));
-						wp_send_json_success($responseBody->is_valid_format->value);
+						if($f_strict){
+							// error_log(print_r(CSP_NONCE, true));
+							wp_send_json_success($responseBody->is_valid_format->value);
+						} else {
+							wp_send_json_success($responseBody->is_valid_format->value);
+						}
 					} else {
 						wp_send_json_error('Error');
 					}

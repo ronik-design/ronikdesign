@@ -299,9 +299,10 @@ function ronik_acf_post_loader($field)
             '_builtin' => false
         );
         $post_types = get_post_types($args);
-        array_push($post_types, 'page');
-        array_push($post_types, 'post');
-
+        $post_types['page'] = 'page';
+        $post_types['post'] = 'post';
+        // array_push($post_types, 'page');
+        // array_push($post_types, 'post');
 
         $choices = array($post_types);
         $field['choices'] = array();
