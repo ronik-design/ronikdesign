@@ -4,7 +4,6 @@
 function prefix_disable_gutenberg($current_status, $post_type)
 {
     $f_disable_gutenberg = get_field('disable_gutenberg_posttype', 'option');
-    error_log(print_r( $f_disable_gutenberg, true));
     if ($f_disable_gutenberg) {
         foreach ($f_disable_gutenberg as $key => $disable_gutenberg) {
             if ($post_type === $disable_gutenberg) return false;

@@ -135,7 +135,6 @@ if ($f_csp_enable) {
             return $all_scripts;
         });
         add_filter('script_loader_tag', function ($html, $handle) {
-            error_log(print_r($handle, true));
             // CSP fix 
             // $nonce = wp_create_nonce( 'my-nonce' );
             // $nonce = 'random123';
