@@ -56,8 +56,10 @@ function verificationProcess($validationType, $validationValue, $strict=false){
 		dataType: 'json',
 		success: data => {
 			if(data.success){
-			  console.log('success');
-			  console.log(data);
+				var $get_csp = $("span").data( 'csp' )
+				var object = {valType: $validationType, timestamp: new Date().getTime(), valNonce: $get_csp}
+				localStorage.setItem("validator", JSON.stringify(object));
+				return data;
 			} else{
 			  console.log('error');
 			  console.log(data);
