@@ -7,6 +7,7 @@
   \**********************************/
 /***/ (() => {
 
+function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
 (function ($) {
   // 'use strict';
   function dynExtLink() {
@@ -203,6 +204,69 @@
     });
   }
 
+  // This will dynamically add all the attributes necessary..
+  function dynImageAttr($) {
+    // Specify image dimensions
+    $('img').each(function () {
+      text_truncate = function text_truncate(str, length, ending) {
+        if (length == null) {
+          length = 100;
+        }
+        if (ending == null) {
+          ending = '...';
+        }
+        if (str.length > length) {
+          return str.substring(0, length - ending.length) + ending;
+        } else {
+          return str;
+        }
+      };
+      if (_typeof($(this).attr('width')) === ( true ? "undefined" : 0)) {
+        var findImgWidth = $(this).width();
+        $(this).attr('width', findImgWidth);
+      }
+      if (_typeof($(this).attr('height')) === ( true ? "undefined" : 0)) {
+        var findImgHeight = $(this).height();
+        $(this).attr('height', findImgHeight);
+      }
+      if (_typeof($(this).attr('alt')) === ( true ? "undefined" : 0)) {
+        var findParent = $(this).parent().text();
+        if (!findParent) {
+          findParent = $(this).parent().parent().text();
+          if (!findParent) {
+            findParent = $(this).parent().parent().parent().text();
+            if (!findParent) {
+              findParent = ' ';
+            }
+          }
+        }
+        $(this).attr('alt', text_truncate(findParent, 100));
+      }
+    });
+  }
+
+  // This will dynamically add all the attributes necessary..
+  function dynAttr($) {
+    // Specify image dimensions
+    $('button, a').each(function () {
+      if ($(this).children()) {
+        if ($(this).text()) {
+          if ($(this).prop("tagName") == 'A') {
+            $(this).attr('aria-label', 'A link to ' + $(this).text());
+          } else {
+            $(this).attr('aria-label', 'A clickable ' + $(this).prop("tagName").toLowerCase() + '.');
+          }
+        } else {
+          if ($(this).prop("tagName") == 'A') {
+            $(this).attr('aria-label', 'A link to ' + $(this).attr('href'));
+          } else {
+            $(this).attr('aria-label', 'A clickable ' + $(this).prop("tagName").toLowerCase() + '.');
+          }
+        }
+      }
+    });
+  }
+
   // Load JS once windows is loaded. 
   $(window).on('load', function () {
     // SetTimeOut just incase things havent initialized just yet.
@@ -213,6 +277,8 @@
       initSvgMigrations($);
       dynExtLink($);
       checkPasswordStrength($);
+      dynImageAttr($);
+      dynAttr($);
     }, 50);
   });
 })(jQuery);

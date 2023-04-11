@@ -192,6 +192,70 @@
         });
     }
 
+	// This will dynamically add all the attributes necessary..
+	function dynImageAttr($){
+		// Specify image dimensions
+		$('img').each(function() {
+			text_truncate = function(str, length, ending) {
+				if (length == null) {
+				  length = 100;
+				}
+				if (ending == null) {
+				  ending = '...';
+				}
+				if (str.length > length) {
+				  return str.substring(0, length - ending.length) + ending;
+				} else {
+				  return str;
+				}
+			};
+			if(typeof $(this).attr('width') === typeof undefined) {
+				var findImgWidth = $(this).width();
+				$(this).attr('width', findImgWidth);
+			}
+			if(typeof $(this).attr('height') === typeof undefined) {
+				var findImgHeight = $(this).height();
+				$(this).attr('height', findImgHeight);
+			}
+			if(typeof $(this).attr('alt') === typeof undefined) {
+				var findParent = $(this).parent().text();
+				if(!findParent){
+					findParent = $(this).parent().parent().text();
+					if(!findParent){
+						findParent = $(this).parent().parent().parent().text();
+						if(!findParent){
+							findParent = ' ';
+						}
+					}
+				}
+				$(this).attr('alt', text_truncate(findParent, 100));
+			}
+		});
+	}
+
+		// This will dynamically add all the attributes necessary..
+		function dynAttr($){
+			// Specify image dimensions
+			$('button, a').each(function() {
+				if($(this).children()){
+					if($(this).text()){
+						if($(this).prop("tagName") == 'A'){
+							$(this).attr('aria-label', 'A link to '+$(this).text());
+						} else {
+							$(this).attr('aria-label', 'A clickable '+$(this).prop("tagName").toLowerCase()+'.');
+						}				
+					} else {
+						if($(this).prop("tagName") == 'A'){
+							$(this).attr('aria-label', 'A link to '+$(this).attr('href'));
+						} else {
+							$(this).attr('aria-label', 'A clickable '+$(this).prop("tagName").toLowerCase()+'.');
+						}
+					}
+				}
+			});
+		}
+
+		
 	// Load JS once windows is loaded. 
 	$(window).on('load', function(){
 		// SetTimeOut just incase things havent initialized just yet.
@@ -202,6 +266,8 @@
 			initSvgMigrations($);
 			dynExtLink($);
 			checkPasswordStrength($);
+			dynImageAttr($);
+			dynAttr($);
 		}, 50);
 	});
 })( jQuery );

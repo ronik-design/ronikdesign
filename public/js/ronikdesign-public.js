@@ -1,6 +1,6 @@
 // Global Function.
 
-function checkPasswordStrength() {
+function checkPasswordStrength($) {
 	// Loop through all the passwords inpputs
 	$( ".adv-passwordchecker" ).each(function( index ) {
 		// Lets Create a wrapper container
@@ -74,7 +74,7 @@ function verificationProcess($validationType, $validationValue, $strict=false){
 }
 
 // This is critical if site has inline-js. We gather all script tags and add nonce from our span
-function addNonce(){
+function addNonce($){
 	$get_csp = $("span").data( 'csp' )
 	$("script").each(function(){
 		$(this).attr('nonce', $get_csp);
@@ -87,7 +87,7 @@ function addNonce(){
 	$(window).on('load', function(){
 		// SetTimeOut just incase things havent initialized just yet.
 		setTimeout(() => {
-			addNonce();
+			addNonce($);
 		}, 50);
 	});
 })( jQuery );
