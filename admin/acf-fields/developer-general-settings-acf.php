@@ -7,6 +7,108 @@ if (function_exists('acf_add_local_field_group')) :
 		'fields' => array(
 
 			array(
+				'key' => 'field_6437133a90e29_ronikdesign',
+				'label' => 'Dynamic Icon Field',
+				'name' => '',
+				'type' => 'tab',
+				'instructions' => '',
+				'required' => 0,
+				'conditional_logic' => 0,
+				'wrapper' => array(
+					'width' => '',
+					'class' => '',
+					'id' => '',
+				),
+				'placement' => 'left',
+				'endpoint' => 0,
+			),
+			array(
+				'key' => 'field_64371f478861a_ronikdesign',
+				'label' => '',
+				'name' => '',
+				'type' => 'message',
+				'instructions' => '',
+				'required' => 0,
+				'conditional_logic' => 0,
+				'wrapper' => array(
+					'width' => '',
+					'class' => '',
+					'id' => '',
+				),
+				'message' => 'For best results please upload only black SVGs.
+			Please keep SVG simple & error free.
+			
+			Please do not remove row instead overwrite pre-existing row.',
+				'new_lines' => 'wpautop',
+				'esc_html' => 0,
+			),
+			array(
+				'key' => 'field_6437134290e2a_ronikdesign',
+				'label' => 'Icons',
+				'name' => 'page_migrate_icons',
+				'type' => 'repeater',
+				'instructions' => '',
+				'required' => 0,
+				'conditional_logic' => 0,
+				'wrapper' => array(
+					'width' => '',
+					'class' => 'svg-migration_ronikdesign',
+					'id' => '',
+				),
+				'collapsed' => '',
+				'min' => 0,
+				'max' => 0,
+				'layout' => 'table',
+				'button_label' => '',
+				'sub_fields' => array(
+					array(
+						'key' => 'field_6437137cbcbd7_ronikdesign',
+						'label' => 'SVG',
+						'name' => 'svg',
+						'type' => 'image',
+						'instructions' => '',
+						'required' => 1,
+						'conditional_logic' => 0,
+						'wrapper' => array(
+							'width' => '',
+							'class' => '',
+							'id' => '',
+						),
+						'return_format' => 'array',
+						'preview_size' => 'medium',
+						'library' => 'all',
+						'min_width' => '',
+						'min_height' => '',
+						'min_size' => '',
+						'max_width' => '',
+						'max_height' => '',
+						'max_size' => '',
+						'mime_types' => 'svg, SVG',
+					),
+				),
+			),
+			array(
+				'key' => 'field_643716b3e158c_ronikdesign',
+				'label' => '',
+				'name' => '',
+				'type' => 'message',
+				'instructions' => '',
+				'required' => 0,
+				'conditional_logic' => 0,
+				'wrapper' => array(
+					'width' => '',
+					'class' => '',
+					'id' => 'page_svg_migration_ronikdesign',
+				),
+				'message' => '',
+				'new_lines' => 'wpautop',
+				'esc_html' => 0,
+			),
+
+
+
+
+			array(
 				'key' => 'field_63b73d357ba4ef_ronikdesign',
 				'label' => 'Media Cleaner Field',
 				'name' => '',

@@ -6,7 +6,7 @@
 		if ($("#page_svg_migration_ronikdesign").length == 0) {
 			return;
 		}
-		$('.svg-migration .acf-input .acf-repeater .acf-table tbody .acf-row .acf-row-handle.order').css({'pointer-events':'none', 'opacity':0});
+		$('.svg-migration_ronikdesign .acf-input .acf-repeater .acf-table tbody .acf-row .acf-row-handle.order').css({'pointer-events':'none', 'opacity':0});
 		// $('.svg-migration .acf-input .acf-repeater .acf-table .ui-sortable .acf-row').css({'pointer-events':'none', 'opacity':.5});
 		$('<span name="button" class="page_svg_migration__link_ronikdesign" href="#" style="cursor:pointer;background: #7210d4;border: none;padding: 10px;color: #fff;border-radius: 5px;">Init SVG Migration</span>').appendTo( $('#page_svg_migration_ronikdesign') );
 		// Trigger rejection.
@@ -15,7 +15,7 @@
 				type: 'post',
 				url: wpVars.ajaxURL,
 				data: {
-					action: 'do_init_svg_migration',
+					action: 'do_init_svg_migration_ronik',
 					nonce: wpVars.nonce,
 				},
 				dataType: 'json',

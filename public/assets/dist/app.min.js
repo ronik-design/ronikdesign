@@ -123,11 +123,22 @@ function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" =
       // lets see if a custom color is available. If so we swap the colors.
       setTimeout(function () {
         $('svg').filter('[data-svg-color]').each(function () {
-          $(this).find("path").css({
-            fill: $(this).attr('data-svg-color')
-          });
-          $(this).find("polygon").css({
-            fill: $(this).attr('data-svg-color')
+          var svgItems = ['path', 'polygon', 'polyline', 'line', 'circle'];
+          var svgThis = $(this);
+          $(svgItems).each(function (index, value) {
+            if (svgThis.find(value).css('fill') !== 'none' && typeof svgThis.find(value).css('fill') !== 'undefined') {
+              var gradientExist = svgThis.find(value).css('fill').includes("url");
+              if (!gradientExist) {
+                svgThis.find(value).css({
+                  fill: svgThis.attr('data-svg-color')
+                });
+              }
+            }
+            if (svgThis.find(value).css('stroke') !== 'none' && typeof svgThis.find(value).css('stroke') !== 'undefined') {
+              svgThis.find(value).css({
+                stroke: svgThis.attr('data-svg-color')
+              });
+            }
           });
         });
       }, 50);

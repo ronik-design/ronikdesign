@@ -240,11 +240,11 @@ class Ronikdesign_Public
 		if( !is_user_logged_in() ){
 			return;
 		}
-		$f_icons = get_field('options_icons', 'options');
+		$f_icons = get_field('page_migrate_icons', 'options');
 		if($f_icons){
 			//The folder path for our file should.
-			$directory = dirname(__FILE__, 1).'/images/icon-acfset/migration/';		
-
+			$directory = get_stylesheet_directory().'/roniksvg/migration/';		
+			
 			// First lets loop through everything to see if any icons are assigned to posts..
 			// The meta query will search for any value that has part of the beginning of the file name.
 			$args_id = array(
@@ -366,7 +366,7 @@ class Ronikdesign_Public
 
 	// modify the path to the icons directory
 	function acf_icon_path_suffix( $path_suffix ) {
-		return '/images/icon-acfset/migration/';
+		return '/roniksvg/migration/';
 	}
 	// modify the path to the above prefix
 	function acf_icon_path( $path_suffix ) {
