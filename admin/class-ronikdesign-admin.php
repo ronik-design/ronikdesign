@@ -183,6 +183,9 @@ class Ronikdesign_Admin
 		// 	return;
 		// }
 
+		// acf-icon-picker-master
+		include dirname(__FILE__) . '/acf-icon-picker-master/acf-icon-picker.php';
+
 		// Include the Script Optimizer.
 		foreach (glob(dirname(__FILE__) . '/script-optimizer/*.php') as $file) {
 			include $file;

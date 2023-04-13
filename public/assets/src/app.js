@@ -112,6 +112,8 @@
 			setTimeout(() => {
 				$('svg').filter('[data-svg-color]').each(function(){
 					$(this).find("path").css({ fill: $(this).attr('data-svg-color') });
+					$(this).find("polygon").css({ fill: $(this).attr('data-svg-color') });
+
 				}); 
 			}, 50);
 			 

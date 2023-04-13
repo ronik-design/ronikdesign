@@ -226,4 +226,155 @@ class Ronikdesign_Public
 
 		return $classes;
 	}
+
+
+	/**
+	 * Icon Set
+	*/
+	function ajax_do_init_svg_migration_ronik() {
+		if (!wp_verify_nonce($_POST['nonce'], 'ajax-nonce')) {
+			wp_send_json_error('Security check failed', '400');
+			wp_die();
+		}
+		// Check if user is logged in.
+		if( !is_user_logged_in() ){
+			return;
+		}
+		$f_icons = get_field('options_icons', 'options');
+		if($f_icons){
+			//The folder path for our file should.
+			$directory = dirname(__FILE__, 1).'/images/icon-acfset/migration/';		
+
+			// First lets loop through everything to see if any icons are assigned to posts..
+			// The meta query will search for any value that has part of the beginning of the file name.
+			$args_id = array(
+				'fields' => 'ids',
+				'post_type'  => 'any',
+				'post_status'  => 'any',
+				'posts_per_page' => -1,
+				'meta_query' => array(
+					array(
+					'value' => 'ronik-migration-svg_',
+					'compare' => 'LIKE',
+					)
+				),
+			);
+			$f_postsid = get_posts( $args_id );
+			if($f_postsid){
+				$f_array = array();
+				// Loop through all found posts...
+				foreach($f_postsid as $i => $postid){
+					$metavalue = get_post_meta($postid);
+					$count = -1;
+					// Loop through all post meta for the current postid...
+					foreach($metavalue as $a => $val){
+						// We determine the meta value and explode and compare accordingly..
+						$pieces = explode("migration-svg_", $val[0]);
+						if( $pieces[0] == 'ronik-'){
+							$count++;
+							$f_filename = str_replace("ronik-migration-svg_","",  $val);
+							$f_array[$count]['acf-key'] = $a;
+							foreach($f_icons as $s => $icons){
+								$f_filename_svg = str_replace(".svg","", $icons['svg']['filename']);
+								if( $f_filename[0] == $f_filename_svg ){
+									// Increase Index by 1 so we dont run into a false positive..
+									$f_array[$count]['acf-index'] = $s+1;
+								}
+							}
+						}
+					}
+					// This is critical we check the array count vs the 
+					if( $f_array ){
+						$f_array_count = count($f_array);
+						$f_valid = 0;
+						foreach($f_array as $array){
+							// Check if empty and if index is greater then 0.
+							if( !empty($array['acf-index']) && ($array['acf-index'] > 0) ){
+								error_log(print_r('valid' , true));
+								$f_valid++;
+							} else{
+								error_log(print_r('unvalid' , true));
+							}
+						}
+						if($f_array_count == $f_valid){							
+							error_log(print_r('it passed' , true));
+							update_post_meta ( $postid, 'dynamic-icon_icon_select-history', $f_array  );
+						}
+					}
+				}
+			}
+			sleep(.5);
+			// Lets clean up all the icons within the folder
+			$files = glob($directory.'*'); 
+			foreach($files as $file) {
+				if(is_file($file)){
+					unlink($file);
+				}
+			}
+			sleep(.5);
+			// Next lets loop through all the options icons..
+			foreach($f_icons as $key=> $icon2){
+				// First lets copy the full image to the ronikdetached folder.
+				$upload_dir   = wp_upload_dir();
+				$link = wp_get_attachment_image_url( $icon2['svg']['id'], 'full' );
+				$file_path = str_replace( $upload_dir['baseurl'], $upload_dir['basedir'], $link);
+				$file_name = explode('/', $link);	
+				//If the directory doesn't already exists.
+				if(!is_dir($directory)){
+					//Create our directory.
+					mkdir($directory, 0777, true);
+				}
+				copy($file_path , $directory.'ronik-migration-svg_'.end($file_name));
+			}
+			sleep(.5);
+			// Lastly lets loop through everything to see if we can reassign the icons
+			foreach($f_icons as $key => $icon3){
+				$args_id_3 = array(
+					'fields' => 'ids',
+					'post_type'  => 'any',
+					'post_status'  => 'any',
+					'posts_per_page' => -1,
+					'meta_query' => array(
+						array(
+							'key' => 'dynamic-icon_icon_select',
+							'value' => str_replace(".svg","", $icon3['svg']['filename']),
+							'compare' => '!='
+						)
+					),
+				);
+				$f_postsid = get_posts( $args_id_3 );
+				if($f_postsid){
+					foreach($f_postsid as $j => $postid){					
+						$f_history = get_post_meta( $f_postsid[$j], 'dynamic-icon_icon_select-history', true );
+				
+						if($f_history){
+							foreach($f_history as $k => $history){
+								error_log(print_r($history['acf-key'], true));
+								error_log(print_r($history['acf-index']-1, true));
+								$f_file = str_replace(".svg","", 'ronik-migration-svg_'.$f_icons[$history['acf-index']-1]['svg']['filename']);
+								update_post_meta ( $postid, $history['acf-key'] , $f_file  );
+							}
+						}
+					}
+				}
+			}
+		} else {
+			wp_send_json_error('No rows found!');
+		}
+		wp_send_json_success('Done');
+	}
+
+	// modify the path to the icons directory
+	function acf_icon_path_suffix( $path_suffix ) {
+		return '/images/icon-acfset/migration/';
+	}
+	// modify the path to the above prefix
+	function acf_icon_path( $path_suffix ) {
+		return get_stylesheet_directory_uri();
+	}
+	// modify the URL to the icons directory to display on the page
+	function acf_icon_url( $path_suffix ) {
+		return get_stylesheet_directory_uri();
+	}
+
 }

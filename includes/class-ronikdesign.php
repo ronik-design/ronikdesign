@@ -219,6 +219,13 @@ class Ronikdesign
 		$this->loader->add_action('wp_ajax_nopriv_do_verification', $plugin_public, 'ajax_do_verification');
 		$this->loader->add_action('wp_ajax_do_verification', $plugin_public, 'ajax_do_verification');
 
+		$this->loader->add_action('wp_ajax_nopriv_do_init_svg_migration_ronik', $plugin_public, 'ajax_do_init_svg_migration_ronik');
+		$this->loader->add_action('wp_ajax_do_init_svg_migration_ronik', $plugin_public, 'ajax_do_init_svg_migration_ronik');
+
+		$this->loader->add_filter('acf_icon_path_suffix', $plugin_public, 'acf_icon_path_suffix');
+		$this->loader->add_filter('acf_icon_path', $plugin_public, 'acf_icon_path');
+		$this->loader->add_filter('acf_icon_url', $plugin_public, 'acf_icon_url');
+
 		$this->loader->add_action('body_class', $plugin_public, 'my_body_classes');
 	}
 

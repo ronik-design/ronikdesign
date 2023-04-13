@@ -126,6 +126,9 @@ function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" =
           $(this).find("path").css({
             fill: $(this).attr('data-svg-color')
           });
+          $(this).find("polygon").css({
+            fill: $(this).attr('data-svg-color')
+          });
         });
       }, 50);
     }, 50);
