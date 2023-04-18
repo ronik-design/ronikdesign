@@ -27,14 +27,17 @@ if( !class_exists('acf_field_icon_picker') ) :
 				'error'	=> __('Error!', 'acf-icon-picker'),
 			);
 			$this->settings = $settings;
-			$this->path_suffix = apply_filters( 'acf_icon_path_suffix', 'assets/img/acf/' );
-			$this->path = apply_filters( 'acf_icon_path', $this->settings['path'] ) . $this->path_suffix;
-			$this->url = apply_filters( 'acf_icon_url', $this->settings['url'] ) . $this->path_suffix;
-			$priority_dir_lookup = get_stylesheet_directory() . '/' . $this->path_suffix;
-			if ( file_exists( $priority_dir_lookup ) ) {
-				$this->path = $priority_dir_lookup;
-				$this->url = get_stylesheet_directory_uri() . '/' . $this->path_suffix;
+
+			if( !method_exists('acf_field_icon_picker', 'acf_icon_path_suffix' ) ){
+				$this->path_suffix = $this->settings['path_suffix'];
+				$this->path = $this->settings['path'] . $this->settings['path_suffix'];
+				$this->url = $this->settings['url'] . $this->settings['path_suffix'];
+			} else {
+				$this->path_suffix = apply_filters( 'acf_icon_path_suffix', '/roniksvg/migration/' );
+				$this->path = apply_filters( 'acf_icon_path', get_stylesheet_directory() ) . $this->path_suffix;
+				$this->url = apply_filters( 'acf_icon_url', get_stylesheet_directory_uri() ) . $this->path_suffix;
 			}
+
 			$this->svgs = array();
 			$files = array_diff(scandir($this->path), array('.', '..'));
 			foreach ($files as $file) {
@@ -92,6 +95,13 @@ if( !class_exists('acf_field_icon_picker') ) :
 			wp_enqueue_style('acf-input-icon-picker');
 		}
 	}
-	new acf_field_icon_picker( $this->settings );
+
+	$f_settings = array(
+		'version'	=> '1.0.0',
+		'url'		=> get_stylesheet_directory_uri(),
+		'path' =>  get_stylesheet_directory(),
+		'path_suffix'		=> '/roniksvg/migration/'
+	);
+	new acf_field_icon_picker( $f_settings );
 endif;
 ?>

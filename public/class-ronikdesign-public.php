@@ -366,15 +366,18 @@ class Ronikdesign_Public
 
 	// modify the path to the icons directory
 	function acf_icon_path_suffix( $path_suffix ) {
-		return '/roniksvg/migration/';
+		return $path_suffix;
+		// return 'roniksvg/migration/';
 	}
 	// modify the path to the above prefix
 	function acf_icon_path( $path_suffix ) {
-		return get_stylesheet_directory_uri();
+		return $path_suffix;
+		// return get_stylesheet_directory_uri();
 	}
 	// modify the URL to the icons directory to display on the page
 	function acf_icon_url( $path_suffix ) {
-		return get_stylesheet_directory_uri();
+		return $path_suffix;
+		// return get_stylesheet_directory_uri();	
 	}
 
 }

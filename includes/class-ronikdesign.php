@@ -175,9 +175,9 @@ class Ronikdesign
 
 
 		// Hooking up our function to theme setup
-		$this->loader->add_action('acf/init', $plugin_admin, 'my_acf_op_init');
-		$this->loader->add_action('acf/init', $plugin_admin, 'my_acf_op_init_fields', 10);
-		$this->loader->add_action('acf/init', $plugin_admin, 'my_acf_op_functions', 20);
+		$this->loader->add_action('acf/init', $plugin_admin, 'ronik_acf_op_init');
+		$this->loader->add_action('acf/init', $plugin_admin, 'ronik_acf_op_init_fields', 10);
+		$this->loader->add_action('acf/init', $plugin_admin, 'ronik_acf_op_init_functions', 20);
 
 		// $this->loader->add_action('admin_menu', $plugin_admin, 'remove_menus', 99);
 		$this->loader->add_filter('upload_mimes', $plugin_admin, 'roniks_add_svg_mime_types', 99);
@@ -193,9 +193,6 @@ class Ronikdesign
 
 		$this->loader->add_action('wp_ajax_nopriv_do_init_remove_unused_media', $plugin_admin, 'ajax_do_init_remove_unused_media');
 		$this->loader->add_action('wp_ajax_do_init_remove_unused_media', $plugin_admin, 'ajax_do_init_remove_unused_media');
-
-
-		
 	}
 
 	/**
@@ -207,7 +204,6 @@ class Ronikdesign
 	 */
 	private function define_public_hooks()
 	{
-
 		$plugin_public = new Ronikdesign_Public($this->get_plugin_name(), $this->get_version());
 
 		$this->loader->add_action('wp_enqueue_scripts', $plugin_public, 'enqueue_styles');
@@ -216,16 +212,20 @@ class Ronikdesign
 		// This will add styles to the admin dashboard side
 		// $this->loader->add_action('admin_enqueue_scripts', $plugin_public, 'enqueue_styles');
 
+		// Verification API AJAX.
 		$this->loader->add_action('wp_ajax_nopriv_do_verification', $plugin_public, 'ajax_do_verification');
 		$this->loader->add_action('wp_ajax_do_verification', $plugin_public, 'ajax_do_verification');
 
+		// SVG API AJAX.
 		$this->loader->add_action('wp_ajax_nopriv_do_init_svg_migration_ronik', $plugin_public, 'ajax_do_init_svg_migration_ronik');
 		$this->loader->add_action('wp_ajax_do_init_svg_migration_ronik', $plugin_public, 'ajax_do_init_svg_migration_ronik');
 
+		// SVG Add Custom Route Path.
 		$this->loader->add_filter('acf_icon_path_suffix', $plugin_public, 'acf_icon_path_suffix');
 		$this->loader->add_filter('acf_icon_path', $plugin_public, 'acf_icon_path');
 		$this->loader->add_filter('acf_icon_url', $plugin_public, 'acf_icon_url');
 
+		// Lets add body class. This will allow us to hook into some powerful JS functions.
 		$this->loader->add_action('body_class', $plugin_public, 'my_body_classes');
 	}
 

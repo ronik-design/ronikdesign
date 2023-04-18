@@ -126,19 +126,23 @@ function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" =
           var svgItems = ['path', 'polygon', 'polyline', 'line', 'circle'];
           var svgThis = $(this);
           $(svgItems).each(function (index, value) {
-            if (svgThis.find(value).css('fill') !== 'none' && typeof svgThis.find(value).css('fill') !== 'undefined') {
-              var gradientExist = svgThis.find(value).css('fill').includes("url");
+
+            svgThis.find(value).each(function (index, value) {
+              var gradientExist = $(this).css('fill').includes("url");
               if (!gradientExist) {
-                svgThis.find(value).css({
-                  fill: svgThis.attr('data-svg-color')
-                });
+                if ($(this).css('stroke') !== 'none' && typeof $(this).css('stroke') !== 'undefined') {
+                  $(this).css({
+                    stroke: svgThis.attr('data-svg-color')
+                  });
+                }
+                if ($(this).css('fill') !== 'none' && typeof $(this).css('fill') !== 'undefined') {
+                  $(this).css({
+                    fill: svgThis.attr('data-svg-color')
+                  });
+                }
               }
-            }
-            if (svgThis.find(value).css('stroke') !== 'none' && typeof svgThis.find(value).css('stroke') !== 'undefined') {
-              svgThis.find(value).css({
-                stroke: svgThis.attr('data-svg-color')
-              });
-            }
+            });
+
           });
         });
       }, 50);

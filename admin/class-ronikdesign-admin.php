@@ -132,23 +132,19 @@ class Ronikdesign_Admin
 		 * class.
 		 */
 		
+		// Detect if jQuery is included if not lets modernize with the latest stable version.
 		if ( ! wp_script_is( 'jquery', 'enqueued' )) {
 			wp_enqueue_script($this->plugin_name.'jquery', 'https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js', array(), null, true);
 			$scriptName = $this->plugin_name.'jquery';
 			wp_enqueue_script($this->plugin_name . '-acf', plugin_dir_url(__FILE__) . 'js/acf/admin.js', array($scriptName), $this->version, false);
-	
 		} else {
 			wp_enqueue_script($this->plugin_name . '-acf', plugin_dir_url(__FILE__) . 'js/acf/admin.js', array(), $this->version, false);
 		}
 	}
 
 
-
-
-	/**
-	 * Ronik Customs CSP.
-	 */
-	function my_acf_op_init()
+	// This will setup all options pages.
+	function ronik_acf_op_init()
 	{
 		// Check function exists.
 		if (function_exists('acf_add_options_page')) {
@@ -169,7 +165,9 @@ class Ronikdesign_Admin
 			));
 		}
 	}
-	function my_acf_op_init_fields()
+
+	// This will setup all custom fields via php scripts.
+	function ronik_acf_op_init_fields()
 	{
 		// Include the ACF Fields
 		foreach (glob(dirname(__FILE__) . '/acf-fields/*.php') as $file) {
@@ -177,12 +175,9 @@ class Ronikdesign_Admin
 		}
 	}
 
-	function my_acf_op_functions()
-	{
-		// if( class_exists('ACF') ){
-		// 	return;
-		// }
 
+	function ronik_acf_op_init_functions()
+	{
 		// acf-icon-picker-master
 		include dirname(__FILE__) . '/acf-icon-picker-master/acf-icon-picker.php';
 

@@ -62,7 +62,13 @@ register_deactivation_hook( __FILE__, 'deactivate_ronikdesign' );
  * The core plugin class that is used to define internationalization,
  * admin-specific hooks, and public-facing site hooks.
  */
-require plugin_dir_path( __FILE__ ) . 'includes/class-ronikdesign.php';
+
+// We need to make sure ACF is installed. Otherwise site may crash!
+if(class_exists('ACF') ){
+	require plugin_dir_path( __FILE__ ) . 'includes/class-ronikdesign.php';
+} else {
+	return;
+}
 
 /**
  * Begins execution of the plugin.
