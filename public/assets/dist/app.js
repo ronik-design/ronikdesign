@@ -126,23 +126,19 @@ function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" =
           var svgItems = ['path', 'polygon', 'polyline', 'line', 'circle'];
           var svgThis = $(this);
           $(svgItems).each(function (index, value) {
-
-            svgThis.find(value).each(function (index, value) {
-              var gradientExist = $(this).css('fill').includes("url");
+            if (svgThis.find(value).css('fill') !== 'none' && typeof svgThis.find(value).css('fill') !== 'undefined') {
+              var gradientExist = svgThis.find(value).css('fill').includes("url");
               if (!gradientExist) {
-                if ($(this).css('stroke') !== 'none' && typeof $(this).css('stroke') !== 'undefined') {
-                  $(this).css({
-                    stroke: svgThis.attr('data-svg-color')
-                  });
-                }
-                if ($(this).css('fill') !== 'none' && typeof $(this).css('fill') !== 'undefined') {
-                  $(this).css({
-                    fill: svgThis.attr('data-svg-color')
-                  });
-                }
+                svgThis.find(value).css({
+                  fill: svgThis.attr('data-svg-color')
+                });
               }
-            });
-
+            }
+            if (svgThis.find(value).css('stroke') !== 'none' && typeof svgThis.find(value).css('stroke') !== 'undefined') {
+              svgThis.find(value).css({
+                stroke: svgThis.attr('data-svg-color')
+              });
+            }
           });
         });
       }, 50);
@@ -221,24 +217,32 @@ function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" =
       enhanceMouseFocusUpdate($);
     });
   }
+  function text_truncate(str, length, ending) {
+    // This will remove the break space.
+    str = str.replace(/\s|&nbsp;/, ' ');
+    // Remove all multi whitespace in a row.
+    str = str.replace(/\s\s+/g, ' ');
+    if (length == null) {
+      length = 100;
+    }
+    if (ending == null) {
+      ending = '...';
+    }
+    if (str.length > length) {
+      return str.substring(0, length - ending.length) + ending;
+    } else {
+      return str;
+    }
+  }
+  ;
 
   // This will dynamically add all the attributes necessary..
   function dynImageAttr($) {
+    if (!$("body").hasClass("dyn-image-attr")) {
+      return false;
+    }
     // Specify image dimensions
     $('img').each(function () {
-      text_truncate = function text_truncate(str, length, ending) {
-        if (length == null) {
-          length = 100;
-        }
-        if (ending == null) {
-          ending = '...';
-        }
-        if (str.length > length) {
-          return str.substring(0, length - ending.length) + ending;
-        } else {
-          return str;
-        }
-      };
       if (_typeof($(this).attr('width')) === ( true ? "undefined" : 0)) {
         var findImgWidth = $(this).width();
         $(this).attr('width', findImgWidth);
@@ -265,20 +269,23 @@ function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" =
 
   // This will dynamically add all the attributes necessary..
   function dynAttr($) {
+    if (!$("body").hasClass("dyn-button-attr")) {
+      return false;
+    }
     // Specify image dimensions
     $('button, a').each(function () {
       if ($(this).children()) {
         if ($(this).text()) {
           if ($(this).prop("tagName") == 'A') {
-            $(this).attr('aria-label', 'A link to ' + $(this).text());
+            $(this).attr('aria-label', 'A link to ' + text_truncate($(this).text(), 100));
           } else {
-            $(this).attr('aria-label', 'A clickable ' + $(this).prop("tagName").toLowerCase() + '.');
+            $(this).attr('aria-label', 'A clickable ' + text_truncate($(this).prop("tagName").toLowerCase(), 100) + '.');
           }
         } else {
           if ($(this).prop("tagName") == 'A') {
-            $(this).attr('aria-label', 'A link to ' + $(this).attr('href'));
+            $(this).attr('aria-label', 'A link to ' + text_truncate($(this).attr('href'), 100));
           } else {
-            $(this).attr('aria-label', 'A clickable ' + $(this).prop("tagName").toLowerCase() + '.');
+            $(this).attr('aria-label', 'A clickable ' + text_truncate($(this).prop("tagName").toLowerCase(), 100) + '.');
           }
         }
       }

@@ -70,6 +70,11 @@ body {
   transition: all 0.4s;
 }
 
+.ronik-password-disabled{
+  pointer-events: none !important;
+  opacity: 0.4 !important;
+}
+
 .ronik-password__container{
   position: relative;
 
@@ -107,5 +112,21 @@ body {
     font-weight: 400;
     font-style: italic;
     transition: all .4s;
+  }
+}
+
+.twofa-wrapper{
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  padding: 50px;
+
+  img{
+    width: 100%;
+    height: 100%;
+    max-width: 200px;
+    margin: 25px;
   }
 }

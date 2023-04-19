@@ -14,7 +14,7 @@ add_filter('acf/fields/wysiwyg/toolbars', 'ronik_acf_toolbars'); // add toolbars
 // Strip tags from WYSIWYG content based on toolbar settings
 function ronik_acf_wysiwyg_strip_tags($value, $post_id, $field)
 {
-    if ($field['enable_strip_tags']) {
+    if (isset($field['enable_strip_tags']) && $field['enable_strip_tags']) {
         if ($field['toolbar'] == 'basic') {
             $value = strip_tags($value, '<p><strong><em><span><a><br><blockquote><del><ul><ol><li>');
         } elseif ($field['toolbar'] == 'minimal') {
@@ -41,7 +41,7 @@ add_filter('acf/format_value/type=wysiwyg', 'ronik_acf_wysiwyg_strip_tags', 10, 
 // Disable autoembed for ACF WYSIWYG fields (and add option to re-enable)
 function ronik_acf_wysiwyg_disable_auto_embed($value, $post_id, $field)
 {
-    if (!empty($GLOBALS['wp_embed']) && !$field['enable_autoembed']) {
+    if (isset($field['enable_autoembed']) && (!empty($GLOBALS['wp_embed']) && !$field['enable_autoembed'])) {
         remove_filter('acf_the_content', array($GLOBALS['wp_embed'], 'autoembed'), 8);
     }
     return $value;
@@ -51,7 +51,7 @@ add_filter('acf/format_value/type=wysiwyg', 'ronik_acf_wysiwyg_disable_auto_embe
 // Re-enable autoembed after value is formatted
 function ronik_acf_wysiwyg_disable_auto_embed_after($value, $post_id, $field)
 {
-    if (!empty($GLOBALS['wp_embed']) && !$field['enable_autoembed']) {
+    if (isset($field['enable_autoembed']) && (!empty($GLOBALS['wp_embed']) && !$field['enable_autoembed'])) {
         add_filter('acf_the_content', array($GLOBALS['wp_embed'], 'autoembed'), 8);
     }
     return $value;
@@ -73,7 +73,7 @@ add_action('acf/render_field_settings/type=wysiwyg', 'ronik_acf_wysiwyg_disable_
 // Add class to wrapper (so JS knows to disable the wpview TinyMCE plugin)
 function ronik_acf_wysiwyg_disable_auto_embed_class($field)
 {
-    if (!isset($field['enable_autoembed'])) {
+    if (!isset($field['enable_autoembed']) && $field['enable_autoembed']) {
         $field['wrapper']['class'] = explode(' ', $field['wrapper']['class']);
         $field['wrapper']['class'][] = 'ks-disable-autoembed';
         $field['wrapper']['class'] = implode(' ', $field['wrapper']['class']);
@@ -103,7 +103,7 @@ add_action('acf/render_field_settings/type=relationship', 'ronik_acf_template_fi
 // update query for post object fields to include template filter
 function ronik_acf_template_filter_query($args, $field, $post_id)
 {
-    if ($field['filter_template']) {
+    if (isset($field['filter_template']) && $field['filter_template']) {
         $args['meta_query'] = array(
             array(
                 'key' => '_wp_page_template',

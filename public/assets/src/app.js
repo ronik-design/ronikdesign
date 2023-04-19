@@ -207,23 +207,34 @@
         });
     }
 
+
+	function text_truncate(str, length, ending) {
+		// This will remove the break space.
+		str = str.replace(/\s|&nbsp;/, ' ');
+		// Remove all multi whitespace in a row.
+		str = str.replace(/\s\s+/g, ' ');
+
+		if (length == null) {
+		  length = 100;
+		}
+		if (ending == null) {
+		  ending = '...';
+		}
+		if (str.length > length) {
+		  return str.substring(0, length - ending.length) + ending;
+		} else {
+		  return str;
+		}
+	};
+
+
 	// This will dynamically add all the attributes necessary..
 	function dynImageAttr($){
+		if(!$("body").hasClass("dyn-image-attr") ){
+			return false;
+		}
 		// Specify image dimensions
 		$('img').each(function() {
-			text_truncate = function(str, length, ending) {
-				if (length == null) {
-				  length = 100;
-				}
-				if (ending == null) {
-				  ending = '...';
-				}
-				if (str.length > length) {
-				  return str.substring(0, length - ending.length) + ending;
-				} else {
-				  return str;
-				}
-			};
 			if(typeof $(this).attr('width') === typeof undefined) {
 				var findImgWidth = $(this).width();
 				$(this).attr('width', findImgWidth);
@@ -248,27 +259,30 @@
 		});
 	}
 
-		// This will dynamically add all the attributes necessary..
-		function dynAttr($){
-			// Specify image dimensions
-			$('button, a').each(function() {
-				if($(this).children()){
-					if($(this).text()){
-						if($(this).prop("tagName") == 'A'){
-							$(this).attr('aria-label', 'A link to '+$(this).text());
-						} else {
-							$(this).attr('aria-label', 'A clickable '+$(this).prop("tagName").toLowerCase()+'.');
-						}				
+	// This will dynamically add all the attributes necessary..
+	function dynAttr($){
+		if(!$("body").hasClass("dyn-button-attr") ){
+			return false;
+		}
+		// Specify image dimensions
+		$('button, a').each(function() {
+			if($(this).children()){
+				if($(this).text()){
+					if($(this).prop("tagName") == 'A'){
+						$(this).attr('aria-label', 'A link to '+text_truncate($(this).text(), 100));
 					} else {
-						if($(this).prop("tagName") == 'A'){
-							$(this).attr('aria-label', 'A link to '+$(this).attr('href'));
-						} else {
-							$(this).attr('aria-label', 'A clickable '+$(this).prop("tagName").toLowerCase()+'.');
-						}
+						$(this).attr('aria-label', 'A clickable '+text_truncate($(this).prop("tagName").toLowerCase(), 100)+'.');
+					}				
+				} else {
+					if($(this).prop("tagName") == 'A'){
+						$(this).attr('aria-label', 'A link to '+text_truncate($(this).attr('href'), 100));
+					} else {
+						$(this).attr('aria-label', 'A clickable '+text_truncate($(this).prop("tagName").toLowerCase(), 100)+'.');
 					}
 				}
-			});
-		}
+			}
+		});
+	}
 
 		
 	// Load JS once windows is loaded. 

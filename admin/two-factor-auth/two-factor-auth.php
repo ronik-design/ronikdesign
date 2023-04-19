@@ -9,6 +9,18 @@ use chillerlan\QRCode\QROptions;
 
 use Twilio\Rest\Client;
 
+
+    function ronikdesigns_reserve_page_template( $page_template ){
+        // If the page is 2fa we add our custom ronik 2fa-template to the page.
+        if ( is_page( '2fa' ) ) {
+            $page_template =  dirname( __FILE__ , 2).'/custom-templates/2fa-template.php';
+        }
+        return $page_template;
+    }
+    add_filter( 'template_include', 'ronikdesigns_reserve_page_template', 99 );
+
+
+
     // do_action('2fa-registration-page');
     add_action('2fa-registration-page', function () {
         $options = new QROptions([
@@ -126,9 +138,9 @@ use Twilio\Rest\Client;
     add_filter('authenticate', 'my_custom_authenticate', 10, 3);
 
     // Per each user
-    add_action('show_user_profile', 'extra_user_profile_fields');
-    add_action('edit_user_profile', 'extra_user_profile_fields');
-    function extra_user_profile_fields($user)
+    add_action('show_user_profile', 'ronikdesign_extra_user_profile_fields');
+    add_action('edit_user_profile', 'ronikdesign_extra_user_profile_fields');
+    function ronikdesign_extra_user_profile_fields($user)
     {
         $get_registration_status = get_user_meta(get_current_user_id(), $key = 'google2fa_status', true);
     ?>

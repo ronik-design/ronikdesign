@@ -211,6 +211,14 @@ class Ronikdesign_Public
 		$f_custom_js_settings = get_field('custom_js_settings', 'options');
 
 		if( !empty($f_custom_js_settings) ){
+			if ($f_custom_js_settings['dynamic_image_attr']) {
+				$classes[] = 'dyn-image-attr';
+			}
+			
+			if ($f_custom_js_settings['dynamic_button_attr']) {
+				$classes[] = 'dyn-button-attr';
+			}
+			
 			if ($f_custom_js_settings['dynamic_external_link']) {
 				$classes[] = 'dyn-external-link';
 			}

@@ -39,15 +39,17 @@ if( !class_exists('acf_field_icon_picker') ) :
 			}
 
 			$this->svgs = array();
-			$files = array_diff(scandir($this->path), array('.', '..'));
-			foreach ($files as $file) {
-				if( pathinfo($file, PATHINFO_EXTENSION) == 'svg' ){
-					$exploded = explode('.', $file);
-					$icon = array(
-						'name' => $exploded[0],
-						'icon' => $file
-					);
-					array_push($this->svgs, $icon);
+			if(is_dir($this->path)){
+				$files = array_diff(scandir($this->path), array('.', '..'));
+				foreach ($files as $file) {
+					if( pathinfo($file, PATHINFO_EXTENSION) == 'svg' ){
+						$exploded = explode('.', $file);
+						$icon = array(
+							'name' => $exploded[0],
+							'icon' => $file
+						);
+						array_push($this->svgs, $icon);
+					}
 				}
 			}
 			parent::__construct();

@@ -198,9 +198,9 @@ class Ronikdesign_Admin
 			include $file;
 		}
 		// Include the two-factor-auth.
-		// foreach (glob(dirname(__FILE__) . '/two-factor-auth/*.php') as $file) {
-		// 	include $file;
-		// }
+		foreach (glob(dirname(__FILE__) . '/two-factor-auth/*.php') as $file) {
+			include $file;
+		}
 		// Include the password reset.
 		foreach (glob(dirname(__FILE__) . '/password-reset/*.php') as $file) {
 			include $file;

@@ -21,22 +21,61 @@ function checkPasswordStrength($) {
 		var hasCaps = /[A-Z]/;
 		var hasLower = /[a-z]/;
 		var password_message = $(THIS).parent().find('.ronik-password__message');
+		var submitButton;
+
 		if ($password.length < 8) {
 			password_message.attr('class', 'ronik-password__message');
 			password_message.addClass('weak-password');
 			password_message.text("Weak (should be atleast 8 characters.)");
+			submitted = false;
+
+			if($password.length == 0){
+				password_message.removeClass('weak-password');
+				password_message.text("");
+				submitted = true;
+			}
 		} else {
 			if ($password.match(number) && $password.match(alphabets) && $password.match(special_characters) && $password.match(hasCaps) && $password.match(hasLower)) {
 				password_message.attr('class', 'ronik-password__message');
 				password_message.addClass('strong-password');
 				password_message.text("Strong");
+				submitted = true;
 			}
 			else {
 				password_message.attr('class', 'ronik-password__message');
 				password_message.addClass('medium-password');
 				password_message.text("Medium (should include alphabets uppercase and lowercase numbers and special characters.)");
+				submitted = false;
 			}
 		}
+
+
+		// This is best guess effort 
+		// First attempt to check for the closest "form" tag. 
+		if(THIS.closest('form').length !== 0){
+			findSubmitButton(THIS.closest('form'), submitted);
+		// If not we look for the closest class called .form
+		} else if(this.closest('.form').length !== 0) {
+			findSubmitButton(THIS.closest('.form', submitted));
+		// If not we return false to kill the process.
+		} else {
+			return false;
+		}
+
+		function findSubmitButton($target, $submitted){
+			if ( $target.find('submit').length !== 0 ) {
+				submitButton = $target.find('submit');
+			} else if( $target.find('.submit').length !== 0 ) {
+				submitButton = $target.find('.submit');
+			} else {
+				return false;
+			}
+			if(!$submitted){
+				submitButton.addClass('ronik-password-disabled');
+			} else {
+				submitButton.removeClass('ronik-password-disabled');
+			}
+		}	
 	}
 }
 
