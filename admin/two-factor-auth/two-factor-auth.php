@@ -23,6 +23,10 @@ use Twilio\Rest\Client;
 
     // do_action('2fa-registration-page');
     add_action('2fa-registration-page', function () {
+        if($_GET["2faredirect"] == 'home'){
+            header("Location:".home_url());
+            die();
+        }
         $options = new QROptions([
             'eccLevel' => QRCode::ECC_L,
             'outputType' => QRCode::OUTPUT_MARKUP_SVG,
@@ -44,7 +48,6 @@ use Twilio\Rest\Client;
         }
         // Check if google2fa_status is not equal to verified.
         if ($get_registration_status !== 'google2fa_verified' && is_user_logged_in()) {
-
             // Get the User Object.
             $author_obj = get_user_by('id', get_current_user_id());
             // Lets create the QR as well.
@@ -67,6 +70,22 @@ use Twilio\Rest\Client;
             ?>
             <?php if ($valid) { ?>
                 <div class="">Authorization Saved!</div>
+                <div id="countdown"></div>
+                <script>
+                    var timeleft = 5;
+                    var downloadTimer = setInterval(function(){
+                        if(timeleft <= 0){
+                            clearInterval(downloadTimer);
+                            document.getElementById("countdown").innerHTML = "Reloading";
+                            setTimeout(() => {
+                                window.location = window.location.pathname + "?2faredirect=home";
+                            }, 1000);
+                        } else {
+                        document.getElementById("countdown").innerHTML = "Page will reload in: " + timeleft + " seconds";
+                        }
+                            timeleft -= 1;
+                    }, 1000);
+                </script>
             <?php } else { ?>
                 <p><?= $get_current_secret; ?></p>
                 <img src='<?= $qrcode ?>' alt='QR Code' width='100' height='100'>
@@ -77,6 +96,23 @@ use Twilio\Rest\Client;
             <?php } ?>
         <?php } else{ ?>
             Please contact system administrator. To reset 2fa code.
+            <br>
+            <div id="countdown"></div>
+            <script>
+                var timeleft = 5;
+                var downloadTimer = setInterval(function(){
+                    if(timeleft <= 0){
+                        clearInterval(downloadTimer);
+                        document.getElementById("countdown").innerHTML = "Reloading";
+                        setTimeout(() => {
+                            window.location = window.location.pathname + "?2faredirect=home";
+                        }, 1000);
+                    } else {
+                    document.getElementById("countdown").innerHTML = "Page will reload in: " + timeleft + " seconds";
+                    }
+                        timeleft -= 1;
+                }, 1000);
+            </script>
         <?php }
     });
     // Add additional login field
@@ -122,10 +158,10 @@ use Twilio\Rest\Client;
             //Create an error to return to user
             return new WP_Error('denied', __("<strong>ERROR</strong>: Sorry incorrect credentials."));
         }
-        // Check if verifed. 
+        // Check if verifed.
         $valid = $google2fa->verifyKey($get_current_secret, $login_google2fa);
         if ($valid) {
-            //Make sure you return null 
+            //Make sure you return null
             return null;
         } else {
             //User note found, or no value entered or doesn't match stored value - don't proceed.
@@ -177,14 +213,14 @@ use Twilio\Rest\Client;
             if( empty($get_current_secret) || $get_registration_status == 'google2fa_unverified'){
                 // Prevent an infinite loop.
                 if(get_permalink() !== home_url('/2fa/')){
-                    wp_redirect( esc_url(home_url('/2fa/')) ); 
+                    wp_redirect( esc_url(home_url('/2fa/')) );
                     exit;
                 }
             }
         } else{
             // Prevent an infinite loop.
             if(get_permalink() == home_url('/2fa/')){
-                wp_redirect( esc_url(home_url()) ); 
+                wp_redirect( esc_url(home_url()) );
                 exit;
             }
         }

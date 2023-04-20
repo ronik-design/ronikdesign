@@ -97,7 +97,7 @@ if ($f_csp_enable) {
             wp_scripts()->add_data('jquery-migrate', 'group', 1);
         }
         add_action('wp_enqueue_scripts', 'ronik_jquery_to_footer');
-        //Remove JQuery migrate, 
+        //Remove JQuery migrate,
         function ronik_remove_jquery_migrate($scripts)
         {
             if (!is_admin() && isset($scripts->registered['jquery'])) {
@@ -110,7 +110,7 @@ if ($f_csp_enable) {
             }
         }
         add_action('wp_default_scripts', 'ronik_remove_jquery_migrate');
-        //Add preload to all enqueue styles. 
+        //Add preload to all enqueue styles.
         function ronik_add_preload_attribute($link, $handle)
         {
             $all_styles = handle_retrieval(true, false); // A list of all the styles with handles.
@@ -135,7 +135,7 @@ if ($f_csp_enable) {
             return $all_scripts;
         });
         add_filter('script_loader_tag', function ($html, $handle) {
-            // CSP fix 
+            // CSP fix
             // $nonce = wp_create_nonce( 'my-nonce' );
             // $nonce = 'random123';
             $deferHandles = apply_filters('nonce_scripts', []);
@@ -146,7 +146,7 @@ if ($f_csp_enable) {
                 $html = trim(str_replace("<script", '<script type="text/javascript" defer nonce="' . CSP_NONCE . '"', $html));
             }
 
-            // Basically 
+            // Basically
             if(DISALLOW_SCRIPTS_DEFER){
                 foreach(DISALLOW_SCRIPTS_DEFER as $key => $reject_script_defer){
                     if($reject_script_defer['handle'] == $handle){
@@ -167,7 +167,7 @@ if ($f_csp_enable) {
             $headers['X-Content-Type-Options']      = 'nosniff';
             $headers['X-XSS-Protection']            = '1; mode=block';
             $headers['Permissions-Policy']          = 'fullscreen=(self "' . ENV_PATH . '"), geolocation=*, camera=()';
-            //Note: In the presence of a CSP nonce the unsafe-inline directive will be ignored by modern browsers. Older browsers, which don't support nonces, will see unsafe-inline and allow inline scripts to execute. For site to work properly.        
+            //Note: In the presence of a CSP nonce the unsafe-inline directive will be ignored by modern browsers. Older browsers, which don't support nonces, will see unsafe-inline and allow inline scripts to execute. For site to work properly.
             $headers['Content-Security-Policy']     = " script-src '" . $nonce . "' 'strict-dynamic' 'unsafe-inline' 'unsafe-eval' https: 'self'; ";
             // $headers['Content-Security-Policy']      = " script-src 'strict-dynamic' 'unsafe-inline' 'unsafe-eval' https: 'self'; ";
             $headers['Content-Security-Policy']     .= " default-src 'strict-dynamic' 'unsafe-inline' 'unsafe-eval' https: 'self'; ";
@@ -181,6 +181,8 @@ if ($f_csp_enable) {
 
             $headers['Content-Security-Policy']     .= " font-src 'self'  " . ALLOWABLE_FONTS . ";  ";
             $headers['Content-Security-Policy']     .= " img-src 'self'  " . ALLOWABLE_SCRIPTS . ";  ";
+
+            $headers['Content-Security-Policy']     .= " frame-src 'self'  " . ALLOWABLE_SCRIPTS . ";  ";
 
             $headers['Content-Security-Policy']     .= " report-uri " . ENV_PATH . "; ";
 
