@@ -1043,6 +1043,63 @@ https://test.com/',
 
 
 			array(
+				'key' => 'field_638e451534179244_ronikdesign',
+				'label' => 'MFA Settings ',
+				'name' => '',
+				'type' => 'tab',
+				'instructions' => '',
+				'required' => 0,
+				'conditional_logic' => 0,
+				'wrapper' => array(
+					'width' => '',
+					'class' => '',
+					'id' => '',
+				),
+				'placement' => 'left',
+				'endpoint' => 0,
+			),
+
+			array(
+				'key' => 'field_638e4515341792b_ronikdesign',
+				'label' => 'MFA Settings',
+				'name' => 'mfa_settings',
+				'type' => 'group',
+				'instructions' => 'MFASettings',
+				'required' => 0,
+				'conditional_logic' => 0,
+				'wrapper' => array(
+					'width' => '',
+					'class' => '',
+					'id' => '',
+				),
+				'layout' => 'block',
+				'sub_fields' => array(
+					array(
+						'key' => 'field_6372afa6da3f200c_ronikdesign',
+						'label' => 'Enable MFA Settings',
+						'name' => 'enable_mfa_settings',
+						'type' => 'true_false',
+						'instructions' => 'This will enable MFA settings.',
+						'required' => 0,
+						'conditional_logic' => 0,
+						'wrapper' => array(
+							'width' => '50',
+							'class' => '',
+							'id' => '',
+						),
+						'message' => '',
+						'default_value' => 1,
+						'ui' => 1,
+						'ui_on_text' => '',
+						'ui_off_text' => '',
+					),
+				),
+			),
+
+
+
+
+			array(
 				'key' => 'field_638e4515341792_ronikdesign',
 				'label' => 'Custom JS Settings',
 				'name' => '',

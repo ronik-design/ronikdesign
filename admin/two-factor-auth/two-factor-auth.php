@@ -9,6 +9,10 @@ use chillerlan\QRCode\QROptions;
 
 use Twilio\Rest\Client;
 
+    $f_mfa = get_field('mfa_settings', 'options');
+    if(!$f_mfa['enable_mfa_settings']){
+        return false;
+    }
 
     function ronikdesigns_reserve_page_template( $page_template ){
         // If the page is 2fa we add our custom ronik 2fa-template to the page.
@@ -178,7 +182,17 @@ use Twilio\Rest\Client;
     add_action('edit_user_profile', 'ronikdesign_extra_user_profile_fields');
     function ronikdesign_extra_user_profile_fields($user)
     {
-        $get_registration_status = get_user_meta(get_current_user_id(), $key = 'google2fa_status', true);
+        if(isset($_GET["user_id"])){
+            $get_registration_status = get_user_meta($_GET["user_id"], $key = 'google2fa_status', true);
+            if(!$get_registration_status){
+                $get_registration_status = 'google2fa_unverified';
+            }
+        } else {
+            $get_registration_status = get_user_meta(get_current_user_id(), $key = 'google2fa_status', true);
+            if(!$get_registration_status){
+                $get_registration_status = 'google2fa_unverified';
+            }
+        }
     ?>
         <h3><?php _e("Extra profile information", "blank"); ?></h3>
         <table class="form-table">
