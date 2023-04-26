@@ -10,7 +10,7 @@ use chillerlan\QRCode\QROptions;
 use Twilio\Rest\Client;
 
     $f_mfa = get_field('mfa_settings', 'options');
-    if(!$f_mfa['enable_mfa_settings']){
+    if(!isset($f_mfa['enable_mfa_settings']) || !$f_mfa['enable_mfa_settings']){
         return false;
     }
 

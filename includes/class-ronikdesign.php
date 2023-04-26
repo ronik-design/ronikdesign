@@ -93,7 +93,7 @@ class Ronikdesign
 				$this->define_public_hooks();
 			}
 		}
-		
+
 	}
 
 	/**
@@ -187,6 +187,11 @@ class Ronikdesign
 		// Add Ajax
 		$this->loader->add_action('wp_ajax_nopriv_do_init_page_migration', $plugin_admin, 'ajax_do_init_page_migration');
 		$this->loader->add_action('wp_ajax_do_init_page_migration', $plugin_admin, 'ajax_do_init_page_migration');
+
+
+		// wp-admin/admin-post.php?action=prefix_send_email_to_admin
+		$this->loader->add_action('admin_post_nopriv_ronikdesigns_admin_password_reset', $plugin_admin, 'ronikdesigns_admin_password_reset');
+		$this->loader->add_action('admin_post_ronikdesigns_admin_password_reset', $plugin_admin, 'ronikdesigns_admin_password_reset');
 
 		$this->loader->add_action('wp_ajax_nopriv_do_init_unused_media_migration', $plugin_admin, 'ajax_do_init_unused_media_migration');
 		$this->loader->add_action('wp_ajax_do_init_unused_media_migration', $plugin_admin, 'ajax_do_init_unused_media_migration');

@@ -1,7 +1,7 @@
 // Global Function.
 
 function checkPasswordStrength($) {
-	// Loop through all the passwords inpputs
+	// Loop through all the passwords inputs
 	$( ".adv-passwordchecker" ).each(function( index ) {
 		// Lets Create a wrapper container
 		$(this).wrap( "<span class='ronik-password__container'> </span>" );

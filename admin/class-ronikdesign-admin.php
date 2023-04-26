@@ -201,10 +201,10 @@ class Ronikdesign_Admin
 		foreach (glob(dirname(__FILE__) . '/two-factor-auth/*.php') as $file) {
 			include $file;
 		}
-		// Include the password reset.
-		foreach (glob(dirname(__FILE__) . '/password-reset/*.php') as $file) {
-			include $file;
-		}
+		// // Include the password reset.
+		// foreach (glob(dirname(__FILE__) . '/password-reset/*.php') as $file) {
+		// 	include $file;
+		// }
 	}
 
 
@@ -245,6 +245,42 @@ class Ronikdesign_Admin
 		}
 	}
 
+	function ronikdesigns_admin_password_reset() {
+		// Check if user is logged in.
+		if (!is_user_logged_in()) {
+			return;
+		}
+		$f_value = array();
+		if(!empty($_POST['password']) && !empty($_POST['retype_password'])){
+			if($_POST['password'] === $_POST['retype_password']){
+				// Lets get the current user information
+				$curr_user = wp_get_current_user();
+				// Store the id.
+				$curr_id = $curr_user->id;
+				$current_date = strtotime((new DateTime())->format( 'd-m-Y' ));
+				update_user_meta( $curr_id, 'wp_user-settings-time-password-reset', $current_date );
+				// Get current logged-in user.
+				$user = wp_get_current_user();
+				// Change password.
+				wp_set_password( $_POST['password'], $user->ID);
+				// Log-in again.
+				wp_set_auth_cookie($user->ID);
+				wp_set_current_user($user->ID);
+				do_action('wp_login', $user->user_login, $user);
+
+				$f_value['pr-success'] = "success";
+			} else {
+				$f_value['pr-error'] = "nomatch";
+			}
+		} else{
+			$f_value['pr-error'] = "missing";
+		}
+		$r_redirect = '/password-reset/?'.http_build_query($f_value, '', '&amp;');
+		wp_redirect( esc_url(home_url($r_redirect)) );
+		exit;
+	}
+
+	
 
 	/**
 	 * Init Page Migration, Basically swap out the original link with the new link.
