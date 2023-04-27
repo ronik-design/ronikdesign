@@ -201,10 +201,10 @@ class Ronikdesign_Admin
 		foreach (glob(dirname(__FILE__) . '/two-factor-auth/*.php') as $file) {
 			include $file;
 		}
-		// // Include the password reset.
-		// foreach (glob(dirname(__FILE__) . '/password-reset/*.php') as $file) {
-		// 	include $file;
-		// }
+		// Include the password reset.
+		foreach (glob(dirname(__FILE__) . '/password-reset/*.php') as $file) {
+			include $file;
+		}
 	}
 
 
@@ -261,6 +261,12 @@ class Ronikdesign_Admin
 				update_user_meta( $curr_id, 'wp_user-settings-time-password-reset', $current_date );
 				// Get current logged-in user.
 				$user = wp_get_current_user();
+				// Send out an email notification.
+				$to = $curr_user->user_email;
+				$subject = 'Password Reset.';
+				$body = 'Your password was successfully reset.';
+				$headers = array('Content-Type: text/html; charset=UTF-8');
+				wp_mail($to, $subject, $body, $headers);
 				// Change password.
 				wp_set_password( $_POST['password'], $user->ID);
 				// Log-in again.

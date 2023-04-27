@@ -19,7 +19,6 @@ $f_success = isset($_GET['pr-success']) ? $_GET['pr-success'] : false;
 $f_error = isset($_GET['pr-error']) ? $_GET['pr-error'] : false;
 
 
-error_log(print_r( 'sss', true));
 
 if(!is_user_logged_in()){
     wp_redirect( esc_url(home_url()) );
