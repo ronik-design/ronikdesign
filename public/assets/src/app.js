@@ -284,6 +284,29 @@
 		});
 	}
 
+	function passwordReset(){
+		const url = window.location.href;
+		let domain = (new URL(url));
+		if(domain.pathname != '/password-reset/'){
+			var urlBuilder;
+			if(domain.pathname){
+				urlBuilder = domain.pathname;
+				if(domain.search){
+					urlBuilder = domain.pathname+domain.search;
+				}
+			} else {
+				if(domain.search){
+					urlBuilder = domain.hostname+domain.search;
+				} else {
+					urlBuilder = domain.hostname;
+				}
+			}
+			const PasswordReset = {
+				redirect: urlBuilder
+			}
+			window.localStorage.setItem('ronik-password-reset', JSON.stringify(PasswordReset));
+		}
+	}
 		
 	// Load JS once windows is loaded. 
 	$(window).on('load', function(){
@@ -297,6 +320,7 @@
 			checkPasswordStrength($);
 			dynImageAttr($);
 			dynAttr($);
+			passwordReset($);
 		}, 50);
 	});
 })( jQuery );

@@ -80,28 +80,39 @@ function password_reset_ronikdesigns(){
 
         // If past date is greater then current time stamp. We redirect to the reset page.
         if( $current_user_reset_time_stamp <= $past_date ){
-            // Check if the $_SERVER is available.
-            if(isset($_SERVER['REDIRECT_URL'])){
-                // Lets check if the $_SERVER['REDIRECT_URL'] is equal to admin-post.php or password-reset.
-                // This prevent redirect loop issues
-                if(($_SERVER['REQUEST_URI'] !== '/wp-admin/admin-post.php') && ($_SERVER['REDIRECT_URL'] !== '/password-reset/')){
-                    // Because we are using GET we have to check each query
-                    if( ($_SERVER['QUERY_STRING'] !== 'pr-success=success') || ($_SERVER['QUERY_STRING'] !== 'pr-error=nomatch') || ($_SERVER['QUERY_STRING'] !== 'pr-error=missing') ){
-                        error_log(print_r($_SERVER['REQUEST_URI'], true));
-                        wp_redirect( esc_url(home_url('/password-reset/')) );
 
-                        exit;
-                    }
-                }
-            } else {
-                if(($_SERVER['REQUEST_URI'] !== '/wp-admin/admin-post.php') && ($_SERVER['REQUEST_URI'] !== '/password-reset/')){
-                    if( ($_SERVER['REQUEST_URI'] !== '/password-reset/?pr-success=success') && ($_SERVER['REQUEST_URI'] !== '/password-reset/?pr-error=nomatch') && ($_SERVER['REQUEST_URI'] !== '/password-reset/?pr-error=missing') ){
-                        error_log(print_r($_SERVER['REQUEST_URI'], true));
-                        wp_redirect( esc_url(home_url('/password-reset/')) );
-                        exit;
-                    }
+            // Lets setup the cookie for redirect purposes.
+            if(($_SERVER['REQUEST_URI'] !== '/wp-admin/admin-post.php') && ($_SERVER['REQUEST_URI'] !== '/password-reset/')){
+                if( ($_SERVER['REQUEST_URI'] !== '/password-reset/?pr-success=success') && ($_SERVER['REQUEST_URI'] !== '/password-reset/?pr-error=nomatch') && ($_SERVER['REQUEST_URI'] !== '/password-reset/?pr-error=missing') ){
+                    $cookie_name = "ronik-password-reset-redirect";
+                    $cookie_value = urlencode($_SERVER['REQUEST_URI']);
+                    // Lets expire the cookie after 1 day.
+                    setcookie($cookie_name, $cookie_value, time() + (86400 * 30), "/"); // 86400 = 1 day
+                    // Pause server.
+                    sleep(.5);
                 }
             }
+
+            // Due to redirect loop issues we need to check the following parameters to avoid a redirect loop.
+                // Check if the $_SERVER is available via isset. WPE will default to else.
+                if(isset($_SERVER['REDIRECT_URL'])){
+                    // Lets check if the $_SERVER['REDIRECT_URL'] is equal to admin-post.php or password-reset.
+                    // This prevent redirect loop issues
+                    if(($_SERVER['REQUEST_URI'] !== '/wp-admin/admin-post.php') && ($_SERVER['REDIRECT_URL'] !== '/password-reset/')){
+                        // Because we are using GET we have to check each query
+                        if( ($_SERVER['QUERY_STRING'] !== 'pr-success=success') || ($_SERVER['QUERY_STRING'] !== 'pr-error=nomatch') || ($_SERVER['QUERY_STRING'] !== 'pr-error=missing') ){
+                            wp_redirect( esc_url(home_url('/password-reset/')) );
+                            exit;
+                        }
+                    }
+                } else {
+                    if(($_SERVER['REQUEST_URI'] !== '/wp-admin/admin-post.php') && ($_SERVER['REQUEST_URI'] !== '/password-reset/')){
+                        if( ($_SERVER['REQUEST_URI'] !== '/password-reset/?pr-success=success') && ($_SERVER['REQUEST_URI'] !== '/password-reset/?pr-error=nomatch') && ($_SERVER['REQUEST_URI'] !== '/password-reset/?pr-error=missing') ){
+                            wp_redirect( esc_url(home_url('/password-reset/')) );
+                            exit;
+                        }
+                    }
+                }
         }
     }
 }

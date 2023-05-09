@@ -291,6 +291,29 @@ function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" =
       }
     });
   }
+  function passwordReset() {
+    var url = window.location.href;
+    var domain = new URL(url);
+    if (domain.pathname != '/password-reset/') {
+      var urlBuilder;
+      if (domain.pathname) {
+        urlBuilder = domain.pathname;
+        if (domain.search) {
+          urlBuilder = domain.pathname + domain.search;
+        }
+      } else {
+        if (domain.search) {
+          urlBuilder = domain.hostname + domain.search;
+        } else {
+          urlBuilder = domain.hostname;
+        }
+      }
+      var PasswordReset = {
+        redirect: urlBuilder
+      };
+      window.localStorage.setItem('ronik-password-reset', JSON.stringify(PasswordReset));
+    }
+  }
 
   // Load JS once windows is loaded. 
   $(window).on('load', function () {
@@ -304,6 +327,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" =
       checkPasswordStrength($);
       dynImageAttr($);
       dynAttr($);
+      passwordReset($);
     }, 50);
   });
 })(jQuery);
