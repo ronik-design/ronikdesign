@@ -42,7 +42,6 @@ function password_reset_ronikdesigns(){
 	if(!is_user_logged_in()){
 		return false;
 	}
-
     function ronikdesigns_reserve_passwordreset_page_template( $page_template ){
         // If the page is 2fa we add our custom ronik 2fa-template to the page.
         if ( is_page( 'password-reset' ) ) {
@@ -79,29 +78,32 @@ function password_reset_ronikdesigns(){
         // $current_user_reset_time_stamp = $past_date_older;
         // End of Comment this out.
 
-        // If past date is greater then current time stamp. We reset the user time stamp & reset the password & send them a mail.
+        // If past date is greater then current time stamp. We redirect to the reset page.
         if( $current_user_reset_time_stamp <= $past_date ){
             // Check if the $_SERVER is available.
             if(isset($_SERVER['REDIRECT_URL'])){
-                // Lets check if the $_SERVER['REDIRECT_URL'] is equal to admin-post.php or password-reset. 
+                // Lets check if the $_SERVER['REDIRECT_URL'] is equal to admin-post.php or password-reset.
                 // This prevent redirect loop issues
                 if(($_SERVER['REQUEST_URI'] !== '/wp-admin/admin-post.php') && ($_SERVER['REDIRECT_URL'] !== '/password-reset/')){
                     // Because we are using GET we have to check each query
                     if( ($_SERVER['QUERY_STRING'] !== 'pr-success=success') || ($_SERVER['QUERY_STRING'] !== 'pr-error=nomatch') || ($_SERVER['QUERY_STRING'] !== 'pr-error=missing') ){
+                        error_log(print_r($_SERVER['REQUEST_URI'], true));
                         wp_redirect( esc_url(home_url('/password-reset/')) );
+
                         exit;
                     }
                 }
             } else {
                 if(($_SERVER['REQUEST_URI'] !== '/wp-admin/admin-post.php') && ($_SERVER['REQUEST_URI'] !== '/password-reset/')){
                     if( ($_SERVER['REQUEST_URI'] !== '/password-reset/?pr-success=success') && ($_SERVER['REQUEST_URI'] !== '/password-reset/?pr-error=nomatch') && ($_SERVER['REQUEST_URI'] !== '/password-reset/?pr-error=missing') ){
+                        error_log(print_r($_SERVER['REQUEST_URI'], true));
                         wp_redirect( esc_url(home_url('/password-reset/')) );
                         exit;
                     }
                 }
             }
         }
-    }  
+    }
 }
 add_action( 'admin_init', 'password_reset_ronikdesigns' );
 add_action( 'template_redirect', 'password_reset_ronikdesigns' );
