@@ -21,15 +21,13 @@ if($_GET["2faredirect"] == 'home'){
 	$f_instructions_verfied_complete = false;
 }
 ?>
-
-<div id="Container">
-	<?php if($f_header){ ?><?= $f_header; ?><?php } ?>
-
-	<?php if($f_content){ ?><?= $f_content; ?><?php } ?>
+	<?php if($f_header){ ?><?= $f_header(); ?><?php } ?>
 
 	<div class="twofa-wrapper">
+		<?php if($f_content){ ?><?= $f_content(); ?><?php } ?>
+		<br></br>
 		<?php if($f_instructions && !$f_instructions_verfied_complete){ ?>
-			<?= $f_instructions; ?>
+			<?= $f_instructions(); ?>
 		<?php } else { ?>
 			<?php if(!$f_instructions_verfied_complete){ ?>
 				<div class="instructions">
@@ -62,11 +60,7 @@ if($_GET["2faredirect"] == 'home'){
 		<?php do_action('2fa-registration-page'); ?>
 	</div>
 
-
-</div><!-- /Container --> 
-
-<?php if($f_footer){ ?><?= $f_footer; ?><?php } ?>
-
+	<?php if($f_footer){ ?><?= $f_footer(); ?><?php } ?>
 
 <?php get_footer(); ?>
 
