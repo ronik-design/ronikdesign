@@ -1,6 +1,19 @@
 (function( $ ) {
 	'use strict';
 
+	function log_click_action( action, url ) {
+		jQuery.ajax({
+			type: 'POST',
+			url: ajaxurl,
+			data: {
+				action: 'do_init_analytics',
+				click_action: action,
+				point_origin: url
+			}
+		});
+	}
+
+
 	function initSVGMigration() {
 		// Exit Function if node doesnt exist.
 		if ($("#page_svg_migration_ronikdesign").length == 0) {
@@ -215,6 +228,25 @@
 			// 	verificationProcess('phone', '631-617-4271' );
 			// }, 2000);
 
+			jQuery( 'button, a' ).on( 'click', function (ev) {
+				// ev.preventDefault();
+				// alert("Hello World!");
+
+				var currentLocation = window.location;
+				console.log(currentLocation);
+				log_click_action( 'my_button_clicked', currentLocation );
+				alert('sss');
+
+
+				setTimeout(() => {
+					alert('sss');
+				}, 1110);
+
+			});
 		}, 250);
+
+
+
+
 	});
 })( jQuery );

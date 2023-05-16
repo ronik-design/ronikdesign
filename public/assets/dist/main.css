@@ -457,3 +457,23 @@ body {
   flex-direction: column;
   padding: 50px;
 }
+.pass-reset-wrapper form {
+  width: 100%;
+  max-width: 250px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.pass-reset-wrapper form .ronik-password__container {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: column;
+  width: 100%;
+}
+.pass-reset-wrapper form .ronik-password__container input {
+  width: 100%;
+}
+.pass-reset-wrapper form .ronik-password__container .ronik-password__message {
+  width: 100%;
+  margin-top: 5px;
+}

@@ -41,12 +41,12 @@ $f_userdata = wp_get_current_user();
         <br></br>
 		<?php if($f_userdata){ ?>
             <form action="<?php echo esc_url( admin_url('admin-post.php') ); ?>" method="post">
-                <label for="password">Password:</label><br>
-                <input type="password" class="adv-passwordchecker" id="password" name="password" value="" required ><br><br>
-                <label for="password">Retype Password:</label><br>
-                <input type="password" class="adv-passwordchecker" id="retype_password" name="retype_password" value="" required><br><br>
+                <label for="password">Password:</label>
+                <input type="password" class="adv-passwordchecker" id="password" name="password" value="" required >
+                <label for="password">Retype Password:</label>
+                <input type="password" class="adv-passwordchecker" id="retype_password" name="retype_password" value="" required>
                 <input type="hidden" name="action" value="ronikdesigns_admin_password_reset">
-                <input type="submit" value="Send My Message">
+                <button type="submit" value="Reset Password">Reset Password</button>
             </form>
 		<?php } else { ?>
             <?= "Whoops something went wrong!" ?>

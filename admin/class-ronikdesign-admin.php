@@ -205,6 +205,11 @@ class Ronikdesign_Admin
 		foreach (glob(dirname(__FILE__) . '/password-reset/*.php') as $file) {
 			include $file;
 		}
+
+		// // Include the analytics.
+		// foreach (glob(dirname(__FILE__) . '/analytics/*.php') as $file) {
+		// 	include $file;
+		// }
 	}
 
 
@@ -683,4 +688,32 @@ class Ronikdesign_Admin
 
 
 
+	function ajax_do_init_analytics() {
+		// Check if user is logged in.
+		if (!is_user_logged_in()) {
+			return;
+		}
+		$user_id = get_current_user_id();
+		$meta_key = 'user_click_actions';
+
+		$current_data = get_user_meta( $user_id, $meta_key, true );
+
+		if($current_data){
+			// error_log(print_r($current_data, true));
+			$current_data[] = array(
+				'action' => $_POST['click_action'],
+				'timestamp' => time(),
+				'url' => $_POST['point_origin']
+			);
+			update_user_meta( $user_id, $meta_key, $current_data );
+		} else {
+			$current_data = array(
+				'action' => $_POST['click_action'],
+				'timestamp' => time(),
+				'url' => $_POST['point_origin']
+			);
+			update_user_meta( $user_id, $meta_key, $current_data );
+
+		}
+	}
 }
