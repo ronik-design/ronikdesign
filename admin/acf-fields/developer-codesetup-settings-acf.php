@@ -25,6 +25,27 @@ if( function_exists('acf_add_local_field_group') ):
                     </br></br>
 
 
+                    <div class="acf-setup-instructions">
+                        <div class="acf-setup-instruction__content">
+                            <strong>Enable Dynamic Icon Dropdown </strong></br>
+                            Create a new field. Then assign the Field Name as "icon". 
+
+                            Then select "Clone" Field Type. You will see a list select the "All fields from CLONE: ACF Select Icon field group." 
+
+                            Then Display select "Seamless (replaced this field with selected fields) Select "Prefix Field Names."
+
+                            Function listed below. "icon_dynamic-icon" is the acf field name
+                            </br>
+                            
+                            <code>$f_icon = get_sub_field("icon_dynamic-icon");</code></br>
+                            <code>dynamic_get_icon($f_icon);</code>
+                        </div>
+                        <div class="acf-setup-instruction__img"><img src="'.plugin_dir_url( __DIR__ ) . 'screenshots/dynamic-icon-dropdown.jpg'.'"></div>
+                    </div>
+
+
+
+
 
                     <div class="acf-setup-instructions">
                         <div class="acf-setup-instruction__content">
