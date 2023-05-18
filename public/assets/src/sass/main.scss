@@ -139,6 +139,32 @@ body {
   flex-direction: column;
   padding: 50px;
 
+  .pass-reset-message{
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    max-width: 400px;
+
+    div{
+      padding: 10px;
+      border-radius: 5px;
+      width: 100%;
+      color: black;
+      text-align: center;
+      font-style: italic;
+    }
+    .pass-reset-message__success{
+      color: #ffff;
+      background-color: green;
+    }
+    .pass-reset-message__nomatch{
+      background-color: orange;
+    }
+    .pass-reset-message__missing{
+      background-color: orange;
+    }
+  }
   form{ 
     width: 100%;
     max-width: 250px;
@@ -151,16 +177,36 @@ body {
       flex-wrap: wrap;
       flex-direction: column;
       width: 100%;
-  
+      
+      label{
+        padding-bottom: 5px;
+      }
       input{
-        width: 100%;
+        line-height: 1;
+        padding: 5px 10px;
+        margin: 5px 0px;
+        border: solid 1px;
+        border-radius: 2px;
       }
       .ronik-password__message{
         width: 100%;
         margin-top: 5px;
+        margin-bottom: 10px;
       }
+    }
+    button{
+      transition: all .4s;
+      cursor: pointer;
+      background-color: #000;
+      color: #ffff;
+      border: none;
+      padding: 10px;
+      border-radius: 4px;
+      opacity: 1;
 
-      
+      &:hover{
+        opacity: 0.8;
+      }
     }
   }
 }

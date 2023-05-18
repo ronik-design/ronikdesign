@@ -457,6 +457,31 @@ body {
   flex-direction: column;
   padding: 50px;
 }
+.pass-reset-wrapper .pass-reset-message {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  max-width: 400px;
+}
+.pass-reset-wrapper .pass-reset-message div {
+  padding: 10px;
+  border-radius: 5px;
+  width: 100%;
+  color: black;
+  text-align: center;
+  font-style: italic;
+}
+.pass-reset-wrapper .pass-reset-message .pass-reset-message__success {
+  color: white;
+  background-color: green;
+}
+.pass-reset-wrapper .pass-reset-message .pass-reset-message__nomatch {
+  background-color: orange;
+}
+.pass-reset-wrapper .pass-reset-message .pass-reset-message__missing {
+  background-color: orange;
+}
 .pass-reset-wrapper form {
   width: 100%;
   max-width: 250px;
@@ -470,10 +495,31 @@ body {
   flex-direction: column;
   width: 100%;
 }
+.pass-reset-wrapper form .ronik-password__container label {
+  padding-bottom: 5px;
+}
 .pass-reset-wrapper form .ronik-password__container input {
-  width: 100%;
+  line-height: 1;
+  padding: 5px 10px;
+  margin: 5px 0px;
+  border: solid 1px;
+  border-radius: 2px;
 }
 .pass-reset-wrapper form .ronik-password__container .ronik-password__message {
   width: 100%;
   margin-top: 5px;
+  margin-bottom: 10px;
+}
+.pass-reset-wrapper form button {
+  transition: all 0.4s;
+  cursor: pointer;
+  background-color: #000;
+  color: white;
+  border: none;
+  padding: 10px;
+  border-radius: 4px;
+  opacity: 1;
+}
+.pass-reset-wrapper form button:hover {
+  opacity: 0.8;
 }

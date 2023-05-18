@@ -25,15 +25,17 @@ $f_userdata = wp_get_current_user();
 
 <?php if($f_header){ ?><?= $f_header(); ?><?php } ?>
 	<div class="pass-reset-wrapper">
-        <?php if($f_success){ ?>
-            Password Successfully Reset
-        <?php } ?>
-        <?php if($f_error == 'nomatch'){ ?>
-            Sorry your password does not match!
-        <?php } ?>
-        <?php if($f_error == 'missing'){ ?>
-            Sorry you did not input a password!
-        <?php } ?>
+        <div class="pass-reset-message">
+            <?php if($f_success){ ?>
+                <div class="pass-reset-message__success">Password Successfully Reset</div>
+            <?php } ?>
+            <?php if($f_error == 'nomatch'){ ?>
+                <div class="pass-reset-message__nomatch">Sorry your password does not match!</div>
+            <?php } ?>
+            <?php if($f_error == 'missing'){ ?>
+                <div class="pass-reset-message__missing">Sorry you did not input a password!</div>
+            <?php } ?>
+        </div>
         <br></br>
         <?php if($f_content){ ?><?= $f_content(); ?><?php } ?>
         <br></br>
