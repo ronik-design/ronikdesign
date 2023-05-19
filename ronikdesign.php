@@ -37,6 +37,18 @@ if ( ! defined( 'WPINC' ) ) {
  */
 define( 'RONIKDESIGN_VERSION', '1.0.0' );
 
+
+
+require 'plugin-update-checker/plugin-update-checker.php';
+use YahnisElsts\PluginUpdateChecker\v5\PucFactory;
+
+$myUpdateChecker = PucFactory::buildUpdateChecker(
+	'https://github.com/ronik-design/ronikdesign/blob/main/plugin.json',
+	__FILE__, //Full path to the main plugin file or functions.php.
+	'ronikdesign-plugin'
+);
+
+
 /**
  * The code that runs during plugin activation.
  * This action is documented in includes/class-ronikdesign-activator.php
