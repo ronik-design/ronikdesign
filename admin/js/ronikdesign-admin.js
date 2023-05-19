@@ -228,21 +228,21 @@
 			// 	verificationProcess('phone', '631-617-4271' );
 			// }, 2000);
 
-			jQuery( 'button, a' ).on( 'click', function (ev) {
-				// ev.preventDefault();
-				// alert("Hello World!");
+			// jQuery( 'button, a' ).on( 'click', function (ev) {
+			// 	// ev.preventDefault();
+			// 	// alert("Hello World!");
 
-				var currentLocation = window.location;
-				console.log(currentLocation);
-				log_click_action( 'my_button_clicked', currentLocation );
-				alert('sss');
+			// 	var currentLocation = window.location;
+			// 	console.log(currentLocation);
+			// 	log_click_action( 'my_button_clicked', currentLocation );
+			// 	alert('sss');
 
 
-				setTimeout(() => {
-					alert('sss');
-				}, 1110);
+			// 	setTimeout(() => {
+			// 		alert('sss');
+			// 	}, 1110);
 
-			});
+			// });
 		}, 250);
 
 
