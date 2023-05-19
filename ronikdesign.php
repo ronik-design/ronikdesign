@@ -39,14 +39,29 @@ define( 'RONIKDESIGN_VERSION', '1.0.0' );
 
 
 
+// require 'plugin-update-checker/plugin-update-checker.php';
+// use YahnisElsts\PluginUpdateChecker\v5\PucFactory;
+
+// $myUpdateChecker = PucFactory::buildUpdateChecker(
+// 	'https://kmancuso.com/plugin.json',
+// 	__FILE__, //Full path to the main plugin file or functions.php.
+// 	'ronikdesign'
+// );
+
 require 'plugin-update-checker/plugin-update-checker.php';
 use YahnisElsts\PluginUpdateChecker\v5\PucFactory;
 
 $myUpdateChecker = PucFactory::buildUpdateChecker(
-	'https://github.com/ronik-design/ronikdesign/blob/main/plugin.json',
-	__FILE__, //Full path to the main plugin file or functions.php.
-	'ronikdesign-plugin'
+	'https://github.com/ronik-design/ronikdesign/',
+	__FILE__,
+	'ronikdesign'
 );
+//Set the branch that contains the stable release.
+$myUpdateChecker->setBranch('main');
+//Optional: If you're using a private repository, specify the access token like this:
+$myUpdateChecker->setAuthentication('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');
+
+
 
 
 /**
