@@ -16,7 +16,7 @@
  * Plugin Name:       Ronik Designs Developer Toolbox
  * Plugin URI:        https://www.ronikdesign.com/
  * Description:       Theme Code Optimizer. ACF is necessary for plugin to work correctly.
- * Version:           1.0.1
+ * Version:           1.0.0
  * Author:            Kevin Mancuso
  * Author URI:        https://www.ronikdesign.com/
  * License:           GPL-2.0+
@@ -35,7 +35,7 @@ if ( ! defined( 'WPINC' ) ) {
  * Start at version 1.0.0 and use SemVer - https://semver.org
  * Rename this for your plugin and update it as you release new versions.
  */
-define( 'RONIKDESIGN_VERSION', '1.0.1' );
+define( 'RONIKDESIGN_VERSION', '1.0.0' );
 
 
 
