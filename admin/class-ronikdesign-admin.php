@@ -381,10 +381,10 @@ class Ronikdesign_Admin
 				'programming' 
 			);
 			$select_attachment_type = array(
-				"jpg" => "image/jpg",
-				"jpeg" => "image/jpeg",
-				"jpe" => "image/jpe",
-				"gif" => "image/gif",
+				// "jpg" => "image/jpg",
+				// "jpeg" => "image/jpeg",
+				// "jpe" => "image/jpe",
+				// "gif" => "image/gif",
 				"png" => "image/png",
 			);
 			$select_numberposts = get_field('page_media_cleaner_numberposts_field_ronikdesign', 'options');
