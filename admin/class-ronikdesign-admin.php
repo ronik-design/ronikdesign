@@ -366,6 +366,11 @@ class Ronikdesign_Admin
 		if (!is_user_logged_in()) {
 			return;
 		}
+		function ronik_timeout_extend( $time ){
+			// Default timeout is 5
+			return 20;
+		}
+		add_filter( 'http_request_timeout', 'ronik_timeout_extend' );
 
 		function recursive_delete($number){
 			// $select_post_type = array( 'page', 'posts', 'segments', 'networks', 'programs', 'articles', 'playlists', 'credits', 'programming' );
@@ -381,10 +386,10 @@ class Ronikdesign_Admin
 				'programming' 
 			);
 			$select_attachment_type = array(
-				// "jpg" => "image/jpg",
-				// "jpeg" => "image/jpeg",
-				// "jpe" => "image/jpe",
-				// "gif" => "image/gif",
+				"jpg" => "image/jpg",
+				"jpeg" => "image/jpeg",
+				"jpe" => "image/jpe",
+				"gif" => "image/gif",
 				"png" => "image/png",
 			);
 			$select_numberposts = get_field('page_media_cleaner_numberposts_field_ronikdesign', 'options');
