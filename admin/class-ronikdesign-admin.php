@@ -502,14 +502,11 @@ class Ronikdesign_Admin
 				// First let remove the Gutenberg id from the bulk main id array
 				if($wp_postsid_gutenberg_image_array){
 					$arr_checkpoint_2a = array_values(array_diff($arr_checkpoint_1b, $wp_postsid_gutenberg_image_array) );
-					error_log(print_r('Remove Gutenberg id from bulk main id array: '.count($wp_postsid_gutenberg_image_array) , true));
-
 				} else{
-					$arr_checkpoint_2a = $wp_postsid_gutenberg_image_array;
+					$arr_checkpoint_2a = $arr_checkpoint_1b;
 				}
 				if($wp_posts_gutenberg_image_array){
 					$arr_checkpoint_2b = array_values(array_diff($arr_checkpoint_2a, $wp_posts_gutenberg_image_array) );
-					error_log(print_r('Remove Gutenberg Image from bulk main id array: '.count($wp_posts_gutenberg_image_array) , true));
 				} else {
 					$arr_checkpoint_2b = $arr_checkpoint_2a;
 				}
