@@ -658,7 +658,7 @@ class Ronikdesign_Admin
 		}
 		// Warning this script will slow down the entire server. Use only a small amount at a time.
 		$image_array = array();
-		foreach ( range( 0, 50 ) as $number) {
+		foreach ( range( 0, 25 ) as $number) {
 			if(recursive_delete($number)){
 				$image_array[$number] = recursive_delete($number);
 			}
