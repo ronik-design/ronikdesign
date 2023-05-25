@@ -523,6 +523,7 @@ class Ronikdesign_Admin
 				error_log(print_r('CHECKPOINT 3' , true));
 			
 				$wp_postsmeta_acf_repeater_image_array = array();
+				$wp_postsmeta_acf_repeater_image_url_array = array();
 				if($arr_checkpoint_2c){
 					foreach($arr_checkpoint_2c as $image_id){
 
@@ -657,7 +658,7 @@ class Ronikdesign_Admin
 		}
 		// Warning this script will slow down the entire server. Use only a small amount at a time.
 		$image_array = array();
-		foreach ( range( 0, 5 ) as $number) {
+		foreach ( range( 0, 50 ) as $number) {
 			if(recursive_delete($number)){
 				$image_array[$number] = recursive_delete($number);
 			}
