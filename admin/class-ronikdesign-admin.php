@@ -376,7 +376,7 @@ class Ronikdesign_Admin
 				// "gif" => "image/gif",
 				"png" => "image/png",
 			);
-			$select_numberposts = 50; // Do not add more then 150.
+			$select_numberposts = 20; // Do not add more then 150.
 			$offsetValue = $number * $select_numberposts;
 			$select_post_status = array('publish', 'pending', 'draft', 'private', 'future');
 
@@ -658,11 +658,15 @@ class Ronikdesign_Admin
 		$f_offset_value_end = get_field('offset_field_ronikdesign', 'options');
 		$f_offset_value_start = $f_offset_value_end - 25;
 		$image_array = array();
+		$f_count = 0;
 		foreach ( range( $f_offset_value_start, $f_offset_value_end ) as $number) {
-			if(recursive_delete($number)){
-				$image_array[$number] = recursive_delete($number);
-			}
+			// $f_count++;
+			$image_array[$f_count++] = recursive_delete($number);
 		}
+		// remove empty and re-arrange image array
+		$image_array = array_values(array_filter($image_array));
+
+		error_log(print_r(memory_get_usage(), true));
 
 		error_log(print_r('Final Results', true));
 		error_log(print_r($image_array, true));
