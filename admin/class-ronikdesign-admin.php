@@ -368,243 +368,313 @@ class Ronikdesign_Admin
 		}
 
 		function recursive_delete($number){
-			$offsetValue = $number * 20;
-			// This will allow us to collect all the image ids.
-			$image_ids = array();
-			$image_ids_two = array();
+			$offsetValue = $number * 50;
 
-			// We receive all the attachments that does not have a post_parent.
-			error_log(print_r('Attachment Check' , true));
-			$attachments = get_posts( array(
-				'post_type' => 'attachment',
-				// 'posts_per_page' => 2,
-				'offset' => $offsetValue,
-				'numberposts' => 20, // Do not add more then 150.
-				'fields' => 'ids',
-				'post_parent' => 0,
-				'post_mime_type' => array(
-					"jpg" => "image/jpeg",
-					"jpeg" => "image/jpeg",
-					"jpe" => "image/jpeg",
-					"gif" => "image/gif",
-					"png" => "image/png",
-				),
-			));
-			if ($attachments) {
-				foreach ($attachments as $attachmentID){
-					$image_ids[] = $attachmentID;
+			$select_post_type = array( 'page', 'posts', 'segments', 'networks', 'programs', 'articles', 'playlists', 'credits', 'programming' );
+			$select_attachment_type = array(
+				"jpg" => "image/jpg",
+				"jpeg" => "image/jpeg",
+				"jpe" => "image/jpe",
+				"gif" => "image/gif",
+				"png" => "image/png",
+			);
+			$select_numberposts = 50; // Do not add more then 150.
+			$select_post_status = array('publish', 'pending', 'draft', 'private', 'future');
+
+
+			// Lets gather all the image id of the entire application.
+				// We receive all the image id.
+				error_log(print_r('Gather All Image ID of the entire website.' , true));
+				$allimagesid = get_posts( array(
+					'post_type' => 'attachment',
+					// 'posts_per_page' => 2,
+					'offset' => $offsetValue,
+					// 'numberposts' => 20, // Do not add more then 150.
+					// 'numberposts' => -1, // Do not add more then 150.
+					'numberposts' => $select_numberposts,
+					'fields' => 'ids',
+					'post_mime_type' => $select_attachment_type,
+				));
+				// This will allow us to collect all the image ids.
+				$main_image_ids = array();
+				if ($allimagesid) {
+					foreach ($allimagesid as $imageID){
+						$main_image_ids[] = $imageID;
+					}
 				}
-			}
-			// Lets output all the missing image ids.
-			error_log(print_r($image_ids , true));
-			error_log(print_r('Looping through all IDS.' , true));
-			if($image_ids){
-				foreach($image_ids as $key => $image_id){
-					// lets get the image ID. Search through the wp_posts data table. This is not ideal, but is the only good way to search for imageid for gutenberg blocks.
-					error_log(print_r('Image ID wp_posts Check' , true));
-					$args_id = array(
-						// 'fields' => 'ids',
-						'post_type'  => 'any',
-						'post_status'  => 'any',
-						'posts_per_page' => -1,
-						's'  => ':'.$image_id,
-					);
-					$f_postsid = get_posts( $args_id );
-					if($f_postsid){
-						foreach($f_postsid as $key => $posts){
-							if($posts->ID){
-								// error_log(print_r($image_id , true));
-								// Lets remove the found image from the array.
-								if (($key = array_search($image_id, $image_ids)) !== false) {
-									unset($image_ids[$key]);
-								}
-								error_log(print_r('Image ID wp_posts Check Found missing ID: '.$image_id , true));
+
+			// CHECKPOINT 1
+				error_log(print_r('Get all image ids: '.count($main_image_ids) , true));
+				error_log(print_r('CHECKPOINT 1' , true));
+
+			// Lets get all of the pages, posts and custom post types of the entire application. Thumbnail.
+				$get_all_post_pages = get_posts( array(
+					'post_type' => $select_post_type,
+					'numberposts' => -1,
+					'fields' => 'ids',
+					'post_status'  => $select_post_status,
+				));				
+				$all_post_thumbnail_ids = array();
+				$all_image_attachement_ids = array();
+				if ($get_all_post_pages) {
+					foreach ($get_all_post_pages as $pageID){
+						$attachments = get_posts( array(
+							'post_type' => 'attachment',
+							'numberposts' => -1,
+							'fields' => 'ids',
+							'post_parent' => $pageID,
+							'post_mime_type' => $select_attachment_type,
+						));
+						if ($attachments) {
+							foreach ($attachments as $attachmentID){
+								$all_image_attachement_ids[] = $attachmentID;
 							}
 						}
-					}
-					$image_ids = array_values(array_filter($image_ids)); // 'reindex' array to cleanup...
-					sleep(.25);
-
-					// error_log(print_r($image_ids , true));
-					// lets get the attached file name. Search through the wp_posts data table. This is not ideal, but is the only good way to search for imageid for gutenberg blocks. Plus any images that are inserted into posts manually.
-					error_log(print_r('Attached file wp_posts Check' , true));
-					$f_attached_file = get_attached_file( $image_id );
-					$pieces = explode('/', $f_attached_file ) ;
-					$args_attached = array(
-						'post_type'  => 'any',
-						'post_status'  => 'any',
-						'posts_per_page' => -1,
-						's'  => end($pieces),
-					);
-					$f_postsattached = get_posts( $args_attached );
-					if($f_postsattached){
-						foreach($f_postsattached as $key => $posts){
-							if($posts->ID){
-								// error_log(print_r($image_id , true));
-								// Lets remove the found image from the array.
-								if (($key = array_search($image_id, $image_ids)) !== false) {
-									unset($image_ids[$key]);
-								}
-								error_log(print_r('Attached file wp_posts Check Found missing ID: '.$image_id , true));
-							}
+						if( get_post_thumbnail_id( $pageID ) ){
+							$all_post_thumbnail_ids[] = get_post_thumbnail_id( $pageID );
 						}
 					}
-					$image_ids = array_values(array_filter($image_ids)); // 'reindex' array to cleanup...
-					sleep(.25);
+				}
+	
+			// Lets remove any duplicated matches & set to new array.
+				// First let remove the thumbnail id from the bulk main id array
+				if($all_post_thumbnail_ids){
+					$arr_checkpoint_1a = array_values(array_diff($main_image_ids, $all_post_thumbnail_ids) );
+				} else{
+					$arr_checkpoint_1a = $main_image_ids;
+				}
+				// Second let remove any image id that has a image attachment associated with it id.
+				if($all_image_attachement_ids){
+					$arr_checkpoint_1b = array_values(array_diff($arr_checkpoint_1a, $all_image_attachement_ids) );
+				} else {
+					$arr_checkpoint_1b = $arr_checkpoint_1a;
+				}
 
-					// error_log(print_r($image_ids , true));
-					// Lets Search through all posts for the featured thumbnail.
-					error_log(print_r('Featured Image Check' , true));
-					$args = array(
-						'post_type'  => 'any',
-						'post_status'  => 'any',
-						'posts_per_page' => -1,
-						'meta_query' => array(
+			// CHECKPOINT COMPLETE
+				error_log(print_r('Remove thumbnail id from bulk main id array: '.count($arr_checkpoint_1a) , true));
+				error_log(print_r('Remove images attachment from bulk main id array: '.count($arr_checkpoint_1b) , true));
+				error_log(print_r('CHECKPOINT 1 COMPLETE' , true));
+
+			// CHECKPOINT 2
+				error_log(print_r('CHECKPOINT 2' , true));
+
+				$wp_postsid_gutenberg_image_array = array();
+				$wp_posts_gutenberg_image_array = array();
+				if($arr_checkpoint_1b){
+					foreach($arr_checkpoint_1b as $a => $image_id){
+						// This will search for the image id within the posts. This is primarily for Gutenberg Block Editor. The image id is stored within the post content...
+						$f_postsid = get_posts(
 							array(
-								'key' => '_thumbnail_id',
-								'value' => $image_id,
-								'compare' => '=='
-							)
-						),
-					);
-					$f_posts = get_posts( $args );
-					if($f_posts){
-						foreach($f_posts as $key => $posts){
-							if($posts->ID){
-								// Lets remove the found image from the array.
-								if (($key = array_search($image_id, $image_ids)) !== false) {
-									unset($image_ids[$key]);
+								'post_status'  => $select_post_status,
+								'post_type' => $select_post_type,
+								'fields' => 'ids',		
+								'posts_per_page' => -1,
+								's'  => ':'.$image_id,
+							),
+						);
+						if($f_postsid){
+							foreach($f_postsid as $b => $postsid){
+								$wp_postsid_gutenberg_image_array[] = $image_id;
+							}
+						}
+
+						// lets get the attached file name. Search through the wp_posts data table. This is not ideal, but is the only good way to search for imageid for gutenberg blocks. Plus any images that are inserted into posts manually.
+						$f_attached_file = get_attached_file( $image_id );
+						$pieces = explode('/', $f_attached_file ) ;
+						$f_postsattached = get_posts( array(
+							'post_status'  => $select_post_status,
+							'post_type' => $select_post_type,
+							'fields' => 'ids',		
+							'posts_per_page' => -1,
+							's'  => end($pieces),
+						) );
+						if($f_postsattached){
+							foreach($f_postsattached as $key => $posts){
+								if($posts->ID){
+									$wp_posts_gutenberg_image_array[] = $image_id;
 								}
-								error_log(print_r('Featured Image Check Found missing ID: '.$image_id , true));
 							}
 						}
 					}
-					$image_ids = array_values(array_filter($image_ids)); // 'reindex' array to cleanup...
-					sleep(.25);
+				}
+				
+			// Lets remove any duplicated matches & set to new array.
+				// First let remove the Gutenberg id from the bulk main id array
+				if($wp_postsid_gutenberg_image_array){
+					$arr_checkpoint_2a = array_values(array_diff($arr_checkpoint_1b, $wp_postsid_gutenberg_image_array) );
+				} else{
+					$arr_checkpoint_2a = $wp_postsid_gutenberg_image_array;
+				}
+				if($wp_posts_gutenberg_image_array){
+					$arr_checkpoint_2b = array_values(array_diff($arr_checkpoint_2a, $wp_posts_gutenberg_image_array) );
+				} else {
+					$arr_checkpoint_2b = $arr_checkpoint_2a;
+				}
+				// 'reindex' array to cleanup...
+				$arr_checkpoint_2c = array_values(array_filter($arr_checkpoint_2b)); 
 
-					// error_log(print_r($image_ids , true));
-					// This part is critical we check all the postmeta for any image ids in the acf serialized array. AKA any repeater fields or gallery fields.
-					error_log(print_r('Postmeta ACF Repeater Check' , true));
-					$argstwo = array(
-						'fields' => 'ids',
-						'post_type'  => 'any',
-						'post_status'  => 'any',
-						'posts_per_page' => -1,
-						'meta_query' => array(
-							array(
-							'value' => sprintf(':"%s";', $image_id),
-							'compare' => 'LIKE',
-							)
-						),
-					);
-					$f_poststwo = get_posts( $argstwo );
-					if($f_poststwo){
-						foreach($f_poststwo as $key => $posts){
-							if($posts->ID){
-								error_log(print_r($image_id , true));
-								// Lets remove the found image from the array.
-								if (($key = array_search($image_id, $image_ids)) !== false) {
-									unset($image_ids[$key]);
-								}
-								error_log(print_r('Acf serialized array ID, Check Found missing ID: '.$image_id , true));
-							}
-						}
-					}
-					$image_ids = array_values(array_filter($image_ids)); // 'reindex' array to cleanup...
-					sleep(.25);
+			// CHECKPOINT COMPLETE
+				error_log(print_r('Remove Gutenberg id from bulk main id array: '.count($arr_checkpoint_2a) , true));
+				error_log(print_r('Remove Gutenberg Image from bulk main id array: '.count($arr_checkpoint_2b) , true));
+				error_log(print_r('Reindex Array: '.count($arr_checkpoint_2c) , true));
+				error_log(print_r('CHECKPOINT 2 COMPLETE' , true));
 
-					// error_log(print_r($image_ids , true));
-					// This part is critical we check all the postmeta for any image ids in the acf serialized array. AKA any repeater fields or gallery fields.
-					error_log(print_r('Postmeta ACF Repeater Check attached file.' , true));
-					$argsthree = array(
-						'fields' => 'ids',
-						'post_type'  => 'any',
-						'post_status'  => 'any',
-						'posts_per_page' => -1,
-						'meta_query' => array(
-							array(
-								'value' => sprintf(':"%s";', get_attached_file($image_id)),
+			// CHECKPOINT 3
+				error_log(print_r('CHECKPOINT 3' , true));
+			
+				$wp_postsmeta_acf_repeater_image_array = array();
+				if($arr_checkpoint_2c){
+					foreach($arr_checkpoint_2c as $image_id){
+
+						// This part is critical we check all the postmeta for any image ids in the acf serialized array. AKA any repeater fields or gallery fields.
+						$f_posts = get_posts( array(
+							'fields' => 'ids',
+							'post_type' => $select_post_type,
+							'post_status'  => $select_post_status,
+							'posts_per_page' => -1,
+							'meta_query' => array(
+								array(
+								'value' => sprintf(':"%s";', $image_id),
 								'compare' => 'LIKE',
-							)
-						),
-					);
-					$f_poststhree = get_posts( $argsthree );
-					if($f_poststhree){
-						foreach($f_poststhree as $key => $posts){
-							if($posts->ID){
-								error_log(print_r($image_id , true));
-								// Lets remove the found image from the array.
-								if (($key = array_search($image_id, $image_ids)) !== false) {
-									unset($image_ids[$key]);
+								)
+							),
+						) );
+						if($f_posts){
+							foreach($f_posts as $key => $posts){
+								if($posts){
+									$wp_postsmeta_acf_repeater_image_array[] = $image_id;
 								}
-								error_log(print_r('Acf serialized array attached, Check Found missing ID: '.$image_id , true));
 							}
 						}
-					}
-					$image_ids = array_values(array_filter($image_ids)); // 'reindex' array to cleanup...
-					sleep(.25);
 
-					// error_log(print_r($image_ids , true));
-					// This part is critical we check all the postmeta for any image ids in the meta value
-					error_log(print_r('Postmeta ACF Check' , true));
-					$argsfour = array(
-						'fields' => 'ids',
-						'post_type'  => 'any',
-						'post_status'  => 'any',
-						'posts_per_page' => -1,
-						'meta_query' => array(
-							array(
-							'value' => $image_id,
-							'compare' => '==',
-							)
-						),
-					);
-					$f_postsfour = get_posts( $argsfour );
-					if($f_postsfour){
-						foreach($f_postsfour as $key => $posts){
-							if($posts->ID){
-								// error_log(print_r($image_id , true));
-								// Lets remove the found image from the array.
-								if (($key = array_search($image_id, $image_ids)) !== false) {
-									unset($image_ids[$key]);
+						// This part is critical we check all the postmeta for any image ids in the acf serialized array. AKA any repeater fields or gallery fields.		
+						$f_posts_2 = get_posts( array(
+							'fields' => 'ids',
+							'post_type' => $select_post_type,
+							'post_status'  => $select_post_status,
+							'posts_per_page' => -1,
+							'meta_query' => array(
+								array(
+									'value' => sprintf(':"%s";', get_attached_file($image_id)),
+									'compare' => 'LIKE',
+								)
+							),
+						));
+						if($f_posts_2){
+							foreach($f_posts_2 as $key => $posts){
+								if($posts){
+									$wp_postsmeta_acf_repeater_image_url_array[] = $image_id;
 								}
-								error_log(print_r('Acf postmeta, Check Found missing ID: '.$image_id , true));
 							}
 						}
-					}
-					$image_ids = array_values(array_filter($image_ids)); // 'reindex' array to cleanup...
-					sleep(.25);
+					}	
+				}	
 
-					// This part is critical we check all the php files within the active theme directory.
-					error_log(print_r('PHP file check.' , true));
-					$image_ids_two[] = receiveAllFiles_ronikdesigns($image_id);
+
+			// Lets remove any duplicated matches & set to new array.
+				// First let remove the Gutenberg id from the bulk main id array
+				if($wp_postsmeta_acf_repeater_image_array){
+					$arr_checkpoint_3a = array_values(array_diff($arr_checkpoint_2c, $wp_postsmeta_acf_repeater_image_array) );
+				} else{
+					$arr_checkpoint_3a = $arr_checkpoint_2c;
 				}
-			}
+				if($wp_postsmeta_acf_repeater_image_url_array){
+					$arr_checkpoint_3b = array_values(array_diff($arr_checkpoint_3a, $wp_postsmeta_acf_repeater_image_url_array) );
+				} else{
+					$arr_checkpoint_3b = $arr_checkpoint_3a;
+				}
 
-			$image_ids_cleaned1 = array_values(array_filter($image_ids)); // 'reindex' array to cleanup...
-			$image_ids_cleaned2 = array_values(array_filter($image_ids_two)); // 'reindex' array to cleanup...
-			$result = array_diff($image_ids_cleaned1, $image_ids_cleaned2);
+			// CHECKPOINT COMPLETE
+				error_log(print_r('Postmeta for any image ids in the acf serialized array: '.count($arr_checkpoint_3a) , true));
+				error_log(print_r('Postmeta for any image url in the acf serialized array: '.count($arr_checkpoint_3b) , true));
+				error_log(print_r('CHECKPOINT 3 COMPLETE' , true));
 
-			// $result = $image_ids_cleaned1;
+			// CHECKPOINT 4
+			error_log(print_r('CHECKPOINT 4' , true));
 
-			return array_values(array_filter($result));
+				$wp_postsmeta_acf_array = array();
+				if($arr_checkpoint_3b){
+					foreach($arr_checkpoint_3b as $image_id){
+
+						$f_posts = get_posts( array(
+							'fields' => 'ids',
+							'post_type' => $select_post_type,
+							'post_status'  => $select_post_status,
+							'posts_per_page' => -1,
+							'meta_query' => array(
+								array(
+								'value' => $image_id,
+								'compare' => '==',
+								)
+							),
+						));
+						if($f_posts){
+							foreach($f_posts as $key => $posts){
+								if($posts){
+									$wp_postsmeta_acf_array[] = $image_id;
+								}
+							}
+						}		
+					}	
+				}	
+
+			// This part is critical we check all the postmeta for any image ids in the meta value
+				if($wp_postsmeta_acf_array){
+					$arr_checkpoint_4a = array_values(array_diff($arr_checkpoint_3b, $wp_postsmeta_acf_array) );
+				} else{
+					$arr_checkpoint_4a = $arr_checkpoint_3b;
+				}
+				$arr_checkpoint_4b = array_values(array_filter($arr_checkpoint_4a)); // 'reindex' array to cleanup...
+
+
+			// CHECKPOINT COMPLETE
+			error_log(print_r('Postmeta for any image ids in the acf array: '.count($arr_checkpoint_4a) , true));
+			error_log(print_r('Reindex: '.count($arr_checkpoint_4b) , true));
+			error_log(print_r('CHECKPOINT 4 COMPLETE' , true));
+
+			// CHECKPOINT 5
+				error_log(print_r('CHECKPOINT 5' , true));
+										
+				$wp_infiles_array = array();
+				if($arr_checkpoint_4b){
+					foreach($arr_checkpoint_4b as $image_id){
+						$wp_infiles_array[] = receiveAllFiles_ronikdesigns($image_id);						
+					}	
+				}	
+
+			// This part is critical we check all the php files within the active theme directory.
+				if($wp_infiles_array){
+					$arr_checkpoint_5a = array_values(array_diff($arr_checkpoint_4b, $wp_infiles_array) );
+				} else{
+					$arr_checkpoint_5a = $arr_checkpoint_4b;
+				}
+
+			// CHECKPOINT COMPLETE
+				error_log(print_r('Check all the php files within the active theme directory: '.count($arr_checkpoint_5a) , true));
+				error_log(print_r('CHECKPOINT 5 COMPLETE' , true));
+
+			return array_values(array_filter($arr_checkpoint_5a)); // 'reindex' array to cleanup...
 		}
 		// Warning this script will slow down the entire server. Use only a small amount at a time.
-		// foreach (range(0, 1) as $number) {
-		// 	recursive_delete($number);
-		// }
-		$f_results = recursive_delete(0);
-		error_log(print_r('recursive_delete Completed' , true));
+		$image_array = array();
+		foreach ( range( 0, 1000 ) as $number) {
 
-		if($f_results){
+			if(recursive_delete($number)){
+				$image_array[$number] = recursive_delete($number);
+			}
+		}
+
+		error_log(print_r('Final Results', true));
+		error_log(print_r($image_array, true));
+		if($image_array){
 			// Get the array count..
-			update_option( 'options_page_media_cleaner_field' , count($f_results) );
-			foreach( $f_results as $key => $f_result ){
+			update_option( 'options_page_media_cleaner_field' , count($image_array) );
+			foreach( $image_array as $key => $f_result ){
 				update_option('options_page_media_cleaner_field_' . $key . '_image_id',  $f_result);
 				update_option('options_page_media_cleaner_field_' . $key . '_image_url', get_attached_file($f_result) );
 				update_option('options_page_media_cleaner_field_' . $key . '_thumbnail_preview', $f_result);
 
-				if( $f_result == end($f_results) ){
+				if( $f_result == end($image_array) ){
 					// Sleep for 2 seconds...
 					sleep(2);
 					// Send sucess message!
