@@ -368,19 +368,17 @@ class Ronikdesign_Admin
 		}
 
 		function recursive_delete($number){
-			$offsetValue = $number * 50;
-
 			$select_post_type = array( 'page', 'posts', 'segments', 'networks', 'programs', 'articles', 'playlists', 'credits', 'programming' );
 			$select_attachment_type = array(
-				"jpg" => "image/jpg",
-				"jpeg" => "image/jpeg",
+				// "jpg" => "image/jpg",
+				// "jpeg" => "image/jpeg",
 				// "jpe" => "image/jpe",
-				"gif" => "image/gif",
+				// "gif" => "image/gif",
 				"png" => "image/png",
 			);
 			$select_numberposts = 50; // Do not add more then 150.
+			$offsetValue = $number * $select_numberposts;
 			$select_post_status = array('publish', 'pending', 'draft', 'private', 'future');
-
 
 			// Lets gather all the image id of the entire application.
 				// We receive all the image id.
