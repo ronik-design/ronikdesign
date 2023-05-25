@@ -124,6 +124,29 @@ if (function_exists('acf_add_local_field_group')) :
 				'placement' => 'left',
 				'endpoint' => 0,
 			),
+
+			array(
+				'key' => 'field_63b73e5f5511522_ronikdesign',
+				'label' => 'Offset Field',
+				'name' => 'offset_field_ronikdesign',
+				'type' => 'number',
+				'instructions' => 'This will offset the field amount. Default ratio is 0 start / 25 end. If no images are found please increment to the next number.',
+				'required' => 0,
+				'conditional_logic' => 0,
+				'wrapper' => array(
+					'width' => '100',
+					'class' => '',
+					'id' => '',
+				),
+				'default_value' => 25,
+				'placeholder' => '',
+				'prepend' => '',
+				'append' => '',
+				'min' => 0,
+				'max' => 30000,
+				'step' => '25',
+			),
+
 			array(
 				'key' => 'field_63b73e5f551152_ronikdesign',
 				'label' => 'Media Cleaner Field',

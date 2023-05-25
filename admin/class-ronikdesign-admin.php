@@ -374,7 +374,7 @@ class Ronikdesign_Admin
 			$select_attachment_type = array(
 				"jpg" => "image/jpg",
 				"jpeg" => "image/jpeg",
-				"jpe" => "image/jpe",
+				// "jpe" => "image/jpe",
 				"gif" => "image/gif",
 				"png" => "image/png",
 			);
@@ -657,8 +657,10 @@ class Ronikdesign_Admin
 			return array_values(array_filter($arr_checkpoint_5a)); // 'reindex' array to cleanup...
 		}
 		// Warning this script will slow down the entire server. Use only a small amount at a time.
+		$f_offset_value_end = get_field('offset_field_ronikdesign', 'options');
+		$f_offset_value_start = $f_offset_value_end - 25;
 		$image_array = array();
-		foreach ( range( 0, 25 ) as $number) {
+		foreach ( range( $f_offset_value_start, $f_offset_value_end ) as $number) {
 			if(recursive_delete($number)){
 				$image_array[$number] = recursive_delete($number);
 			}
