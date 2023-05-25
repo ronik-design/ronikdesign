@@ -368,7 +368,18 @@ class Ronikdesign_Admin
 		}
 
 		function recursive_delete($number){
-			$select_post_type = array( 'page', 'posts', 'segments', 'networks', 'programs', 'articles', 'playlists', 'credits', 'programming' );
+			// $select_post_type = array( 'page', 'posts', 'segments', 'networks', 'programs', 'articles', 'playlists', 'credits', 'programming' );
+			$select_post_type = array( 
+				'page',
+				'posts', 
+				'segments', 
+				'networks', 
+				'programs', 
+				'articles', 
+				'playlists', 
+				'credits', 
+				'programming' 
+			);
 			$select_attachment_type = array(
 				// "jpg" => "image/jpg",
 				// "jpeg" => "image/jpeg",
@@ -376,7 +387,7 @@ class Ronikdesign_Admin
 				// "gif" => "image/gif",
 				"png" => "image/png",
 			);
-			$select_numberposts = 20; // Do not add more then 150.
+			$select_numberposts = 5; // Do not add more then 150.
 			$offsetValue = $number * $select_numberposts;
 			$select_post_status = array('publish', 'pending', 'draft', 'private', 'future');
 
@@ -392,6 +403,8 @@ class Ronikdesign_Admin
 					'numberposts' => $select_numberposts,
 					'fields' => 'ids',
 					'post_mime_type' => $select_attachment_type,
+					'orderby' => 'date', 
+					'order'  => 'DESC',
 				));
 				// This will allow us to collect all the image ids.
 				$main_image_ids = array();
@@ -411,6 +424,8 @@ class Ronikdesign_Admin
 					'numberposts' => -1,
 					'fields' => 'ids',
 					'post_status'  => $select_post_status,
+					'orderby' => 'date', 
+					'order'  => 'DESC',
 				));				
 				$all_post_thumbnail_ids = array();
 				$all_image_attachement_ids = array();
@@ -422,6 +437,8 @@ class Ronikdesign_Admin
 							'fields' => 'ids',
 							'post_parent' => $pageID,
 							'post_mime_type' => $select_attachment_type,
+							'orderby' => 'date', 
+							'order'  => 'DESC',
 						));
 						if ($attachments) {
 							foreach ($attachments as $attachmentID){
@@ -468,6 +485,8 @@ class Ronikdesign_Admin
 								'fields' => 'ids',		
 								'posts_per_page' => -1,
 								's'  => ':'.$image_id,
+								'orderby' => 'date', 
+								'order'  => 'DESC',
 							),
 						);
 						if($f_postsid){
@@ -485,6 +504,8 @@ class Ronikdesign_Admin
 							'fields' => 'ids',		
 							'posts_per_page' => -1,
 							's'  => end($pieces),
+							'orderby' => 'date', 
+							'order'  => 'DESC',
 						) );
 						if($f_postsattached){
 							foreach($f_postsattached as $key => $posts){
@@ -537,6 +558,8 @@ class Ronikdesign_Admin
 								'compare' => 'LIKE',
 								)
 							),
+							'orderby' => 'date', 
+							'order'  => 'DESC',
 						) );
 						if($f_posts){
 							foreach($f_posts as $key => $posts){
@@ -558,6 +581,8 @@ class Ronikdesign_Admin
 									'compare' => 'LIKE',
 								)
 							),
+							'orderby' => 'date', 
+							'order'  => 'DESC',
 						));
 						if($f_posts_2){
 							foreach($f_posts_2 as $key => $posts){
@@ -606,6 +631,8 @@ class Ronikdesign_Admin
 								'compare' => '==',
 								)
 							),
+							'orderby' => 'date', 
+							'order'  => 'DESC',
 						));
 						if($f_posts){
 							foreach($f_posts as $key => $posts){
@@ -656,16 +683,19 @@ class Ronikdesign_Admin
 		}
 		// Warning this script will slow down the entire server. Use only a small amount at a time.
 		$f_offset_value_end = get_field('offset_field_ronikdesign', 'options');
-		$f_offset_value_start = $f_offset_value_end - 25;
+		$f_offset_value_start = $f_offset_value_end - 5;
 		$image_array = array();
 		$f_count = 0;
 		foreach ( range( $f_offset_value_start, $f_offset_value_end ) as $number) {
 			// $f_count++;
-			$image_array[$f_count++] = recursive_delete($number);
+			$image_array[] = recursive_delete($number);
 		}
 		// remove empty and re-arrange image array
 		$image_array = array_values(array_filter($image_array));
+		$image_array = array_merge(...$image_array);
 
+
+		error_log(print_r(memory_get_usage(true), true));
 		error_log(print_r(memory_get_usage(), true));
 
 		error_log(print_r('Final Results', true));

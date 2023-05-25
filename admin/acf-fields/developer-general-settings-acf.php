@@ -130,7 +130,7 @@ if (function_exists('acf_add_local_field_group')) :
 				'label' => 'Offset Field',
 				'name' => 'offset_field_ronikdesign',
 				'type' => 'number',
-				'instructions' => 'This will offset the field amount. Default ratio is 0 start / 25 end. If no images are found please increment to the next number.',
+				'instructions' => 'This will offset the field amount. Default ratio is 0 start / 5 end. If no images are found please increment to the next number.',
 				'required' => 0,
 				'conditional_logic' => 0,
 				'wrapper' => array(
@@ -138,13 +138,13 @@ if (function_exists('acf_add_local_field_group')) :
 					'class' => '',
 					'id' => '',
 				),
-				'default_value' => 25,
+				'default_value' => 5,
 				'placeholder' => '',
 				'prepend' => '',
 				'append' => '',
 				'min' => 0,
 				'max' => 30000,
-				'step' => '25',
+				'step' => '5',
 			),
 
 			array(
