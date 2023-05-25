@@ -381,13 +381,13 @@ class Ronikdesign_Admin
 				'programming' 
 			);
 			$select_attachment_type = array(
-				// "jpg" => "image/jpg",
-				// "jpeg" => "image/jpeg",
-				// "jpe" => "image/jpe",
-				// "gif" => "image/gif",
+				"jpg" => "image/jpg",
+				"jpeg" => "image/jpeg",
+				"jpe" => "image/jpe",
+				"gif" => "image/gif",
 				"png" => "image/png",
 			);
-			$select_numberposts = 5; // Do not add more then 150.
+			$select_numberposts = get_field('page_media_cleaner_numberposts_field_ronikdesign', 'options');
 			$offsetValue = $number * $select_numberposts;
 			$select_post_status = array('publish', 'pending', 'draft', 'private', 'future');
 
@@ -417,7 +417,7 @@ class Ronikdesign_Admin
 			// CHECKPOINT 1
 				error_log(print_r('Get all image ids: '.count($main_image_ids) , true));
 				error_log(print_r('CHECKPOINT 1' , true));
-
+				sleep(1);
 			// Lets get all of the pages, posts and custom post types of the entire application. Thumbnail.
 				$get_all_post_pages = get_posts( array(
 					'post_type' => $select_post_type,
@@ -469,6 +469,7 @@ class Ronikdesign_Admin
 				error_log(print_r('Remove thumbnail id from bulk main id array: '.count($arr_checkpoint_1a) , true));
 				error_log(print_r('Remove images attachment from bulk main id array: '.count($arr_checkpoint_1b) , true));
 				error_log(print_r('CHECKPOINT 1 COMPLETE' , true));
+				sleep(1);
 
 			// CHECKPOINT 2
 				error_log(print_r('CHECKPOINT 2' , true));
@@ -537,6 +538,7 @@ class Ronikdesign_Admin
 				error_log(print_r('Remove Gutenberg Image from bulk main id array: '.count($arr_checkpoint_2b) , true));
 				error_log(print_r('Reindex Array: '.count($arr_checkpoint_2c) , true));
 				error_log(print_r('CHECKPOINT 2 COMPLETE' , true));
+				sleep(1);
 
 			// CHECKPOINT 3
 				error_log(print_r('CHECKPOINT 3' , true));
@@ -612,6 +614,7 @@ class Ronikdesign_Admin
 				error_log(print_r('Postmeta for any image ids in the acf serialized array: '.count($arr_checkpoint_3a) , true));
 				error_log(print_r('Postmeta for any image url in the acf serialized array: '.count($arr_checkpoint_3b) , true));
 				error_log(print_r('CHECKPOINT 3 COMPLETE' , true));
+				sleep(1);
 
 			// CHECKPOINT 4
 			error_log(print_r('CHECKPOINT 4' , true));
@@ -657,6 +660,7 @@ class Ronikdesign_Admin
 			error_log(print_r('Postmeta for any image ids in the acf array: '.count($arr_checkpoint_4a) , true));
 			error_log(print_r('Reindex: '.count($arr_checkpoint_4b) , true));
 			error_log(print_r('CHECKPOINT 4 COMPLETE' , true));
+			sleep(1);
 
 			// CHECKPOINT 5
 				error_log(print_r('CHECKPOINT 5' , true));
@@ -678,16 +682,15 @@ class Ronikdesign_Admin
 			// CHECKPOINT COMPLETE
 				error_log(print_r('Check all the php files within the active theme directory: '.count($arr_checkpoint_5a) , true));
 				error_log(print_r('CHECKPOINT 5 COMPLETE' , true));
+				sleep(1);
 
 			return array_values(array_filter($arr_checkpoint_5a)); // 'reindex' array to cleanup...
 		}
 		// Warning this script will slow down the entire server. Use only a small amount at a time.
-		$f_offset_value_end = get_field('offset_field_ronikdesign', 'options');
+		$f_offset_value_end = get_field('page_media_cleaner_offset_field_ronikdesign', 'options');
 		$f_offset_value_start = $f_offset_value_end - 5;
 		$image_array = array();
-		$f_count = 0;
 		foreach ( range( $f_offset_value_start, $f_offset_value_end ) as $number) {
-			// $f_count++;
 			$image_array[] = recursive_delete($number);
 		}
 		// remove empty and re-arrange image array
@@ -710,7 +713,7 @@ class Ronikdesign_Admin
 
 				if( $f_result == end($image_array) ){
 					// Sleep for 2 seconds...
-					sleep(2);
+					sleep(1);
 					// Send sucess message!
 					wp_send_json_success('Done');
 				}

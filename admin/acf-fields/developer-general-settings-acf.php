@@ -124,17 +124,38 @@ if (function_exists('acf_add_local_field_group')) :
 				'placement' => 'left',
 				'endpoint' => 0,
 			),
-
+			
 			array(
-				'key' => 'field_63b73e5f5511522_ronikdesign',
-				'label' => 'Offset Field',
-				'name' => 'offset_field_ronikdesign',
+				'key' => 'field_63b73e5f5511522a_ronikdesign',
+				'label' => 'Number Posts Field',
+				'name' => 'page_media_cleaner_numberposts_field_ronikdesign',
 				'type' => 'number',
-				'instructions' => 'This will offset the field amount. Default ratio is 0 start / 5 end. If no images are found please increment to the next number.',
+				'instructions' => 'This will pull the overall image number per sequence. ** A Higher Value will increase the chance of an unsuccessful response.',
 				'required' => 0,
 				'conditional_logic' => 0,
 				'wrapper' => array(
-					'width' => '100',
+					'width' => '50',
+					'class' => '',
+					'id' => '',
+				),
+				'default_value' => 5,
+				'placeholder' => '',
+				'prepend' => '',
+				'append' => '',
+				'min' => 0,
+				'max' => 150,
+				'step' => '5',
+			),
+			array(
+				'key' => 'field_63b73e5f5511522_ronikdesign',
+				'label' => 'Offset Page Field',
+				'name' => 'page_media_cleaner_offset_field_ronikdesign',
+				'type' => 'number',
+				'instructions' => 'This will offset the page field amount. Default ratio is 0 start / 5 end. If no images are found please increment to the next number.',
+				'required' => 0,
+				'conditional_logic' => 0,
+				'wrapper' => array(
+					'width' => '50',
 					'class' => '',
 					'id' => '',
 				),
@@ -146,7 +167,6 @@ if (function_exists('acf_add_local_field_group')) :
 				'max' => 30000,
 				'step' => '5',
 			),
-
 			array(
 				'key' => 'field_63b73e5f551152_ronikdesign',
 				'label' => 'Media Cleaner Field',
