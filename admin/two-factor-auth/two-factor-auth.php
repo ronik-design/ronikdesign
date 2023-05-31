@@ -140,7 +140,7 @@ use Twilio\Rest\Client;
         <?php }
     });
     // Add additional login field
-    function my_added_login_field()
+    function ronikdesigns_login_field()
     { ?>
         <br>
         <p>
@@ -151,11 +151,11 @@ use Twilio\Rest\Client;
         </p>
     <?php
     }
-    add_action('login_form', 'my_added_login_field');
+    add_action('login_form', 'ronikdesigns_login_field');
 
 
     // Add logic for auth field
-    function my_custom_authenticate($user, $username, $password)
+    function ronikdesigns_custom_authenticate($user, $username, $password)
     {
         $google2fa = new Google2FA();
         //Get POSTED value
@@ -195,12 +195,12 @@ use Twilio\Rest\Client;
             return new WP_Error('denied', __("<strong>ERROR</strong>: You're unique identifier was invalid."));
         }
     }
-    add_filter('authenticate', 'my_custom_authenticate', 10, 3);
+    add_filter('authenticate', 'ronikdesigns_custom_authenticate', 10, 3);
 
     // Per each user
-    add_action('show_user_profile', 'ronikdesign_extra_user_profile_fields');
-    add_action('edit_user_profile', 'ronikdesign_extra_user_profile_fields');
-    function ronikdesign_extra_user_profile_fields($user)
+    add_action('show_user_profile', 'ronikdesigns_extra_user_profile_fields');
+    add_action('edit_user_profile', 'ronikdesigns_extra_user_profile_fields');
+    function ronikdesigns_extra_user_profile_fields($user)
     {
         if(isset($_GET["user_id"])){
             $get_registration_status = get_user_meta($_GET["user_id"], $key = 'google2fa_status', true);
@@ -227,9 +227,9 @@ use Twilio\Rest\Client;
             </tr>
         </table>
     <?php }
-    add_action('personal_options_update', 'save_extra_user_profile_fields');
-    add_action('edit_user_profile_update', 'save_extra_user_profile_fields');
-    function save_extra_user_profile_fields($user_id)
+    add_action('personal_options_update', 'ronikdesigns_save_extra_user_profile_fields');
+    add_action('edit_user_profile_update', 'ronikdesigns_save_extra_user_profile_fields');
+    function ronikdesigns_save_extra_user_profile_fields($user_id)
     {
         if (empty($_POST['_wpnonce']) || !wp_verify_nonce($_POST['_wpnonce'], 'update-user_' . $user_id)) {
             return;
@@ -240,7 +240,7 @@ use Twilio\Rest\Client;
         update_user_meta($user_id, 'google2fa_status', $_POST['google2fa_code']);
     }
     // This will redirect any backend && frontend page to 2fa.
-    function redirect_non_registered_2fa() {
+    function ronikdesigns_redirect_non_registered_2fa() {
         $get_current_secret = get_user_meta(get_current_user_id(), 'google2fa_secret', true);
         $get_registration_status = get_user_meta(get_current_user_id(), $key = 'google2fa_status', true);
         if(is_user_logged_in()){
@@ -259,8 +259,8 @@ use Twilio\Rest\Client;
             }
         }
     }
-    add_action( 'admin_init', 'redirect_non_registered_2fa' );
-    add_action( 'template_redirect', 'redirect_non_registered_2fa' );
+    add_action( 'admin_init', 'ronikdesigns_redirect_non_registered_2fa' );
+    add_action( 'template_redirect', 'ronikdesigns_redirect_non_registered_2fa' );
 
 
 // http://simple-website.local/?private=aksms&tel=6316174271

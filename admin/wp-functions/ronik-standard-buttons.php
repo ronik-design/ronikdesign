@@ -1,5 +1,5 @@
 <?php 
-function ronik_buttons($ACF){
+function ronikdesigns_buttons($ACF){
     $f_buttons = get_field($ACF.'_buttons');
 
     if($f_buttons){ ?>

@@ -46,13 +46,13 @@ if ($f_csp_enable) {
      * Add a class to the body class.
      * Primary purpose is to let js know that csp is enabled
      */
-    function ronik_body_class($classes)
+    function ronikdesigns_body_class($classes)
     {
         $classes[] = 'csp-enabled';
 
         return $classes;
     }
-    // add_filter('body_class', 'ronik_body_class');
+    // add_filter('body_class', 'ronikdesigns_body_class');
 
     function hook_csp() {
         ?>
@@ -68,13 +68,13 @@ if ($f_csp_enable) {
      */
     if (!is_admin() && !is_user_logged_in()) {
         //Remove Gutenberg Block Library CSS from loading on the frontend
-        function ronik_remove_wp_block_library_css()
+        function ronikdesigns_remove_wp_block_library_css()
         {
             wp_dequeue_style('wp-block-library');
             wp_dequeue_style('wp-block-library-theme');
             wp_dequeue_style('wc-block-style'); // Remove WooCommerce block CSS
         }
-        add_action('wp_enqueue_scripts', 'ronik_remove_wp_block_library_css', 100);
+        add_action('wp_enqueue_scripts', 'ronikdesigns_remove_wp_block_library_css', 100);
         // This retrieves all scripts and style handles
         function handle_retrieval($styles, $scripts)
         {
@@ -90,15 +90,15 @@ if ($f_csp_enable) {
             }
         }
         // Move jQuery script to the footer instead of header.
-        function ronik_jquery_to_footer()
+        function ronikdesigns_jquery_to_footer()
         {
             // wp_scripts()->add_data( 'jquery', 'group', 1 );
             wp_scripts()->add_data('jquery-core', 'group', 1);
             wp_scripts()->add_data('jquery-migrate', 'group', 1);
         }
-        add_action('wp_enqueue_scripts', 'ronik_jquery_to_footer');
+        add_action('wp_enqueue_scripts', 'ronikdesigns_jquery_to_footer');
         //Remove JQuery migrate,
-        function ronik_remove_jquery_migrate($scripts)
+        function ronikdesigns_remove_jquery_migrate($scripts)
         {
             if (!is_admin() && isset($scripts->registered['jquery'])) {
                 $script = $scripts->registered['jquery'];
@@ -109,9 +109,9 @@ if ($f_csp_enable) {
                 }
             }
         }
-        add_action('wp_default_scripts', 'ronik_remove_jquery_migrate');
+        add_action('wp_default_scripts', 'ronikdesigns_remove_jquery_migrate');
         //Add preload to all enqueue styles.
-        function ronik_add_preload_attribute($link, $handle)
+        function ronikdesigns_add_preload_attribute($link, $handle)
         {
             $all_styles = handle_retrieval(true, false); // A list of all the styles with handles.
             $styles_to_preload = $all_styles;
@@ -128,7 +128,7 @@ if ($f_csp_enable) {
                 }
             }
         }
-        add_filter('style_loader_tag', 'ronik_add_preload_attribute', 10, 2);
+        add_filter('style_loader_tag', 'ronikdesigns_add_preload_attribute', 10, 2);
         // Nonce external scripts
         add_filter('nonce_scripts', function ($scripts) {
             $all_scripts = handle_retrieval(false, true);

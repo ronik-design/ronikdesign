@@ -144,7 +144,7 @@ class Ronikdesign_Admin
 
 
 	// This will setup all options pages.
-	function ronik_acf_op_init()
+	function ronikdesigns_acf_op_init()
 	{
 		// Check function exists.
 		if (function_exists('acf_add_options_page')) {
@@ -167,7 +167,7 @@ class Ronikdesign_Admin
 	}
 
 	// This will setup all custom fields via php scripts.
-	function ronik_acf_op_init_fields()
+	function ronikdesigns_acf_op_init_fields()
 	{
 		// Include the ACF Fields
 		foreach (glob(dirname(__FILE__) . '/acf-fields/*.php') as $file) {
@@ -176,7 +176,7 @@ class Ronikdesign_Admin
 	}
 
 
-	function ronik_acf_op_init_functions()
+	function ronikdesigns_acf_op_init_functions()
 	{
 		// acf-icon-picker-master
 		include dirname(__FILE__) . '/acf-icon-picker-master/acf-icon-picker.php';
@@ -366,11 +366,11 @@ class Ronikdesign_Admin
 		if (!is_user_logged_in()) {
 			return;
 		}
-		function ronik_timeout_extend( $time ){
+		function ronikdesigns_timeout_extend( $time ){
 			// Default timeout is 5
 			return 20;
 		}
-		add_filter( 'http_request_timeout', 'ronik_timeout_extend' );
+		add_filter( 'http_request_timeout', 'ronikdesigns_timeout_extend' );
 
 		function recursive_delete($number){
 			// $select_post_type = array( 'page', 'posts', 'segments', 'networks', 'programs', 'articles', 'playlists', 'credits', 'programming' );
@@ -673,7 +673,7 @@ class Ronikdesign_Admin
 				$wp_infiles_array = array();
 				if($arr_checkpoint_4b){
 					foreach($arr_checkpoint_4b as $image_id){
-						$wp_infiles_array[] = receiveAllFiles_ronikdesigns($image_id);						
+						$wp_infiles_array[] = ronikdesigns_receiveAllFiles_ronikdesigns($image_id);						
 					}	
 				}	
 

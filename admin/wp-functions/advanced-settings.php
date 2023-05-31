@@ -1,6 +1,6 @@
 <?php 
 
-function ronikAdvancedSettings($fieldType){ 
+function ronikdesigns_AdvancedSettings($fieldType){ 
 	if($fieldType == 'flex'){
 		$get_acf_type = 'get_field';
 	} else{
@@ -53,7 +53,7 @@ function ronikAdvancedSettings($fieldType){
 }
 
 
-function ronikAdvancedSettingsInner($fieldType){
+function ronikdesigns_AdvancedSettingsInner($fieldType){
 	if($fieldType == 'flex'){
 		$get_acf_type = 'get_field';
 	} else{

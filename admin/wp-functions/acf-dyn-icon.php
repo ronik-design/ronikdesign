@@ -1,6 +1,6 @@
 <?php
 
-function dynamic_get_icon($icon){
+function ronikdesigns_dynamic_get_icon($icon){
     if(!$icon){
         return;
     }

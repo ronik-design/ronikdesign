@@ -3,11 +3,11 @@
 
 class RonikHelper{
     public function __construct() {
-        add_action( 'init', [$this, 'ronik_svgconverter'] );
+        add_action( 'init', [$this, 'ronikdesigns_svgconverter'] );
     }
 
 	// Creates an encoded svg for src, lazy loading.
-    public function ronik_svgplaceholder($imgacf = null, $advanced_mode = null, $custom_css = null) {
+    public function ronikdesigns_svgplaceholder($imgacf = null, $advanced_mode = null, $custom_css = null) {
 		if( !is_array($imgacf) && !empty($imgacf) ){
 			$img = wp_get_attachment_image_src( attachment_url_to_postid($imgacf) , 'full' );
 			$viewbox = "width='{$img[1]}' height='{$img[2]}' viewBox='0 0 {$img[1]} {$img[2]}'";
@@ -55,7 +55,7 @@ class RonikHelper{
 
 
 	// Write error logs cleanly.
-    public function ronik_write_log($log) {
+    public function ronikdesigns_write_log($log) {
 		$f_error_email = get_field('error_email', 'option');
 		if ($f_error_email) {
 			// Remove whitespace.
@@ -82,7 +82,7 @@ class RonikHelper{
 
 
 // // Creates an encoded svg for src, lazy loading.
-// function ronik_svgplaceholder($imgacf = null)
+// function ronikdesigns_svgplaceholder($imgacf = null)
 // {
 // 	$iacf = $imgacf;
 // 	if ($iacf) {
@@ -106,7 +106,7 @@ class RonikHelper{
 // }
 
 // // Write error logs cleanly.
-// function ronik_write_log($log)
+// function ronikdesigns_write_log($log)
 // {
 // 	$f_error_email = get_field('error_email', 'option');
 // 	if ($f_error_email) {
@@ -130,7 +130,7 @@ class RonikHelper{
 // }
 
 
-function getLineWithString_ronikdesigns($fileName, $id) {
+function ronikdesigns_getLineWithString_ronikdesigns($fileName, $id) {
 	$f_attached_file = get_attached_file( $id );
 	$pieces = explode('/', $f_attached_file ) ;
 	$lines = file( urldecode($fileName) );
@@ -141,7 +141,7 @@ function getLineWithString_ronikdesigns($fileName, $id) {
 	}
 }
 
-function receiveAllFiles_ronikdesigns($id){
+function ronikdesigns_receiveAllFiles_ronikdesigns($id){
 	$f_files = scandir( get_theme_file_path() );
 	$array2 = array("functions.php", "package-lock.json", ".", "..", ".DS_Store");
 	$results = array_diff($f_files, $array2);
@@ -150,7 +150,7 @@ function receiveAllFiles_ronikdesigns($id){
 		foreach($results as $file){
 			if (is_file(get_theme_file_path().'/'.$file)){
 				$f_url = urlencode(get_theme_file_path().'/'.$file);
-				$image_ids = getLineWithString_ronikdesigns( $f_url , $id);
+				$image_ids = ronikdesigns_getLineWithString_ronikdesigns( $f_url , $id);
 			}
 		}
 	}

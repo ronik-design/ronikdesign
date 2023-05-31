@@ -6,8 +6,8 @@ if (!function_exists('is_plugin_active')) {
     include_once(ABSPATH . 'wp-admin/includes/plugin.php');
 }
 
-$ronik_spam_buster = get_field( 'gform_spam_buster', 'options' );
-if( !empty($ronik_spam_buster['enable_spam_buster']) ){
+$ronikdesigns_spam_buster = get_field( 'gform_spam_buster', 'options' );
+if( !empty($ronikdesigns_spam_buster['enable_spam_buster']) ){
     if ( is_plugin_active( 'gravityforms/gravityforms.php' ) ) {
         //plugin is activated, do something
         add_filter( 'gform_entry_is_spam', 'filter_gform_entry_is_spam_ip_rate_limit', 11, 3 );
@@ -44,12 +44,12 @@ function filter_gform_entry_is_spam_ip_rate_limit( $is_spam, $form, $entry ) {
 	** form submitter enabling you to mark submissions as spam if they originate from specified countries.
 */
 function filter_gform_entry_is_spam_iplocate_country( $is_spam, $form, $entry ) {
-	$ronik_spam_buster = get_field( 'spam_buster', 'options' );
-	if($ronik_spam_buster['country_code']){
+	$ronikdesigns_spam_buster = get_field( 'spam_buster', 'options' );
+	if($ronikdesigns_spam_buster['country_code']){
 		// Empty Array
 		$stack = array();
 		// Push items to Array
-		foreach( $ronik_spam_buster['country_code'] as $country_code ){
+		foreach( $ronikdesigns_spam_buster['country_code'] as $country_code ){
 			array_push($stack, $country_code['item']);
 		} 
 		if ( $is_spam ) {

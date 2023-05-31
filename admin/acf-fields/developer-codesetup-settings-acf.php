@@ -38,7 +38,7 @@ if( function_exists('acf_add_local_field_group') ):
                             </br>
                             
                             <code>$f_icon = get_sub_field("icon_dynamic-icon");</code></br>
-                            <code>dynamic_get_icon($f_icon);</code>
+                            <code>ronikdesigns_dynamic_get_icon($f_icon);</code>
                         </div>
                         <div class="acf-setup-instruction__img"><img src="'.plugin_dir_url( __DIR__ ) . 'screenshots/dynamic-icon-dropdown.jpg'.'"></div>
                     </div>
@@ -58,7 +58,7 @@ if( function_exists('acf_add_local_field_group') ):
 
                             Function listed below. "standard-text" is the acf field name
                             </br>
-                            <code>ronik_standard_text("standard-text");</code>
+                            <code>ronikdesigns_standard_text("standard-text");</code>
                         </div>
                         <div class="acf-setup-instruction__img"><img src="'.plugin_dir_url( __DIR__ ) . 'screenshots/standard-text.jpg'.'"></div>
                     </div>
@@ -76,15 +76,15 @@ if( function_exists('acf_add_local_field_group') ):
 
                             Then Display select "Seamless (replaced this field with selected fields) Select "Prefix Field Names."
 
-                            To use ronikFlexEstablishment please reference code below.
+                            To use ronikdesigns_FlexEstablishment please reference code below.
 
                             
 
                             <code>$flexname = "flex-hero";</br>$f_flexname_outer = "flex-hero-block";</br>$f_flexname_inner = "flex-hero-block__inner";</br>$f_inlineStyle = "";</br>
                                 $f_content = function(){ 
-                                ronik_standard_text("standard-text");
+                                ronikdesigns_standard_text("standard-text");
                                 };</br>
-                                echo ronikFlexEstablishment($block=false, $flexname, $f_flexname_outer, $f_flexname_inner, $f_inlineStyle, $f_content, $f_mod=false, $f_pageID=false );</code>
+                                echo ronikdesigns_FlexEstablishment($block=false, $flexname, $f_flexname_outer, $f_flexname_inner, $f_inlineStyle, $f_content, $f_mod=false, $f_pageID=false );</code>
 
                         </div>
                         <div class="acf-setup-instruction__img"><img src="'.plugin_dir_url( __DIR__ ) . 'screenshots/advanced-settings.jpg'.'"></div>
@@ -109,13 +109,13 @@ if( function_exists('acf_add_local_field_group') ):
                             "adv" = Second parameter Will create all the necessary code and will output the image. If set to false function will return just a barebone svg.
                             "customClass" = Third parameter will create the custom class for the created code.
                             
-                            <code> $helper->ronik_svgplaceholder("image", true, "customClass"); </code>
+                            <code> $helper->ronikdesigns_svgplaceholder("image", true, "customClass"); </code>
 
 
 
                             Function creates a blank svg placeholder with the provided ACF image size.
 
-                            <code>$helper->ronik_svgplaceholder($f_image, false, "customClass");</code>
+                            <code>$helper->ronikdesigns_svgplaceholder($f_image, false, "customClass");</code>
 
                             
 

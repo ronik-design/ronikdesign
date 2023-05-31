@@ -1,7 +1,7 @@
 <?php
 
 // Function To create the barebone needs of a acf flexible content structure
-function ronikFlexEstablishment($block = false, $flexname, $f_flexname_outer, $f_flexname_inner, $f_inlineStyle, $f_content, $f_mod = false, $f_pageID = false)
+function ronikdesigns_FlexEstablishment($block = false, $flexname, $f_flexname_outer, $f_flexname_inner, $f_inlineStyle, $f_content, $f_mod = false, $f_pageID = false)
 {
     ob_start();
     $flexname = urlencode(strtolower($f_flexname_outer));
@@ -86,11 +86,11 @@ function ronikFlexEstablishment($block = false, $flexname, $f_flexname_outer, $f
         }
     }
 ?>
-    <div id="<?php echo esc_attr($id . ' ' . $f_id_outer); ?>" class="<?php echo esc_attr($class_name . ' ' . $f_cl_outer . ' ' . $f_color_override); ?>" style="<?= ' position:relative; ' . $f_bg . $f_img . ' ' . $f_inlineStyle . ' ' . ronikAdvancedSettings('flex'); ?>">
+    <div id="<?php echo esc_attr($id . ' ' . $f_id_outer); ?>" class="<?php echo esc_attr($class_name . ' ' . $f_cl_outer . ' ' . $f_color_override); ?>" style="<?= ' position:relative; ' . $f_bg . $f_img . ' ' . $f_inlineStyle . ' ' . ronikdesigns_AdvancedSettings('flex'); ?>">
         <?php if ($f_gradient_overlay['enable_gradient']) {
             echo $gradient_overlay;
         } ?>
-        <div style="z-index:1; width:100%; <?= ronikAdvancedSettingsInner('flex'); ?>" class="<?php echo esc_attr($flexname_inner . ' ' . $f_cl_inner); ?>" id="<?php echo esc_attr($f_id_inner); ?>">
+        <div style="z-index:1; width:100%; <?= ronikdesigns_AdvancedSettingsInner('flex'); ?>" class="<?php echo esc_attr($flexname_inner . ' ' . $f_cl_inner); ?>" id="<?php echo esc_attr($f_id_inner); ?>">
             <?php
             if ($f_mod) {
                 $f_content('mod');

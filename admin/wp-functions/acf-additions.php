@@ -1,7 +1,7 @@
 <?php
 
 // Customize ACF WYSIWYG toolbars
-function ronik_acf_toolbars($toolbars)
+function ronikdesigns_acf_toolbars($toolbars)
 {
     // Add Minimal toolbar
     $toolbars['Minimal'] = array();
@@ -9,10 +9,10 @@ function ronik_acf_toolbars($toolbars)
 
     return $toolbars;
 }
-add_filter('acf/fields/wysiwyg/toolbars', 'ronik_acf_toolbars'); // add toolbars
+add_filter('acf/fields/wysiwyg/toolbars', 'ronikdesigns_acf_toolbars'); // add toolbars
 
 // Strip tags from WYSIWYG content based on toolbar settings
-function ronik_acf_wysiwyg_strip_tags($value, $post_id, $field)
+function ronikdesigns_acf_wysiwyg_strip_tags($value, $post_id, $field)
 {
     if (isset($field['enable_strip_tags']) && $field['enable_strip_tags']) {
         if ($field['toolbar'] == 'basic') {
@@ -23,10 +23,10 @@ function ronik_acf_wysiwyg_strip_tags($value, $post_id, $field)
     }
     return $value;
 }
-add_action('acf/render_field_settings/type=wysiwyg', 'ronik_acf_wysiwyg_strip_tags_setting'); // add setting to enable/disable
+add_action('acf/render_field_settings/type=wysiwyg', 'ronikdesigns_acf_wysiwyg_strip_tags_setting'); // add setting to enable/disable
 
 // Add setting to enable/disable "Strip Tags Based on Toolbar"
-function ronik_acf_wysiwyg_strip_tags_setting($field)
+function ronikdesigns_acf_wysiwyg_strip_tags_setting($field)
 {
     acf_render_field_setting($field, array(
         'label'    => 'Strip Tags Based on Toolbar',
@@ -36,30 +36,30 @@ function ronik_acf_wysiwyg_strip_tags_setting($field)
         'ui' => 1
     ));
 }
-add_filter('acf/format_value/type=wysiwyg', 'ronik_acf_wysiwyg_strip_tags', 10, 3); // strip tags from WYSIWYG content based on toolbar
+add_filter('acf/format_value/type=wysiwyg', 'ronikdesigns_acf_wysiwyg_strip_tags', 10, 3); // strip tags from WYSIWYG content based on toolbar
 
 // Disable autoembed for ACF WYSIWYG fields (and add option to re-enable)
-function ronik_acf_wysiwyg_disable_auto_embed($value, $post_id, $field)
+function ronikdesigns_acf_wysiwyg_disable_auto_embed($value, $post_id, $field)
 {
     if (isset($field['enable_autoembed']) && (!empty($GLOBALS['wp_embed']) && !$field['enable_autoembed'])) {
         remove_filter('acf_the_content', array($GLOBALS['wp_embed'], 'autoembed'), 8);
     }
     return $value;
 }
-add_filter('acf/format_value/type=wysiwyg', 'ronik_acf_wysiwyg_disable_auto_embed', 10, 3); // disable autoembed
+add_filter('acf/format_value/type=wysiwyg', 'ronikdesigns_acf_wysiwyg_disable_auto_embed', 10, 3); // disable autoembed
 
 // Re-enable autoembed after value is formatted
-function ronik_acf_wysiwyg_disable_auto_embed_after($value, $post_id, $field)
+function ronikdesigns_acf_wysiwyg_disable_auto_embed_after($value, $post_id, $field)
 {
     if (isset($field['enable_autoembed']) && (!empty($GLOBALS['wp_embed']) && !$field['enable_autoembed'])) {
         add_filter('acf_the_content', array($GLOBALS['wp_embed'], 'autoembed'), 8);
     }
     return $value;
 }
-add_filter('acf/format_value/type=wysiwyg', 'ronik_acf_wysiwyg_disable_auto_embed_after', 20, 3); // re-enable autoembed after value is formatted
+add_filter('acf/format_value/type=wysiwyg', 'ronikdesigns_acf_wysiwyg_disable_auto_embed_after', 20, 3); // re-enable autoembed after value is formatted
 
 // Add setting to enable/disable "Enable Autoembed"
-function ronik_acf_wysiwyg_disable_auto_embed_setting($field)
+function ronikdesigns_acf_wysiwyg_disable_auto_embed_setting($field)
 {
     acf_render_field_setting($field, array(
         'label'    => 'Enable Autoembed',
@@ -68,10 +68,10 @@ function ronik_acf_wysiwyg_disable_auto_embed_setting($field)
         'ui' => 1
     ));
 }
-add_action('acf/render_field_settings/type=wysiwyg', 'ronik_acf_wysiwyg_disable_auto_embed_setting'); // add setting to enable/disable
+add_action('acf/render_field_settings/type=wysiwyg', 'ronikdesigns_acf_wysiwyg_disable_auto_embed_setting'); // add setting to enable/disable
 
 // Add class to wrapper (so JS knows to disable the wpview TinyMCE plugin)
-function ronik_acf_wysiwyg_disable_auto_embed_class($field)
+function ronikdesigns_acf_wysiwyg_disable_auto_embed_class($field)
 {
     if (!isset($field['enable_autoembed']) && $field['enable_autoembed']) {
         $field['wrapper']['class'] = explode(' ', $field['wrapper']['class']);
@@ -80,10 +80,10 @@ function ronik_acf_wysiwyg_disable_auto_embed_class($field)
     }
     return $field;
 }
-add_filter('acf/prepare_field/type=wysiwyg', 'ronik_acf_wysiwyg_disable_auto_embed_class'); // add class to wrapper (so JS knows to disable the wpview TinyMCE plugin)
+add_filter('acf/prepare_field/type=wysiwyg', 'ronikdesigns_acf_wysiwyg_disable_auto_embed_class'); // add class to wrapper (so JS knows to disable the wpview TinyMCE plugin)
 
 // Add option to post object, page link, and relationship fields to allow filtering by page template
-function ronik_acf_template_filter_setting($field)
+function ronikdesigns_acf_template_filter_setting($field)
 {
     acf_render_field_setting($field, array(
         'label'    => 'Filter by Page Template',
@@ -96,12 +96,12 @@ function ronik_acf_template_filter_setting($field)
         'placeholder' => 'All page templates'
     ));
 }
-add_action('acf/render_field_settings/type=post_object', 'ronik_acf_template_filter_setting'); // add setting to post object fields
-add_action('acf/render_field_settings/type=page_link', 'ronik_acf_template_filter_setting'); // add setting to page_link fields
-add_action('acf/render_field_settings/type=relationship', 'ronik_acf_template_filter_setting'); // add setting to relationship fields
+add_action('acf/render_field_settings/type=post_object', 'ronikdesigns_acf_template_filter_setting'); // add setting to post object fields
+add_action('acf/render_field_settings/type=page_link', 'ronikdesigns_acf_template_filter_setting'); // add setting to page_link fields
+add_action('acf/render_field_settings/type=relationship', 'ronikdesigns_acf_template_filter_setting'); // add setting to relationship fields
 
 // update query for post object fields to include template filter
-function ronik_acf_template_filter_query($args, $field, $post_id)
+function ronikdesigns_acf_template_filter_query($args, $field, $post_id)
 {
     if (isset($field['filter_template']) && $field['filter_template']) {
         $args['meta_query'] = array(
@@ -114,12 +114,12 @@ function ronik_acf_template_filter_query($args, $field, $post_id)
     }
     return $args;
 }
-add_filter('acf/fields/post_object/query', 'ronik_acf_template_filter_query', 10, 3); // update query for post object fields to include template filter
-add_filter('acf/fields/page_link/query', 'ronik_acf_template_filter_query', 10, 3); // update query for page link fields to include template filter
-add_filter('acf/fields/relationship/query', 'ronik_acf_template_filter_query', 10, 3); // update query for relationship fields to include template filter
+add_filter('acf/fields/post_object/query', 'ronikdesigns_acf_template_filter_query', 10, 3); // update query for post object fields to include template filter
+add_filter('acf/fields/page_link/query', 'ronikdesigns_acf_template_filter_query', 10, 3); // update query for page link fields to include template filter
+add_filter('acf/fields/relationship/query', 'ronikdesigns_acf_template_filter_query', 10, 3); // update query for relationship fields to include template filter
 
 // Add maximum/minimum selection options to field types with multi-select functionality
-function ronik_acf_multi_min_max_settings($field)
+function ronikdesigns_acf_multi_min_max_settings($field)
 {
     if ($field['type'] == 'checkbox') {
         // render settings for checkbox fields (always show settings)
@@ -201,16 +201,16 @@ function ronik_acf_multi_min_max_settings($field)
         ));
     }
 }
-add_action('acf/render_field_settings/type=checkbox', 'ronik_acf_multi_min_max_settings'); // add min/max settings to checkbox fields
-add_action('acf/render_field_settings/type=select', 'ronik_acf_multi_min_max_settings'); // add min/max settings to select fields
-add_action('acf/render_field_settings/type=post_object', 'ronik_acf_multi_min_max_settings'); // add min/max settings to post object fields
-add_action('acf/render_field_settings/type=page_link', 'ronik_acf_multi_min_max_settings'); // add min/max settings to page link fields
-add_action('acf/render_field_settings/type=taxonomy', 'ronik_acf_multi_min_max_settings'); // add min/max settings to taxonomy fields
-add_action('acf/render_field_settings/type=user', 'ronik_acf_multi_min_max_settings'); // add min/max settings to user fields
-add_action('acf/render_field_settings/type=gf_select', 'ronik_acf_multi_min_max_settings'); // add min/max settings to Gravity Form fields
+add_action('acf/render_field_settings/type=checkbox', 'ronikdesigns_acf_multi_min_max_settings'); // add min/max settings to checkbox fields
+add_action('acf/render_field_settings/type=select', 'ronikdesigns_acf_multi_min_max_settings'); // add min/max settings to select fields
+add_action('acf/render_field_settings/type=post_object', 'ronikdesigns_acf_multi_min_max_settings'); // add min/max settings to post object fields
+add_action('acf/render_field_settings/type=page_link', 'ronikdesigns_acf_multi_min_max_settings'); // add min/max settings to page link fields
+add_action('acf/render_field_settings/type=taxonomy', 'ronikdesigns_acf_multi_min_max_settings'); // add min/max settings to taxonomy fields
+add_action('acf/render_field_settings/type=user', 'ronikdesigns_acf_multi_min_max_settings'); // add min/max settings to user fields
+add_action('acf/render_field_settings/type=gf_select', 'ronikdesigns_acf_multi_min_max_settings'); // add min/max settings to Gravity Form fields
 
 // validate min/max settings for checkbox fields
-function ronik_acf_multi_min_max_validation($valid, $value, $field, $input)
+function ronikdesigns_acf_multi_min_max_validation($valid, $value, $field, $input)
 {
     if ($valid) {
         if ($field['multi_min']) {
@@ -243,16 +243,16 @@ function ronik_acf_multi_min_max_validation($valid, $value, $field, $input)
 
     return $valid;
 }
-add_action('acf/validate_value/type=checkbox', 'ronik_acf_multi_min_max_validation', 10, 4); // validate min/max settings for checkbox fields
-add_action('acf/validate_value/type=select', 'ronik_acf_multi_min_max_validation', 10, 4); // validate min/max settings for select fields
-add_action('acf/validate_value/type=post_object', 'ronik_acf_multi_min_max_validation', 10, 4); // validate min/max settings for post object fields
-add_action('acf/validate_value/type=page_link', 'ronik_acf_multi_min_max_validation', 10, 4); // validate min/max settings for page link fields
-add_action('acf/validate_value/type=taxonomy', 'ronik_acf_multi_min_max_validation', 10, 4); // validate min/max settings for taxonomy fields
-add_action('acf/validate_value/type=user', 'ronik_acf_multi_min_max_validation', 10, 4); // validate min/max settings for user fields
-add_action('acf/validate_value/type=gf_select', 'ronik_acf_multi_min_max_validation', 10, 4); // validate min/max settings for Gravity Form fields
+add_action('acf/validate_value/type=checkbox', 'ronikdesigns_acf_multi_min_max_validation', 10, 4); // validate min/max settings for checkbox fields
+add_action('acf/validate_value/type=select', 'ronikdesigns_acf_multi_min_max_validation', 10, 4); // validate min/max settings for select fields
+add_action('acf/validate_value/type=post_object', 'ronikdesigns_acf_multi_min_max_validation', 10, 4); // validate min/max settings for post object fields
+add_action('acf/validate_value/type=page_link', 'ronikdesigns_acf_multi_min_max_validation', 10, 4); // validate min/max settings for page link fields
+add_action('acf/validate_value/type=taxonomy', 'ronikdesigns_acf_multi_min_max_validation', 10, 4); // validate min/max settings for taxonomy fields
+add_action('acf/validate_value/type=user', 'ronikdesigns_acf_multi_min_max_validation', 10, 4); // validate min/max settings for user fields
+add_action('acf/validate_value/type=gf_select', 'ronikdesigns_acf_multi_min_max_validation', 10, 4); // validate min/max settings for Gravity Form fields
 
 // Character counter for ACF text and textarea field types
-function ronik_acf_character_limit_markup($field)
+function ronikdesigns_acf_character_limit_markup($field)
 {
     if ($field['maxlength']) { ?>
         <p class="ronik-character-count">character Count:
@@ -270,11 +270,11 @@ function ronik_acf_character_limit_markup($field)
         </p>
 <?php }
 }
-add_action('acf/render_field/type=text', 'ronik_acf_character_limit_markup'); // add counter to text fields
-add_action('acf/render_field/type=textarea', 'ronik_acf_character_limit_markup'); // add counter to textarea fields
+add_action('acf/render_field/type=text', 'ronikdesigns_acf_character_limit_markup'); // add counter to text fields
+add_action('acf/render_field/type=textarea', 'ronikdesigns_acf_character_limit_markup'); // add counter to textarea fields
 
 // Dynamic Post Loader to select.
-function ronik_acf_post_load($field)
+function ronikdesigns_acf_post_load($field)
 {
     // render settings for other field types (hide/show settings based on whether multi-select is enabled)
     acf_render_field_setting($field, array(
@@ -284,10 +284,10 @@ function ronik_acf_post_load($field)
         'ui' => 1,
     ));
 }
-add_action('acf/render_field_settings/type=select', 'ronik_acf_post_load' , 10); // add Dynamic Post Loader to select
+add_action('acf/render_field_settings/type=select', 'ronikdesigns_acf_post_load' , 10); // add Dynamic Post Loader to select
 
 // Dynamic Post Loader to select.
-function ronik_acf_post_loader($field)
+function ronikdesigns_acf_post_loader($field)
 {
     if( !array_key_exists('dyn_post_loader', $field)  ){
         // return the field
@@ -315,4 +315,4 @@ function ronik_acf_post_loader($field)
     // return the field
     return $field;
 }
-add_filter('acf/load_field/type=select', 'ronik_acf_post_loader', 11);
+add_filter('acf/load_field/type=select', 'ronikdesigns_acf_post_loader', 11);

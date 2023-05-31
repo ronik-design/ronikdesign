@@ -69,8 +69,8 @@ if($f_success){
     } else {
         // We run our backup plan for redirecting back to previous page.
         // The downside this wont account for pages that were clicked during the redirect. So it will get the page that was previously visited.
-        add_action('wp_footer', 'ronik_redirect_js');
-        function ronik_redirect_js(){ ?>
+        add_action('wp_footer', 'ronikdesigns_redirect_js');
+        function ronikdesigns_redirect_js(){ ?>
             <script type="text/javascript">
                 var x = JSON.parse(window.localStorage.getItem("ronik-password-reset"));
                 window.location.replace(x.redirect);
