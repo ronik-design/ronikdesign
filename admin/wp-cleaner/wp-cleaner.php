@@ -55,8 +55,6 @@ if( !empty($dev_general_settings['ronikdesigns_dequeue_block_styles']) ){
 
 // Mitigate information leakage vulnerability
 if( !empty($dev_general_settings['mitigate_vulnerability']) ){
-    error_log(print_r('sss',true));
-
     remove_action( 'wp_head', 'wp_generator' ) ;
 }
 
