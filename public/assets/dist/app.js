@@ -332,6 +332,24 @@ function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" =
   });
 })(jQuery);
 
+// We detect if the user is logged in. If so we dont register the service worker.
+if (!document.body.classList.contains('wp-admin') || !document.body.classList.contains('logged-in')) {
+  if (document.body.classList.contains('enable-serviceworker')) {
+    if (navigator.serviceWorker) {
+      // /sw.js
+      navigator.serviceWorker.register('/sw.js', {
+        scope: './' // <--- THIS BIT IS REQUIRED
+      }).then(function (registration) {
+        // Registration was successful
+        console.log('ServiceWorker registration successful with scope: ', registration.scope);
+      }, function (err) {
+        // registration failed :(
+        console.log('ServiceWorker registration failed: ', err);
+      });
+    }
+  }
+}
+
 /***/ }),
 
 /***/ "./public/assets/src/sass/main.scss":
@@ -474,7 +492,7 @@ __webpack_require__.r(__webpack_exports__);
 /******/ 			return __webpack_require__.O(result);
 /******/ 		}
 /******/ 		
-/******/ 		var chunkLoadingGlobal = self["webpackChunkronikdesigns_plugin"] = self["webpackChunkronikdesigns_plugin"] || [];
+/******/ 		var chunkLoadingGlobal = self["webpackChunkronik_plugin"] = self["webpackChunkronik_plugin"] || [];
 /******/ 		chunkLoadingGlobal.forEach(webpackJsonpCallback.bind(null, 0));
 /******/ 		chunkLoadingGlobal.push = webpackJsonpCallback.bind(null, chunkLoadingGlobal.push.bind(chunkLoadingGlobal));
 /******/ 	})();

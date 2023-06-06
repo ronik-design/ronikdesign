@@ -1,5 +1,40 @@
 <?php
 
+// Enable rest api route for service workers.
+$f_enable_serviceworker = get_field('custom_js_settings', 'option')['enable_serviceworker'];
+if($f_enable_serviceworker){
+    function ronikdesigns_service_worker_data( $data ) {
+        global $wp_version;
+        // version
+        if($data['slug'] == 'version'){
+            $theme_version = wp_get_theme()->get( 'Version' );
+            // This is critical for caching urls...
+            return [$wp_version, RONIKDESIGN_VERSION, $theme_version];
+        }
+        // sitemap
+        if($data['slug'] == 'sitemap'){
+            $args = array(
+                'numberposts' => -1,
+                'post_type'   => array('post','page'),
+            );
+            $f_pages = get_posts( $args );
+            if($f_pages){
+                $f_url_array = [];
+                foreach($f_pages as $posts){
+                    $f_url_array[] = get_permalink($posts->ID);
+                }
+                return $f_url_array;
+            }
+        }
+    }
+    add_action( 'rest_api_init', function () {
+        register_rest_route( 'serviceworker/v1', '/data/(?P<slug>\w+)', array(
+            'methods' => 'GET',
+            'callback' => 'ronikdesigns_service_worker_data',
+        ));
+    });
+}
+
 // Disable Gutenberg editor for specific post type
 function ronikdesigns_prefix_disable_gutenberg($current_status, $post_type)
 {
@@ -107,12 +142,12 @@ function ronikdesigns_wpb_login_logo()
             background-repeat: no-repeat;
             padding-bottom: 10px;
         }
-        
+
         /* Lets fix the weird input issue */
         #user_login, #user_pass {
             padding: 0 10px;
             width: calc(100% - 20px);
-        }        
+        }
 
         .login .button.wp-hide-pw{
             right: -20px !important;

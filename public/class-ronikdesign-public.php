@@ -230,6 +230,11 @@ class Ronikdesign_Public
 			if ($f_custom_js_settings['dynamic_svg_migrations']) {
 				$classes[] = 'dyn-svg-migrations';
 			}
+
+			if ($f_custom_js_settings['enable_serviceworker']) {
+				$classes[] = 'enable-serviceworker';
+			}
+
 		}
 
 		return $classes;

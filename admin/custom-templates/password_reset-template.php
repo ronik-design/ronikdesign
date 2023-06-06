@@ -43,10 +43,12 @@ $f_userdata = wp_get_current_user();
         <br></br>
 		<?php if($f_userdata){ ?>
             <form action="<?php echo esc_url( admin_url('admin-post.php') ); ?>" method="post">
+                <!-- Need to add username input to silence the console warnings. -->
+                <input type="text" name="email" value="..." autocomplete="username email" style="display: none;" >
                 <label for="password">Password:</label>
-                <input type="password" class="adv-passwordchecker" id="password" name="password" value="" required >
+                <input autocomplete="new-password" type="password" class="adv-passwordchecker" id="password" name="password" value="" required >
                 <label for="password">Retype Password:</label>
-                <input type="password" class="adv-passwordchecker" id="retype_password" name="retype_password" value="" required>
+                <input autocomplete="new-password" type="password" class="adv-passwordchecker" id="retype_password" name="retype_password" value="" required>
                 <input type="hidden" name="action" value="ronikdesigns_admin_password_reset">
                 <button type="submit" value="Reset Password">Reset Password</button>
             </form>

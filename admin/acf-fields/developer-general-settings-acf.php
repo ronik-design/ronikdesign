@@ -1328,9 +1328,28 @@ https://test.com/',
 						'ui_on_text' => '',
 						'ui_off_text' => '',
 					),
+
+					array(
+						'key' => 'field_6372afa6da3f2021_ronikdesign',
+						'label' => 'Enable Service Worker',
+						'name' => 'enable_serviceworker',
+						'type' => 'true_false',
+						'instructions' => 'Enable Service Worker. Warning service worker is an experimental feature.',
+						'required' => 0,
+						'conditional_logic' => 0,
+						'wrapper' => array(
+							'width' => '100',
+							'class' => '',
+							'id' => '',
+						),
+						'message' => '',
+						'default_value' => 1,
+						'ui' => 1,
+						'ui_on_text' => '',
+						'ui_off_text' => '',
+					),
 				),
 			),
-
 
 
 
