@@ -15,8 +15,13 @@ $f_content = apply_filters( 'ronikdesign_2fa_custom_content', false );
 $f_instructions = apply_filters( 'ronikdesign_2fa_custom_instructions', false );
 $f_footer = apply_filters( 'ronikdesign_2fa_custom_footer', false );
 
-if($_GET["2faredirect"] == 'home'){
-	$f_instructions_verfied_complete = true;
+
+if( isset($_GET["2faredirect"]) ){
+	if($_GET["2faredirect"] == 'home'){
+		$f_instructions_verfied_complete = true;
+	} else {
+		$f_instructions_verfied_complete = false;
+	}
 } else{
 	$f_instructions_verfied_complete = false;
 }

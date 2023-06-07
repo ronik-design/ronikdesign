@@ -83,7 +83,7 @@ function password_reset_ronikdesigns(){
 
             // Lets setup the cookie for redirect purposes.
             if(($_SERVER['REQUEST_URI'] !== '/wp-admin/admin-post.php') && ($_SERVER['REQUEST_URI'] !== '/password-reset/')){
-                if( ($_SERVER['REQUEST_URI'] !== '/password-reset/?pr-success=success') && ($_SERVER['REQUEST_URI'] !== '/password-reset/?pr-error=nomatch') && ($_SERVER['REQUEST_URI'] !== '/password-reset/?pr-error=missing') ){
+                if( ($_SERVER['REQUEST_URI'] !== '/password-reset/?pr-success=success') && ($_SERVER['REQUEST_URI'] !== '/password-reset/?pr-error=alreadyexists') && ($_SERVER['REQUEST_URI'] !== '/password-reset/?pr-error=nomatch') && ($_SERVER['REQUEST_URI'] !== '/password-reset/?pr-error=missing') ){
                     $cookie_name = "ronik-password-reset-redirect";
                     $cookie_value = urlencode($_SERVER['REQUEST_URI']);
                     // Lets expire the cookie after 1 day.
@@ -100,14 +100,14 @@ function password_reset_ronikdesigns(){
                     // This prevent redirect loop issues
                     if(($_SERVER['REQUEST_URI'] !== '/wp-admin/admin-post.php') && ($_SERVER['REDIRECT_URL'] !== '/password-reset/')){
                         // Because we are using GET we have to check each query
-                        if( ($_SERVER['QUERY_STRING'] !== 'pr-success=success') || ($_SERVER['QUERY_STRING'] !== 'pr-error=nomatch') || ($_SERVER['QUERY_STRING'] !== 'pr-error=missing') ){
+                        if( ($_SERVER['QUERY_STRING'] !== 'pr-success=success') || ($_SERVER['QUERY_STRING'] !== 'pr-error=alreadyexists') || ($_SERVER['QUERY_STRING'] !== 'pr-error=nomatch') || ($_SERVER['QUERY_STRING'] !== 'pr-error=missing') ){
                             wp_redirect( esc_url(home_url('/password-reset/')) );
                             exit;
                         }
                     }
                 } else {
                     if(($_SERVER['REQUEST_URI'] !== '/wp-admin/admin-post.php') && ($_SERVER['REQUEST_URI'] !== '/password-reset/')){
-                        if( ($_SERVER['REQUEST_URI'] !== '/password-reset/?pr-success=success') && ($_SERVER['REQUEST_URI'] !== '/password-reset/?pr-error=nomatch') && ($_SERVER['REQUEST_URI'] !== '/password-reset/?pr-error=missing') ){
+                        if( ($_SERVER['REQUEST_URI'] !== '/password-reset/?pr-success=success') && ($_SERVER['REQUEST_URI'] !== '/password-reset/?pr-error=alreadyexists')&& ($_SERVER['REQUEST_URI'] !== '/password-reset/?pr-error=nomatch') && ($_SERVER['REQUEST_URI'] !== '/password-reset/?pr-error=missing') ){
                             wp_redirect( esc_url(home_url('/password-reset/')) );
                             exit;
                         }

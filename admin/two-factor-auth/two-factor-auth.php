@@ -47,9 +47,11 @@ use Twilio\Rest\Client;
 
     // do_action('2fa-registration-page');
     add_action('2fa-registration-page', function () {
-        if($_GET["2faredirect"] == 'home'){
-            header("Location:".home_url());
-            die();
+        if(isset($_GET["2faredirect"])){
+            if($_GET["2faredirect"] == 'home'){
+                header("Location:".home_url());
+                die();
+            }
         }
         $options = new QROptions([
             'eccLevel' => QRCode::ECC_L,

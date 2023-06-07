@@ -255,31 +255,39 @@ class Ronikdesign_Admin
 		if (!is_user_logged_in()) {
 			return;
 		}
+
 		$f_value = array();
 		if(!empty($_POST['password']) && !empty($_POST['retype_password'])){
 			if($_POST['password'] === $_POST['retype_password']){
 				// Lets get the current user information
 				$curr_user = wp_get_current_user();
-				// Store the id.
-				$curr_id = $curr_user->id;
-				$current_date = strtotime((new DateTime())->format( 'd-m-Y' ));
-				update_user_meta( $curr_id, 'wp_user-settings-time-password-reset', $current_date );
-				// Get current logged-in user.
-				$user = wp_get_current_user();
-				// Send out an email notification.
-				$to = $curr_user->user_email;
-				$subject = 'Password Reset.';
-				$body = 'Your password was successfully reset.';
-				$headers = array('Content-Type: text/html; charset=UTF-8');
-				wp_mail($to, $subject, $body, $headers);
-				// Change password.
-				wp_set_password( $_POST['password'], $user->ID);
-				// Log-in again.
-				wp_set_auth_cookie($user->ID);
-				wp_set_current_user($user->ID);
-				do_action('wp_login', $user->user_login, $user);
 
-				$f_value['pr-success'] = "success";
+				// 	check if password already exists...
+				if(wp_check_password($_POST['password'], $curr_user->user_pass, $curr_user->ID)){
+					$f_value['pr-error'] = "alreadyexists";
+				} else {
+					// Store the id.
+					$curr_id = $curr_user->id;
+					$current_date = strtotime((new DateTime())->format( 'd-m-Y' ));
+					update_user_meta( $curr_id, 'wp_user-settings-time-password-reset', $current_date );
+					// Get current logged-in user.
+					$user = wp_get_current_user();
+					// Send out an email notification.
+					$to = $curr_user->user_email;
+					$subject = 'Password Reset.';
+					$body = 'Your password was successfully reset.';
+					$headers = array('Content-Type: text/html; charset=UTF-8');
+					wp_mail($to, $subject, $body, $headers);
+					// Change password.
+					wp_set_password( $_POST['password'], $user->ID);
+					// Log-in again.
+					wp_set_auth_cookie($user->ID);
+					wp_set_current_user($user->ID);
+					do_action('wp_login', $user->user_login, $user);
+	
+					$f_value['pr-success'] = "success";
+				}
+
 			} else {
 				$f_value['pr-error'] = "nomatch";
 			}
