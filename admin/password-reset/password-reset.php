@@ -92,27 +92,29 @@ function password_reset_ronikdesigns(){
                     sleep(.5);
                 }
             }
+        
+                // Due to redirect loop issues we need to check the following parameters to avoid a redirect loop.
+                    // Check if the $_SERVER is available via isset. WPE will default to else.
+                    if(isset($_SERVER['REDIRECT_URL'])){
+                        // Lets check if the $_SERVER['REDIRECT_URL'] is equal to admin-post.php or password-reset.
+                        // This prevent redirect loop issues
+                        if(($_SERVER['REQUEST_URI'] !== '/wp-admin/admin-post.php') && ($_SERVER['REDIRECT_URL'] !== '/password-reset/')){
+                            // Because we are using GET we have to check each query
+                            if( ($_SERVER['QUERY_STRING'] !== 'pr-success=success') || ($_SERVER['QUERY_STRING'] !== 'pr-error=alreadyexists') || ($_SERVER['QUERY_STRING'] !== 'pr-error=nomatch') || ($_SERVER['QUERY_STRING'] !== 'pr-error=missing') ){
+                                wp_redirect( esc_url(home_url('/password-reset/')) );
+                                exit;
+                            }
+                        }
+                    } else {
+                        if(($_SERVER['REQUEST_URI'] !== '/wp-admin/admin-post.php') && ($_SERVER['REQUEST_URI'] !== '/password-reset/')){
+                            if( ($_SERVER['REQUEST_URI'] !== '/password-reset/?pr-success=success') && ($_SERVER['REQUEST_URI'] !== '/password-reset/?pr-error=alreadyexists')&& ($_SERVER['REQUEST_URI'] !== '/password-reset/?pr-error=nomatch') && ($_SERVER['REQUEST_URI'] !== '/password-reset/?pr-error=missing') ){
+                                wp_redirect( esc_url(home_url('/password-reset/')) );
+                                exit;
+                            }
+                        }
+                    }
+ 
 
-            // Due to redirect loop issues we need to check the following parameters to avoid a redirect loop.
-                // Check if the $_SERVER is available via isset. WPE will default to else.
-                if(isset($_SERVER['REDIRECT_URL'])){
-                    // Lets check if the $_SERVER['REDIRECT_URL'] is equal to admin-post.php or password-reset.
-                    // This prevent redirect loop issues
-                    if(($_SERVER['REQUEST_URI'] !== '/wp-admin/admin-post.php') && ($_SERVER['REDIRECT_URL'] !== '/password-reset/')){
-                        // Because we are using GET we have to check each query
-                        if( ($_SERVER['QUERY_STRING'] !== 'pr-success=success') || ($_SERVER['QUERY_STRING'] !== 'pr-error=alreadyexists') || ($_SERVER['QUERY_STRING'] !== 'pr-error=nomatch') || ($_SERVER['QUERY_STRING'] !== 'pr-error=missing') ){
-                            wp_redirect( esc_url(home_url('/password-reset/')) );
-                            exit;
-                        }
-                    }
-                } else {
-                    if(($_SERVER['REQUEST_URI'] !== '/wp-admin/admin-post.php') && ($_SERVER['REQUEST_URI'] !== '/password-reset/')){
-                        if( ($_SERVER['REQUEST_URI'] !== '/password-reset/?pr-success=success') && ($_SERVER['REQUEST_URI'] !== '/password-reset/?pr-error=alreadyexists')&& ($_SERVER['REQUEST_URI'] !== '/password-reset/?pr-error=nomatch') && ($_SERVER['REQUEST_URI'] !== '/password-reset/?pr-error=missing') ){
-                            wp_redirect( esc_url(home_url('/password-reset/')) );
-                            exit;
-                        }
-                    }
-                }
         }
     }
 }

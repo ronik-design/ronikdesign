@@ -1453,6 +1453,153 @@ https://test.com/',
 			),
 
 
+
+
+
+
+
+			array(
+				'key' => 'field_64822ce62af1eb_ronikdesign',
+				'label' => 'Manifest',
+				'name' => '',
+				'type' => 'tab',
+				'instructions' => '',
+				'required' => 0,
+				'conditional_logic' => 0,
+				'wrapper' => array(
+					'width' => '',
+					'class' => '',
+					'id' => '',
+				),
+				'placement' => 'left',
+				'endpoint' => 0,
+			),
+				array(
+					'key' => 'field_64822d5a96e0a_ronikdesign',
+					'label' => 'App Name',
+					'name' => 'manifest_app_name',
+					'aria-label' => '',
+					'type' => 'text',
+					'instructions' => '',
+					'required' => 0,
+					'conditional_logic' => 0,
+					'wrapper' => array(
+						'width' => '',
+						'class' => '',
+						'id' => '',
+					),
+					'default_value' => '',
+					'maxlength' => '',
+					'placeholder' => '',
+					'prepend' => '',
+					'append' => '',
+				),
+				array(
+					'key' => 'field_64822d7296e0b_ronikdesign',
+					'label' => 'Description',
+					'name' => 'manifest_description',
+					'aria-label' => '',
+					'type' => 'textarea',
+					'instructions' => '',
+					'required' => 0,
+					'conditional_logic' => 0,
+					'wrapper' => array(
+						'width' => '',
+						'class' => '',
+						'id' => '',
+					),
+					'default_value' => '',
+					'maxlength' => '',
+					'rows' => '',
+					'placeholder' => '',
+					'new_lines' => '',
+				),
+				array(
+					'key' => 'field_64822da096e0c_ronikdesign',
+					'label' => 'Theme Color',
+					'name' => 'manifest_theme_color',
+					'aria-label' => '',
+					'type' => 'color_picker',
+					'instructions' => '',
+					'required' => 0,
+					'conditional_logic' => 0,
+					'wrapper' => array(
+						'width' => '',
+						'class' => '',
+						'id' => '',
+					),
+					'default_value' => '',
+					'enable_opacity' => 0,
+					'return_format' => 'string',
+				),
+				array(
+					'key' => 'field_64822de896e0d_ronikdesign',
+					'label' => 'Icons 512x512',
+					'name' => 'manifest_icons_512x512',
+					'aria-label' => '',
+					'type' => 'image',
+					'instructions' => '',
+					'required' => 0,
+					'conditional_logic' => 0,
+					'wrapper' => array(
+						'width' => '',
+						'class' => '',
+						'id' => '',
+					),
+					'return_format' => 'array',
+					'library' => 'all',
+					'min_width' => '',
+					'min_height' => '',
+					'min_size' => '',
+					'max_width' => '',
+					'max_height' => '',
+					'max_size' => '',
+					'mime_types' => '',
+					'preview_size' => 'medium',
+				),
+				array(
+					'key' => 'field_64822e6696e0f_ronikdesign',
+					'label' => 'Icons 144x144',
+					'name' => 'manifest_icons_144x144',
+					'aria-label' => '',
+					'type' => 'image',
+					'instructions' => '',
+					'required' => 0,
+					'conditional_logic' => 0,
+					'wrapper' => array(
+						'width' => '',
+						'class' => '',
+						'id' => '',
+					),
+					'return_format' => 'array',
+					'library' => 'all',
+					'min_width' => '',
+					'min_height' => '',
+					'min_size' => '',
+					'max_width' => '',
+					'max_height' => '',
+					'max_size' => '',
+					'mime_types' => '',
+					'preview_size' => 'medium',
+				),
+
+	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 		),
 		'location' => array(
 			array(

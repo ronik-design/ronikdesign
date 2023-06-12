@@ -62,8 +62,8 @@ use Twilio\Rest\Client;
         // Lets generate the google2fa_secret key.
         $google2fa_secret = $google2fa->generateSecretKey();
         // Lets store important data inside the usermeta.
-        $get_current_secret = get_user_meta(get_current_user_id(), $key = 'google2fa_secret', true);
-        $get_registration_status = get_user_meta(get_current_user_id(), $key = 'google2fa_status', true);
+        $get_current_secret = get_user_meta(get_current_user_id(), 'google2fa_secret', true);
+        $get_registration_status = get_user_meta(get_current_user_id(),'google2fa_status', true);
         // Check if user has secret if not add secret.
         if (!$get_current_secret) {
             add_user_meta(get_current_user_id(), 'google2fa_secret', $google2fa_secret);
@@ -205,12 +205,12 @@ use Twilio\Rest\Client;
     function ronikdesigns_extra_user_profile_fields($user)
     {
         if(isset($_GET["user_id"])){
-            $get_registration_status = get_user_meta($_GET["user_id"], $key = 'google2fa_status', true);
+            $get_registration_status = get_user_meta($_GET["user_id"], 'google2fa_status', true);
             if(!$get_registration_status){
                 $get_registration_status = 'google2fa_unverified';
             }
         } else {
-            $get_registration_status = get_user_meta(get_current_user_id(), $key = 'google2fa_status', true);
+            $get_registration_status = get_user_meta(get_current_user_id(), 'google2fa_status', true);
             if(!$get_registration_status){
                 $get_registration_status = 'google2fa_unverified';
             }

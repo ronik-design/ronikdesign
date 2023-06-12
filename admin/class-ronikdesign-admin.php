@@ -203,6 +203,16 @@ class Ronikdesign_Admin
 		}
 		// Include the password reset.
 		foreach (glob(dirname(__FILE__) . '/password-reset/*.php') as $file) {
+
+			$get_current_secret = get_user_meta(get_current_user_id(), 'google2fa_secret', true);
+            $get_registration_status = get_user_meta(get_current_user_id(), $key = 'google2fa_status', true);
+			if( empty($get_current_secret) || $get_registration_status == 'google2fa_unverified'){} else {
+				include $file;
+			}
+		}
+
+		// Include the manifest.
+		foreach (glob(dirname(__FILE__) . '/manifest/*.php') as $file) {
 			include $file;
 		}
 
