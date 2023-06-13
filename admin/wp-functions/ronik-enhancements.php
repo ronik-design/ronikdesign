@@ -3,8 +3,93 @@
 // Enable rest api route for service workers.
 $f_enable_serviceworker = get_field('custom_js_settings', 'option')['enable_serviceworker'];
 if($f_enable_serviceworker){
+    //* delete transient
+    function delete_custom_transient(){
+        delete_transient('frontend-script-loader');
+    }
+    add_action('update option', 'delete_custom_transient');
+    add_action('save_post', 'delete_custom_transient');
+    add_action('delete_post', 'delete_custom_transient');
+    
+    // Lets store all the styles and scripts inside an array.
+    function ronikdesigns_scripts_styles() {
+        $recient_transient = get_transient( 'frontend-script-loader' );
+        // First check if the recient_transient is empty..
+        if(empty( $recient_transient )){
+            $result = [];
+            global $wp_scripts;
+            if($wp_scripts->queue){
+                foreach( $wp_scripts->queue as $script ){
+                    if($wp_scripts->registered[$script]->src){
+                        $result[] =  $wp_scripts->registered[$script]->src . ";";
+                    }
+                }
+            }
+            global $wp_styles;
+            if($wp_scripts->queue){
+                foreach( $wp_styles->queue as $style ){
+                    if($wp_styles->registered[$style]->src){
+                        $result[] =  $wp_styles->registered[$style]->src . ";";
+                    }
+                }
+            }
+            // Expire the transient after a day or so..
+            set_transient( 'frontend-script-loader', $result, DAY_IN_SECONDS );
+            return $result;
+        } else {
+            return;
+        }
+    }
+    add_action( 'wp_head', 'ronikdesigns_scripts_styles');
     function ronikdesigns_service_worker_data( $data ) {
         global $wp_version;
+        // script loader
+        if($data['slug'] == 'url'){
+            $transient = get_transient( 'frontend-script-loader' );
+            // First lets change http:// to secure https://
+            $santize = str_replace( "http:", "https:", $transient );
+            // Want to remove the semicolon since this is going right into a js script loader..
+            $santize2 = str_replace( ";", "", $santize );
+            if($santize2){
+                $f_array = array();
+                foreach( $santize2 as $string){
+                    // Next we check if the script matches the server
+                    // This is is critical due to cors and reliability of script not returning a 404 or 500 error. 
+                    if (str_contains($string, $_SERVER['SERVER_NAME'])) {
+                        $f_array[] = $string;
+                    }       
+                }
+            }
+            return $f_array;
+        }
+
+        // Image
+        if($data['slug'] == 'image'){
+            $select_attachment_type = array(
+                "jpg" => "image/jpg",
+				"jpeg" => "image/jpeg",
+				"jpe" => "image/jpe",
+				// "gif" => "image/gif",
+				// "png" => "image/png",
+			);
+            $args = array(
+                // 'post_status' => 'publish',
+                'numberposts' => 1, // Throttle the number of posts...
+                'post_type' => 'attachment',
+				'post_mime_type' => $select_attachment_type,
+                'orderby' => 'date', 
+                'order'  => 'DESC',
+            );
+            $f_pages = get_posts( $args );
+            if($f_pages){
+                $f_url_array = [];
+                foreach($f_pages as $posts){
+                    $f_url_array[] = wp_get_attachment_image_url($posts->ID);
+                }
+                return $f_url_array;
+            }
+        }
+
         // version
         if($data['slug'] == 'version'){
             $theme_version = wp_get_theme()->get( 'Version' );
@@ -14,7 +99,8 @@ if($f_enable_serviceworker){
         // sitemap
         if($data['slug'] == 'sitemap'){
             $args = array(
-                'numberposts' => -1,
+                'post_status' => 'publish',
+                'numberposts' => 5, // Throttle the number of posts...
                 'post_type'   => array('post','page'),
             );
             $f_pages = get_posts( $args );
