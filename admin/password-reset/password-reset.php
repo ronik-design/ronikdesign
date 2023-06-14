@@ -8,8 +8,7 @@ if(!isset($f_password_reset['enable_pr_settings']) || !$f_password_reset['enable
 
 // This basically creates the password reset page.
 function ronikdesigns_add_custom_reset_page() {
-    $page_exist = get_page_by_title('Password Reset');
-    if(!$page_exist){
+    if( !ronikdesigns_get_page_by_title('Password Reset') ){
         // Create post object
         $my_post = array(
             'post_title'    => wp_strip_all_tags( 'Password Reset' ),

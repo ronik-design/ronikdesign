@@ -156,3 +156,22 @@ function ronikdesigns_receiveAllFiles_ronikdesigns($id){
 	}
 	return $image_ids;
 }
+
+function ronikdesigns_get_page_by_title($title, $post_type = 'page'){
+	$query = new WP_Query(
+		array(
+			'post_type'              => $post_type,
+			'title'                  => $title,
+			'posts_per_page'         => 1,
+			'no_found_rows'          => true,
+			'ignore_sticky_posts'    => true,
+			'update_post_term_cache' => false,
+			'update_post_meta_cache' => false,
+		)
+	);
+	if( !empty($query->post) ){
+		return true;
+	} else {
+		return false;
+	}
+}
