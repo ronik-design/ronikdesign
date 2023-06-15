@@ -6,6 +6,23 @@
     $f_manifest_icons_512x512 = get_field('manifest_icons_512x512', 'options');
     $f_manifest_icons_144x144 = get_field('manifest_icons_144x144', 'options');
     $random_file = fopen(get_stylesheet_directory()."/manifest.json", "w");
+    
+    if(!$f_manifest_app_name){
+        $f_manifest_app_name = get_bloginfo();
+    }
+    if(!$f_manifest_description){
+        $f_manifest_description = get_bloginfo('description');
+    }
+    if(!$f_manifest_icons_512x512){
+        // Store var as blanks to avoid errors...
+        $f_manifest_icons_512x512['url'] = '';
+        $f_manifest_icons_512x512['mime_type'] = '';
+    }
+    if(!$f_manifest_icons_144x144){
+        // Store var as blanks to avoid errors...
+        $f_manifest_icons_144x144['url'] = '';
+        $f_manifest_icons_144x144['mime_type'] = '';
+    }
 
     $f_array = array(
         "name" => $f_manifest_app_name, 

@@ -15,7 +15,7 @@
         }
     }
 
-    if($f_custom_js_settings['enable_serviceworker']){
+    if(isset($f_custom_js_settings['enable_serviceworker']) && $f_custom_js_settings['enable_serviceworker']){
         ob_start();
     ?>
                 if (location.pathname.indexOf('/wp-admin/') !== -1) {

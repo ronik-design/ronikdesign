@@ -392,25 +392,49 @@ class Ronikdesign_Admin
 		add_filter( 'http_request_timeout', 'ronikdesigns_timeout_extend' );
 
 		function recursive_delete($number){
-			// $select_post_type = array( 'page', 'posts', 'segments', 'networks', 'programs', 'articles', 'playlists', 'credits', 'programming' );
-			$select_post_type = array( 
-				'page',
-				'posts', 
-				'segments', 
-				'networks', 
-				'programs', 
-				'articles', 
-				'playlists', 
-				'credits', 
-				'programming' 
-			);
-			$select_attachment_type = array(
-				"jpg" => "image/jpg",
-				"jpeg" => "image/jpeg",
-				"jpe" => "image/jpe",
-				"gif" => "image/gif",
-				"png" => "image/png",
-			);
+			$post_type = get_field('page_media_cleaner_post_type_field_ronikdesign', 'options');	
+			$select_post_type = $post_type;
+			$post_mime_type = get_field('page_media_cleaner_post_mime_type_field_ronikdesign', 'options');			
+			// https://developer.wordpress.org/reference/hooks/mime_types/
+			if($post_mime_type){
+				$select_attachment_type = array();
+				foreach($post_mime_type as $type){
+					if($type == 'jpg'){
+						$select_attachment_type['jpg'] = "image/jpg";
+						$select_attachment_type['jpeg'] = "image/jpeg";
+						$select_attachment_type['jpe'] = "image/jpe";			
+					} else if($type == 'gif'){
+						$select_attachment_type['gif'] = "image/gif";	
+					} else if($type == 'png'){
+						$select_attachment_type['png'] = "image/png";	
+					} else if($type == 'pdf'){
+						$select_attachment_type['pdf'] = "application/pdf";	
+					} else if($type == 'video'){
+						$select_attachment_type['asf|asx'] = "video/x-ms-asf";	
+						$select_attachment_type['wmv'] = "video/x-ms-wmv";	
+						$select_attachment_type['wmx'] = "video/x-ms-wmx";	
+						$select_attachment_type['wm'] = "video/x-ms-wm";	
+						$select_attachment_type['avi'] = "video/avi";	
+						$select_attachment_type['divx'] = "video/divx";	
+						$select_attachment_type['flv'] = "video/x-flv";	
+						$select_attachment_type['mov|qt'] = "video/quicktime";	
+						$select_attachment_type['mpeg|mpg|mpe'] = "video/mpeg";	
+						$select_attachment_type['mp4|m4v'] = "video/mp4";	
+						$select_attachment_type['ogv'] = "video/ogg";	
+						$select_attachment_type['webm'] = "video/webm";	
+						$select_attachment_type['mkv'] = "video/x-matroska";
+					} else if($type == 'misc'){
+						$select_attachment_type['js'] = "application/javascript";	
+						$select_attachment_type['pdf'] = "application/pdf";	
+						$select_attachment_type['tar'] = "application/x-tar";	
+						$select_attachment_type['zip'] = "application/zip";	
+						$select_attachment_type['gz|gzip'] = "application/x-gzip";	
+						$select_attachment_type['rar'] = "application/rar";	
+						$select_attachment_type['txt|asc|c|cc|h|srt'] = "text/plain";	
+						$select_attachment_type['csv'] = "text/csv";	
+					}
+				}
+			}
 			$select_numberposts = get_field('page_media_cleaner_numberposts_field_ronikdesign', 'options');
 			$offsetValue = $number * $select_numberposts;
 			$select_post_status = array('publish', 'pending', 'draft', 'private', 'future');
@@ -719,7 +743,7 @@ class Ronikdesign_Admin
 		}
 		// remove empty and re-arrange image array
 		$image_array = array_values(array_filter($image_array));
-		$image_array = array_merge(...$image_array);
+		$image_array = array_unique(array_merge(...$image_array));
 
 
 		error_log(print_r(memory_get_usage(true), true));
@@ -731,7 +755,8 @@ class Ronikdesign_Admin
 			// Get the array count..
 			update_option( 'options_page_media_cleaner_field' , count($image_array) );
 			foreach( $image_array as $key => $f_result ){
-				update_option('options_page_media_cleaner_field_' . $key . '_image_id',  $f_result);
+				update_option('options_page_media_cleaner_field_' . $key . '_file_size', ((filesize(get_attached_file($f_result)))/1000)/1000);
+				update_option('options_page_media_cleaner_field_' . $key . '_image_id', $f_result);
 				update_option('options_page_media_cleaner_field_' . $key . '_image_url', get_attached_file($f_result) );
 				update_option('options_page_media_cleaner_field_' . $key . '_thumbnail_preview', $f_result);
 
@@ -795,6 +820,7 @@ class Ronikdesign_Admin
 					//Delete attachment file from disk
 					unlink( get_attached_file( $media_cleaner['image_id'] ) );
 					error_log(print_r('File Deleted', true));
+					update_option('options_page_media_cleaner_field_' . $key . '_file_size',  '');
 					update_option('options_page_media_cleaner_field_' . $key . '_image_id',  '');
 					update_option('options_page_media_cleaner_field_' . $key . '_image_url', '' );
 					update_option('options_page_media_cleaner_field_' . $key . '_thumbnail_preview', '');

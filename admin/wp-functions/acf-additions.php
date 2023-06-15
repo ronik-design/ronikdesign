@@ -73,7 +73,7 @@ add_action('acf/render_field_settings/type=wysiwyg', 'ronikdesigns_acf_wysiwyg_d
 // Add class to wrapper (so JS knows to disable the wpview TinyMCE plugin)
 function ronikdesigns_acf_wysiwyg_disable_auto_embed_class($field)
 {
-    if (!isset($field['enable_autoembed']) && $field['enable_autoembed']) {
+    if (isset($field['enable_autoembed']) && $field['enable_autoembed']) {
         $field['wrapper']['class'] = explode(' ', $field['wrapper']['class']);
         $field['wrapper']['class'][] = 'ks-disable-autoembed';
         $field['wrapper']['class'] = implode(' ', $field['wrapper']['class']);

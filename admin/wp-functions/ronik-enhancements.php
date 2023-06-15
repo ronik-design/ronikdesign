@@ -1,8 +1,35 @@
 <?php
 
+function ronikdesigns_header_manipulation() {
+    $baseDir = get_bloginfo('stylesheet_directory');
+
+    // Lets get the contents of the generic header.php file
+    // get_theme_file_path we have to get the absolute path due to file_get_contents flaws
+    $get_header_content = file_get_contents(get_theme_file_path().'/'.'header.php');
+    
+    // First lets check that the manifest color is set...
+    $f_manifest_theme_color = get_field('manifest_theme_color', 'options');
+    if($f_manifest_theme_color){
+        $f_theme_color = str_contains($get_header_content, 'theme-color');
+        // If the theme color is not set we set the theme color...
+        // This will reduce the event of double meta names...
+        if(!$f_theme_color){
+            echo '<meta name="theme-color" content='.$f_manifest_theme_color.' />';
+        }
+    }
+
+    // Add in the manifest.json file..
+    echo '<link rel="manifest" href="'.$baseDir.'/manifest.json">';
+}
+add_action( 'wp_head', 'ronikdesigns_header_manipulation' );
+
+
+
+
 // Enable rest api route for service workers.
-$f_enable_serviceworker = get_field('custom_js_settings', 'option')['enable_serviceworker'];
-if($f_enable_serviceworker){
+$f_custom_js_settings = get_field('custom_js_settings', 'option');
+
+if(isset($f_custom_js_settings['enable_serviceworker']) && $f_custom_js_settings['enable_serviceworker']){
     //* delete transient
     function delete_custom_transient(){
         delete_transient('frontend-script-loader');
