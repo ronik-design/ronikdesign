@@ -209,6 +209,10 @@
 
 
 	function text_truncate(str, length, ending) {
+		if(str){
+			console.log(str);
+			return str;
+		}
 		// This will remove the break space.
 		str = str.replace(/\s|&nbsp;/, ' ');
 		// Remove all multi whitespace in a row.
@@ -244,15 +248,9 @@
 				$(this).attr('height', findImgHeight);
 			}
 			if(typeof $(this).attr('alt') === typeof undefined) {
-				var findParent = $(this).parent().text();
-				if(!findParent){
-					findParent = $(this).parent().parent().text();
-					if(!findParent){
-						findParent = $(this).parent().parent().parent().text();
-						if(!findParent){
-							findParent = ' ';
-						}
-					}
+				var findParent = text_truncate($(this).parent().text(), 100);			
+				if(!findParent.trim()){
+					findParent = $(this).attr('src').split("/").pop().split(".")[0].replace(/^a-zA-Z0-9 ]/g, '');
 				}
 				$(this).attr('alt', text_truncate(findParent, 100));
 			}
@@ -264,18 +262,39 @@
 		if(!$("body").hasClass("dyn-button-attr") ){
 			return false;
 		}
+
+		function getLastPart(url) {
+			const parts = url.split('/');
+			var lastElement = parts[parts.length - 1];
+
+			if(!lastElement){
+				lastElement = parts[parts.length - 2];
+			} else{
+				lastElement = parts[parts.length - 3];
+			}
+
+			return lastElement;
+		}
+
+
 		// Specify image dimensions
 		$('button, a').each(function() {
 			if($(this).children()){
 				if($(this).text()){
 					if($(this).prop("tagName") == 'A'){
-						$(this).attr('aria-label', 'A link to '+text_truncate($(this).text(), 100));
+												
+						if(text_truncate($(this).text(), 100).trim()){
+							$(this).attr('aria-label', 'A link to '+text_truncate($(this).text(), 100));
+						} else {
+							// $(this).attr('aria-label', 'A link to '+text_truncate(getLastPart($(this).attr('href')), 100));
+						}
+
 					} else {
 						$(this).attr('aria-label', 'A clickable '+text_truncate($(this).prop("tagName").toLowerCase(), 100)+'.');
-					}				
+					}
 				} else {
 					if($(this).prop("tagName") == 'A'){
-						$(this).attr('aria-label', 'A link to '+text_truncate($(this).attr('href'), 100));
+						$(this).attr('aria-label', 'A link to '+text_truncate(getLastPart($(this).attr('href')), 100));
 					} else {
 						$(this).attr('aria-label', 'A clickable '+text_truncate($(this).prop("tagName").toLowerCase(), 100)+'.');
 					}
