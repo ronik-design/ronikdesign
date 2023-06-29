@@ -209,14 +209,18 @@
 
 
 	function text_truncate(str, length, ending) {
-		if(str){
-			console.log(str);
-			return str;
-		}
+		// if(str){
+		// 	return str;
+		// }
 		// This will remove the break space.
 		str = str.replace(/\s|&nbsp;/, ' ');
 		// Remove all multi whitespace in a row.
 		str = str.replace(/\s\s+/g, ' ');
+		// Remove all multi whitespace in a row.
+		str = str.trim();
+		str = str.replace( /[\s\n\r]+/g, ' ' );
+		str = str.replace(/(&nbsp;)*/g, "");
+		str = str.replace(/\s+/g, ' ');
 
 		if (length == null) {
 		  length = 100;
@@ -252,6 +256,8 @@
 				if(!findParent.trim()){
 					findParent = $(this).attr('src').split("/").pop().split(".")[0].replace(/^a-zA-Z0-9 ]/g, '');
 				}
+
+
 				$(this).attr('alt', text_truncate(findParent, 100));
 			}
 		});
@@ -282,9 +288,34 @@
 			if($(this).children()){
 				if($(this).text()){
 					if($(this).prop("tagName") == 'A'){
-												
+						var newText;
+						function linkLastSegment(URL){
+							var LastSeg = URL.split("/").length - 1;
+							newText = URL.split("/")[LastSeg];
+							if(!newText){
+								var LastSeg = URL.split("/").length - 2;
+								newText = URL.split("/")[LastSeg];
+							}
+							newText = newText.replace(/[-_]/g, ' ');
+							return newText;
+						}
+
+						switch( $(this).text().toLowerCase() ) {
+							case 'learn more':
+								newText = linkLastSegment($(this).attr('href'));
+								break;
+							case 'read more':
+								newText = linkLastSegment($(this).attr('href'));
+								break;
+							case 'click here':
+								newText = linkLastSegment($(this).attr('href'));
+								break;
+							default:
+							newText = $(this).text();
+						}
+
 						if(text_truncate($(this).text(), 100).trim()){
-							$(this).attr('aria-label', 'A link to '+text_truncate($(this).text(), 100));
+							$(this).attr('aria-label', 'A link to '+text_truncate(newText, 100));
 						} else {
 							// $(this).attr('aria-label', 'A link to '+text_truncate(getLastPart($(this).attr('href')), 100));
 						}
