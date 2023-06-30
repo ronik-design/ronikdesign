@@ -226,6 +226,17 @@ use Twilio\Rest\Client;
                     </select>
                 </td>
             </tr>
+
+            <tr>
+                <th><label for="sms_code"><?php _e("Google 2fa"); ?></label></th>
+                <td>
+                    <select name="sms_code" id="sms_code">
+                        <option value="sms_verified" <?php if ($get_registration_status == 'sms_verified') { ?>selected="selected" <?php } ?>>google2fa_verified</option>
+                        <option value="sms_unverified" <?php if ($get_registration_status == 'sms_unverified') { ?>selected="selected" <?php } ?>>google2fa_unverified</option>
+                    </select>
+                </td>
+            </tr>
+
         </table>
     <?php }
     add_action('personal_options_update', 'ronikdesigns_save_extra_user_profile_fields');
