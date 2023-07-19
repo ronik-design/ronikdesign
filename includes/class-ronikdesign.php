@@ -188,6 +188,9 @@ class Ronikdesign
 		$this->loader->add_action('admin_post_nopriv_ronikdesigns_admin_password_reset', $plugin_admin, 'ronikdesigns_admin_password_reset');
 		$this->loader->add_action('admin_post_ronikdesigns_admin_password_reset', $plugin_admin, 'ronikdesigns_admin_password_reset');
 
+		$this->loader->add_action('admin_post_nopriv_ronikdesigns_admin_auth_verification', $plugin_admin, 'ronikdesigns_admin_auth_verification');
+		$this->loader->add_action('admin_post_ronikdesigns_admin_auth_verification', $plugin_admin, 'ronikdesigns_admin_auth_verification');
+
 		// Add Ajax
 		$this->loader->add_action('wp_ajax_nopriv_do_init_page_migration', $plugin_admin, 'ajax_do_init_page_migration');
 		$this->loader->add_action('wp_ajax_do_init_page_migration', $plugin_admin, 'ajax_do_init_page_migration');

@@ -209,9 +209,9 @@
 
 
 	function text_truncate(str, length, ending) {
-		// if(str){
-		// 	return str;
-		// }
+		if(!str){
+			return str;
+		}
 		// This will remove the break space.
 		str = str.replace(/\s|&nbsp;/, ' ');
 		// Remove all multi whitespace in a row.
@@ -334,10 +334,11 @@
 		});
 	}
 
-	function passwordReset(){
+	function previousLocationUrl(){
 		const url = window.location.href;
 		let domain = (new URL(url));
-		if(domain.pathname != '/password-reset/'){
+		if((domain.pathname !== '/password-reset/') && (domain.pathname !== '/2fa/')){
+			console.log(domain.pathname);
 			var urlBuilder;
 			if(domain.pathname){
 				urlBuilder = domain.pathname;
@@ -351,10 +352,13 @@
 					urlBuilder = domain.hostname;
 				}
 			}
-			const PasswordReset = {
+			const urlRester = {
 				redirect: urlBuilder
 			}
-			window.localStorage.setItem('ronik-password-reset', JSON.stringify(PasswordReset));
+			window.localStorage.setItem('ronik-url-reset', JSON.stringify(urlRester));
+		} else {
+			// If the pathnames are a match lets remove the items.
+			window.localStorage.removeItem("ronik-url-reset");
 		}
 	}
 		
@@ -370,7 +374,7 @@
 			checkPasswordStrength($);
 			dynImageAttr($);
 			dynAttr($);
-			passwordReset($);
+			previousLocationUrl($);
 		}, 50);
 	});
 })( jQuery );

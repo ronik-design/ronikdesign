@@ -2,6 +2,7 @@
 	'use strict';
 
 	function log_click_action( action, url ) {
+		alert('ddd');
 		jQuery.ajax({
 			type: 'POST',
 			url: ajaxurl,
@@ -223,6 +224,7 @@
 			initPageMigration();
 			initUnusedMedia();
 			deleteUnusedMedia();
+
 			// verificationProcess('email', 'kevin@ronikdesign.com' );
 			// setTimeout(() => {
 			// 	verificationProcess('phone', '631-617-4271' );

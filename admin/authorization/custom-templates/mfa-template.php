@@ -1,8 +1,18 @@
 <?php
 /**
- * Template Name: Ronik 2fa
+ * Template Name: Ronik mfa
  *
  */
+
+// Lets check if 2fa is enabled. If not we kill it. 
+$f_auth = get_field('mfa_settings', 'options');
+if(!$f_auth['enable_mfa_settings']){
+	// Redirect Magic, custom function to prevent an infinite loop.
+	$dataUrl['reUrl'] = array('/wp-admin/admin-post.php');
+	$dataUrl['reDest'] = '';
+	ronikRedirectLoopApproval($dataUrl, "ronik-2fa-reset-redirect");
+}
+// unset($_SESSION["auth-select"]);
 
 ?>
 
@@ -10,14 +20,15 @@
 get_header(); 
 
 
-$f_header = apply_filters( 'ronikdesign_2fa_custom_header', false );
-$f_content = apply_filters( 'ronikdesign_2fa_custom_content', false );
-$f_instructions = apply_filters( 'ronikdesign_2fa_custom_instructions', false );
-$f_footer = apply_filters( 'ronikdesign_2fa_custom_footer', false );
+
+$f_header = apply_filters( 'ronikdesign_mfa_custom_header', false );
+$f_content = apply_filters( 'ronikdesign_mfa_custom_content', false );
+$f_instructions = apply_filters( 'ronikdesign_mfa_custom_instructions', false );
+$f_footer = apply_filters( 'ronikdesign_mfa_custom_footer', false );
 
 
-if( isset($_GET["2faredirect"]) ){
-	if($_GET["2faredirect"] == 'home'){
+if( isset($_GET["mfaredirect"]) ){
+	if($_GET["mfaredirect"] == 'home'){
 		$f_instructions_verfied_complete = true;
 	} else {
 		$f_instructions_verfied_complete = false;
@@ -62,7 +73,7 @@ if( isset($_GET["2faredirect"]) ){
 			<?php } ?>
 		<?php } ?>
 		<br><br>
-		<?php do_action('2fa-registration-page'); ?>
+		<?php do_action('mfa-registration-page'); ?>
 	</div>
 
 	<?php if($f_footer){ ?><?= $f_footer(); ?><?php } ?>

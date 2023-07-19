@@ -218,9 +218,9 @@ function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" =
     });
   }
   function text_truncate(str, length, ending) {
-    // if(str){
-    // 	return str;
-    // }
+    if (!str) {
+      return str;
+    }
     // This will remove the break space.
     str = str.replace(/\s|&nbsp;/, ' ');
     // Remove all multi whitespace in a row.
@@ -332,10 +332,11 @@ function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" =
       }
     });
   }
-  function passwordReset() {
+  function previousLocationUrl() {
     var url = window.location.href;
     var domain = new URL(url);
-    if (domain.pathname != '/password-reset/') {
+    if (domain.pathname !== '/password-reset/' && domain.pathname !== '/2fa/') {
+      console.log(domain.pathname);
       var urlBuilder;
       if (domain.pathname) {
         urlBuilder = domain.pathname;
@@ -349,10 +350,13 @@ function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" =
           urlBuilder = domain.hostname;
         }
       }
-      var PasswordReset = {
+      var urlRester = {
         redirect: urlBuilder
       };
-      window.localStorage.setItem('ronik-password-reset', JSON.stringify(PasswordReset));
+      window.localStorage.setItem('ronik-url-reset', JSON.stringify(urlRester));
+    } else {
+      // If the pathnames are a match lets remove the items.
+      window.localStorage.removeItem("ronik-url-reset");
     }
   }
 
@@ -368,7 +372,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" =
       checkPasswordStrength($);
       dynImageAttr($);
       dynAttr($);
-      passwordReset($);
+      previousLocationUrl($);
     }, 50);
   });
 })(jQuery);

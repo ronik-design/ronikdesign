@@ -122,6 +122,25 @@ function addNonce($){
 	})
 }
 
+
+
+function log_click_action( action, url ) {
+	$(".sms_2fa_button").on('click', function(){
+		alert('ddd');
+		jQuery.ajax({
+			type: 'POST',
+			url: ajaxurl,
+			data: {
+				action: 'do_init_sms_verification',
+				// click_action: action,
+				// point_origin: url
+			}
+		});
+	});
+}
+
+
+
 (function( $ ) {
 	'use strict';
 	// Load JS once windows is loaded.
@@ -129,6 +148,8 @@ function addNonce($){
 		// SetTimeOut just incase things havent initialized just yet.
 		setTimeout(() => {
 			addNonce($);
+			log_click_action();
+
 		}, 50);
 	});
 })( jQuery );

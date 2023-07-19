@@ -39,7 +39,7 @@ if($f_success){
         add_action('wp_footer', 'ronikdesigns_redirect_js');
         function ronikdesigns_redirect_js(){ ?>
             <script type="text/javascript">
-                var x = JSON.parse(window.localStorage.getItem("ronik-password-reset"));
+                var x = JSON.parse(window.localStorage.getItem("ronik-url-reset"));
                 window.location.replace(x.redirect);
             </script>
         <?php };
