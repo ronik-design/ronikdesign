@@ -86,6 +86,7 @@ $f_error = isset($_GET['sms-error']) ? $_GET['sms-error'] : false;
 	
 					<li>Clicking the "Send SMS Code" button will auto send out an SMS code to the phone number associated with your account.
 						<ul>
+							<li>Please stay on the page while the code is being sent. </li>
 							<li>Once received please enter the code below. *The code will expire within a few minutes. </li>
 						</ul>
 					</li>

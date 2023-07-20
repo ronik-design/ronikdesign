@@ -326,6 +326,8 @@ class Ronikdesign_Admin
 							unset($_SESSION['sms-valid']);
 							wp_send_json_success('reload');
 						}
+					} else {
+						wp_send_json_success('noreload');
 					}
 				}
 			}
@@ -474,21 +476,23 @@ class Ronikdesign_Admin
 			}
 
 			// The phone stuff.. We generate a sms message and send it to the current user
-			$account_sid = "AC7a4f8200ecc4e62ade27865cc6e3141e";
-			$auth_token = "bea9463e51809b508bf7d078c3bb0f38";
-			// A Twilio number you own with SMS capabilities
-			$twilio_number = "+19804948670";
-			// Current user phone number.
-			$to_number = '6316174271';
-			$client = new Client($account_sid, $auth_token);
-			$client->messages->create(
-				// Where to send a text message (your cell phone?)
-				$to_number,
-				array(
-					'from' => $twilio_number,
-					'body' => 'Your verification code is '.$sms_2fa_secret
-				)
-			);
+			if( $f_auth['twilio_id'] && $f_auth['twilio_token'] && $f_auth['twilio_number'] ){
+				$account_sid = $f_auth['twilio_id'];
+				$auth_token = $f_auth['twilio_token'];
+				// A Twilio number you own with SMS capabilities
+				$twilio_number = $f_auth['twilio_number'];
+				// Current user phone number.
+				$to_number = '6316174271';
+				$client = new Client($account_sid, $auth_token);
+				$client->messages->create(
+					// Where to send a text message (your cell phone?)
+					$to_number,
+					array(
+						'from' => $twilio_number,
+						'body' => 'Your verification code is '.$sms_2fa_secret
+					)
+				);
+			}
 
 			// Set session variables
 			$_SESSION["send-sms"] = "valid";

@@ -47,9 +47,9 @@ get_header();
 
 $f_header = apply_filters( 'ronikdesign_2fa_custom_header', false );
 $f_content = apply_filters( 'ronikdesign_2fa_custom_content', false );
-$f_instructions = apply_filters( 'ronikdesign_2fa_custom_instructions', false );
+$f_instructions = apply_filters( 'ronikdesign_auth_custom_instructions', false );
 $f_footer = apply_filters( 'ronikdesign_2fa_custom_footer', false );
-
+$f_mfa_settings = get_field( 'mfa_settings', 'options');
 $f_error = isset($_GET['sms-error']) ? $_GET['sms-error'] : false;
 ?>
 	<?php if($f_header){ ?><?= $f_header(); ?><?php } ?>
@@ -69,22 +69,20 @@ $f_error = isset($_GET['sms-error']) ? $_GET['sms-error'] : false;
 
 
 
-		<?php if($f_content){ ?><?= $f_content(); ?><?php } ?>
+		<?php if($f_content){ ?>
+			<?= $f_content(); ?>
+		<?php } 
+		if($f_mfa_settings['auth_content']){ ?>
+			<?= $f_mfa_settings['auth_content']; ?>
+		<?php } ?>
+
+
 		<br></br>
 		<?php if($f_instructions){ ?>
 			<?= $f_instructions(); ?>
 		<?php } else { ?>
 			<div class="instructions">
-				<strong>Please Follow the instructions below:</strong>
-				<br><br>
-				<ul>
-	
-					<li>From there you will see a 6 digit code to enter below. Every 30-15 seconds a new 6 digit code will appear within the Authentication app.
-						<ul>
-							<li>Once you enter the 6 digit code below. You will be redirected to the home screen. </li>
-						</ul>
-					</li>
-				</ul>
+				<?= $f_mfa_settings; ?>
 			</div>
 		<?php } ?>
 		<br><br>

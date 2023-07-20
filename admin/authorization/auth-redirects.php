@@ -89,24 +89,24 @@
 
 
     function your_function_name(){ ?>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
         <script>
-            $(document).ready(function(){
+            jQuery(document).ready(function(){
                 <?php 
                 	$f_auth = get_field('mfa_settings', 'options');
-                    $mfa_idle_time = $f_auth['mfa_idle_time'];
-                    error_log(print_r($mfa_idle_time, true));
-                	// $mfa_idle_time = get_user_meta(get_current_user_id(), 'mfa_idle_time', true);
-                    if($mfa_idle_time){
-                        $mfa_idle_time = $mfa_idle_time * 1000;
+                    $auth_idle_time = $f_auth['auth_idle_time'];
+                	// $auth_idle_time = get_user_meta(get_current_user_id(), 'auth_idle_time', true);
+                    if($auth_idle_time){
+                        $auth_idle_time = $auth_idle_time * 60000; // milliseconds to minutes conversion.
+                        // $auth_idle_time = $auth_idle_time * 10;
+
                     } else{
-                        $mfa_idle_time = 15000;
+                        $auth_idle_time = 15000;
                     }
                 ?>
-                
-
-                var timeoutTime = <?= $mfa_idle_time; ?>;
+                var timeoutTime = <?= $auth_idle_time; ?>;
                 var timeoutTimer = setTimeout(idleTimeValidation, timeoutTime);
-                $(document).ready(function() {
+                jQuery(document).ready(function() {
                     // Okay lets check for mousemove, mousedown, keydown
                     $('body').bind('mousemove mousedown keydown', function(event) {
                         clearTimeout(timeoutTimer);
@@ -141,10 +141,12 @@
                             } else{
                                 console.log('error');
                                 console.log(data);
+                                window.location.reload(true);
                             }
                         },
                         error: err => {
                             console.log(err);
+                            window.location.reload(true);
                         }
                     });
                 }

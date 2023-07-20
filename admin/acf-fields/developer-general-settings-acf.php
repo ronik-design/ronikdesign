@@ -1197,9 +1197,71 @@ https://test.com/',
 
 
 					array(
+						'key' => 'field_6372afa6da3f200cdaasaasss_ronikdesign',
+						'label' => 'Twilio Token',
+						'name' => 'twilio_token',
+						'type' => 'text',
+						'instructions' => '',
+						'required' => 1,
+						'conditional_logic' => 0,
+						'wrapper' => array(
+							'width' => '50',
+							'class' => '',
+							'id' => '',
+						),
+						'append' => '',
+						'message' => '',
+						'default_value' => '',
+						'ui' => 1,
+						'ui_on_text' => '',
+						'ui_off_text' => '',
+					),
+					array(
+						'key' => 'field_6372afa6da3f200cdaasaasssa_ronikdesign',
+						'label' => 'Twilio Id',
+						'name' => 'twilio_id',
+						'type' => 'text',
+						'instructions' => '',
+						'required' => 1,
+						'conditional_logic' => 0,
+						'wrapper' => array(
+							'width' => '50',
+							'class' => '',
+							'id' => '',
+						),
+						'append' => '',
+						'message' => '',
+						'default_value' => '',
+						'ui' => 1,
+						'ui_on_text' => '',
+						'ui_off_text' => '',
+					),
+					array(
+						'key' => 'field_6372afa6da3f200cdaasaasssb_ronikdesign',
+						'label' => 'Twilio Number',
+						'name' => 'twilio_number',
+						'type' => 'text',
+						'instructions' => '',
+						'required' => 1,
+						'conditional_logic' => 0,
+						'wrapper' => array(
+							'width' => '100',
+							'class' => '',
+							'id' => '',
+						),
+						'append' => '',
+						'message' => '',
+						'default_value' => '',
+						'ui' => 1,
+						'ui_on_text' => '',
+						'ui_off_text' => '',
+					),
+
+
+					array(
 						'key' => 'field_6372afa6da3f200cdaasaass_ronikdesign',
-						'label' => 'MFA Idle Time',
-						'name' => 'mfa_idle_time',
+						'label' => 'Auth Idle Time',
+						'name' => 'auth_idle_time',
 						'type' => 'number',
 						'instructions' => 'This will dictate the idle time in minutes.',
 						'required' => 1,
@@ -1218,12 +1280,10 @@ https://test.com/',
 					),
 
 
-
-
 					array(
 						'key' => 'field_6372afa6da3f200cdaasaa_ronikdesign',
-						'label' => 'MFA Expiration Time',
-						'name' => 'mfa_expiration_time',
+						'label' => 'Auth Max Session Expiration Time',
+						'name' => 'auth_expiration_time',
 						'type' => 'number',
 						'instructions' => 'This will dictate MFA time limit based on minutes.',
 						'required' => 1,
@@ -1240,6 +1300,57 @@ https://test.com/',
 						'ui_on_text' => '',
 						'ui_off_text' => '',
 					),
+
+
+
+
+
+
+
+					array(
+						'key' => 'field_6372afa6da3f200c1asasaqwaqwq_ronikdesign',
+						'label' => 'Auth Content:',
+						'name' => 'auth_content',
+						'type' => 'wysiwyg',
+						'instructions' => 'This will display as the Auth main Content.',
+						'required' => 0,
+						'conditional_logic' => 0,
+						'wrapper' => array(
+							'width' => '50',
+							'class' => '',
+							'id' => '',
+						),
+						'message' => '',
+					),
+					array(
+						'key' => 'field_6372afa6da3f200c1asasaqwaqwq1_ronikdesign',
+						'label' => 'Auth Instructions Content:',
+						'name' => 'auth_instructions_content',
+						'type' => 'wysiwyg',
+						'instructions' => 'This will display as the Auth Instructions Content. Please note if left blank default content will be displayed.',
+						'required' => 0,
+						'conditional_logic' => 0,
+						'wrapper' => array(
+							'width' => '50',
+							'class' => '',
+							'id' => '',
+						),
+						'message' => '',
+					),
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 					
@@ -1263,26 +1374,7 @@ https://test.com/',
 						'ui_on_text' => '',
 						'ui_off_text' => '',
 					),
-					array(
-						'key' => 'field_6372afa6da3f200caaa_ronikdesign',
-						'label' => 'MFA Expiration Time',
-						'name' => 'mfa_expiration_time',
-						'type' => 'number',
-						'instructions' => 'This will dictate MFA Expiration time limit based on minutes.',
-						'required' => 1,
-						'conditional_logic' => 0,
-						'wrapper' => array(
-							'width' => '50',
-							'class' => '',
-							'id' => '',
-						),
-						'append' => 'Minutes',
-						'message' => '',
-						'default_value' => 30,
-						'ui' => 1,
-						'ui_on_text' => '',
-						'ui_off_text' => '',
-					),
+
 					array(
 						'key' => 'field_6372afa6da3f200c1_ronikdesign',
 						'label' => 'MFA Content:',
@@ -1338,10 +1430,10 @@ https://test.com/',
 
 					array(
 						'key' => 'field_6372afa6da3f200cdaas_ronikdesign',
-						'label' => 'SMS Expiration Time',
+						'label' => 'SMS Code Expiration Time',
 						'name' => 'sms_expiration_time',
 						'type' => 'number',
-						'instructions' => 'This will dictate SMS Expiration time limit based on minutes.',
+						'instructions' => 'This will dictate SMS Code Expiration time limit based on minutes.',
 						'required' => 1,
 						'conditional_logic' => 0,
 						'wrapper' => array(

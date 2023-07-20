@@ -82,13 +82,15 @@ use Twilio\Rest\Client;
 
             <?php } else {
 
-                if( isset($mfa_validation) && $mfa_validation == 'not_valid'){ ?>
+                var_dump( $mfa_validation);
+
+                if( !$mfa_validation || $mfa_validation == 'not_valid'){ ?>
                     <p><?= $get_current_secret; ?></p>
                     <img src='<?= $qrcode ?>' alt='QR Code' width='100' height='100'>
                 <?php } ?>
                 <form action="<?php echo esc_url( admin_url('admin-post.php') ); ?>" method="post">
                     <input type="hidden" name="action" value="ronikdesigns_admin_auth_verification">
-                    <input type="text" name="google2fa_code" value="">
+                    <input autocomplete="off" type="text" name="google2fa_code" value="">
                     <input type="submit" name="submit" value="Submit">
                 </form>
                 
@@ -135,10 +137,10 @@ use Twilio\Rest\Client;
 function ronikdesigns_redirect_non_registered_mfa() {
     $mfa_status = get_user_meta(get_current_user_id(), $key = 'mfa_status', true);
     $f_mfa_settings = get_field('mfa_settings', 'options');
-    if( isset($f_mfa_settings['mfa_expiration_time']) || $f_mfa_settings['mfa_expiration_time'] ){
-        $f_mfa_expiration_time = $f_mfa_settings['mfa_expiration_time'];
+    if( isset($f_mfa_settings['auth_expiration_time']) || $f_mfa_settings['auth_expiration_time'] ){
+        $f_auth_expiration_time = $f_mfa_settings['auth_expiration_time'];
     } else {
-        $f_mfa_expiration_time = 30;
+        $f_auth_expiration_time = 30;
     }
     $f_auth = get_field('mfa_settings', 'options');
     // Redirect Magic, custom function to prevent an infinite loop.
@@ -154,7 +156,7 @@ function ronikdesigns_redirect_non_registered_mfa() {
                 }
                 // Check if mfa_status is not equal to unverified.
                 if (($mfa_status !== 'mfa_unverified')) {
-                    $past_date = strtotime((new DateTime())->modify('-'.$f_mfa_expiration_time.' minutes')->format( 'd-m-Y H:i:s' ));
+                    $past_date = strtotime((new DateTime())->modify('-'.$f_auth_expiration_time.' minutes')->format( 'd-m-Y H:i:s' ));
                     // If past date is greater than current date. We reset to unverified & start the process all over again.
                     if($past_date > $mfa_status ){
                         session_destroy();

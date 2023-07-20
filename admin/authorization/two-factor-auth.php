@@ -76,6 +76,36 @@ add_action('2fa-registration-page', function () {
             if( isset($_SESSION["send-sms"]) && $_SESSION["send-sms"] == 'valid'){ 
                 $get_phone_number = get_user_meta(get_current_user_id(), 'sms_user_phone', true);
                 $get_phone_number = substr($get_phone_number, -4);
+                // Update the status with timestamp.
+                // Keep in mind all timestamp are within the UTC timezone. For constant all around.
+                // https://www.timestamp-converter.com/
+                // Get the current time.
+                $current_date = strtotime((new DateTime())->format( 'd-m-Y H:i:s' ));
+                $f_mfa_settings = get_field('mfa_settings', 'options');
+
+                $f_expiration_time = $f_mfa_settings['sms_expiration_time'];
+                if($f_expiration_time){
+                    $f_sms_expiration_time = $f_expiration_time;
+                } else{
+                    $f_sms_expiration_time = 10;
+                }
+                $past_date = strtotime((new DateTime())->modify('-'.$f_sms_expiration_time.' minutes')->format( 'd-m-Y H:i:s' ));
+                // Lets store the sms code timestamp in user meta.
+                $sms_code_timestamp = get_user_meta(get_current_user_id(),'sms_code_timestamp', true);
+                // Lets also store within the session.
+                $_SESSION["sms-code-timestamp"] = $current_date;
+                if (!$sms_code_timestamp) {
+                    add_user_meta(get_current_user_id(), 'sms_code_timestamp', $current_date);
+                }
+                if( $past_date > $sms_code_timestamp ){
+                    error_log(print_r( 'Expired', true));
+                    update_user_meta(get_current_user_id(), 'sms_2fa_status', 'sms_2fa_unverified');
+                    //Lets wipe out the session for sms_2fa_status
+                    unset($_SESSION['send-sms']);
+                    unset($_SESSION['sms-valid']);
+                    unset($_SESSION["sms-code-timestamp"]);
+                    // update_user_meta(get_current_user_id(), 'sms_code_timestamp', time());
+                }            
             ?>
 
                 <form action="<?php echo esc_url( admin_url('admin-post.php') ); ?>" method="post">
@@ -83,7 +113,20 @@ add_action('2fa-registration-page', function () {
 
                     <div id="sms-expiration"></div>
                     <script>
-                        var timeleft = 600;
+
+                        document.addEventListener("visibilitychange", (event) => {
+                        if (document.visibilityState == "visible") {
+                            console.log("tab is active");
+                            window.location.reload(true);
+                        } else {
+                            console.log("tab is inactive")
+                        }
+                        });
+
+
+
+
+                        var timeleft = <?= ($f_sms_expiration_time*60); ?>;
                         var downloadTimer = setInterval(function(){
                             if(timeleft <= 0){
                                 clearInterval(downloadTimer);
@@ -156,11 +199,17 @@ add_action('2fa-registration-page', function () {
 function ronikdesigns_redirect_registered_2fa() {
     $get_registration_status = get_user_meta(get_current_user_id(),'sms_2fa_status', true);
     $f_mfa_settings = get_field('mfa_settings', 'options');
-    if( isset($f_mfa_settings['sms_expiration_time']) || $f_mfa_settings['sms_expiration_time'] ){
-        $f_sms_expiration_time = $f_mfa_settings['sms_expiration_time'];
+    // if( isset($f_mfa_settings['sms_expiration_time']) || $f_mfa_settings['sms_expiration_time'] ){
+    //     $f_sms_expiration_time = $f_mfa_settings['sms_expiration_time'];
+    // } else {
+    //     $f_sms_expiration_time = 30;
+    // }
+    if( isset($f_mfa_settings['auth_expiration_time']) || $f_mfa_settings['auth_expiration_time'] ){
+        $f_auth_expiration_time = $f_mfa_settings['auth_expiration_time'];
     } else {
-        $f_sms_expiration_time = 30;
+        $f_auth_expiration_time = 30;
     }
+
     $f_auth = get_field('mfa_settings', 'options');
     // Redirect Magic, custom function to prevent an infinite loop.
     $dataUrl['reUrl'] = array('/wp-admin/admin-post.php', '/2fa/');
@@ -175,7 +224,7 @@ function ronikdesigns_redirect_registered_2fa() {
                 }
                 // Check if sms_2fa_status is not equal to unverified.
                 if (($get_registration_status !== 'sms_2fa_unverified')) {
-                    $past_date = strtotime((new DateTime())->modify('-'.$f_sms_expiration_time.' minutes')->format( 'd-m-Y H:i:s' ));
+                    $past_date = strtotime((new DateTime())->modify('-'.$f_auth_expiration_time.' minutes')->format( 'd-m-Y H:i:s' ));
                     // If past date is greater than current date. We reset to unverified & start the process all over again.
                     if($past_date > $get_registration_status ){
                         unset($_SESSION['send-sms']);
@@ -195,7 +244,6 @@ function ronikdesigns_redirect_registered_2fa() {
                     }
                 } else {
                     error_log(print_r( $get_registration_status, true));
-
                     update_user_meta(get_current_user_id(), 'sms_2fa_status', 'sms_2fa_unverified');
                     // Takes care of the redirection logic
                     ronikRedirectLoopApproval($dataUrl, "ronik-2fa-reset-redirect");
