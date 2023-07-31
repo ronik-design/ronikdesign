@@ -15,7 +15,6 @@ add_action('auth-registration-page', function () {
     } else {
         $valid = false;
     }
-
         // If Valid we redirect
         if ($valid) { ?>
             <div class="">Authorization Saved!</div>
@@ -36,37 +35,31 @@ add_action('auth-registration-page', function () {
                 }, 1000);
             </script>
             <?php
-                $f_success = isset($_GET['sms-success']) ? $_GET['sms-success'] : false;
-                // Success message
-                if($f_success){
-                    // Lets Check for the password reset url cookie.
-                    $cookie_name = "ronik-2fa-reset-redirect";
-                    if(isset($_COOKIE[$cookie_name])) {
-                        wp_redirect( esc_url(home_url(urldecode($_COOKIE[$cookie_name]))) );
-                        exit;
-                    } else {
-                        // We run our backup plan for redirecting back to previous page.
-                        // The downside this wont account for pages that were clicked during the redirect. So it will get the page that was previously visited.
-                        add_action('wp_footer', 'ronikdesigns_redirect_js');
-                        function ronikdesigns_redirect_js(){ ?>
-                            <script type="text/javascript">
-                                var x = JSON.parse(window.localStorage.getItem("ronik-url-reset"));
-                                window.location.replace(x.redirect);
-                            </script>
-                        <?php };
-                    }
+            $f_success = isset($_GET['sms-success']) ? $_GET['sms-success'] : false;
+            // Success message
+            if($f_success){
+                // Lets Check for the password reset url cookie.
+                $cookie_name = "ronik-2fa-reset-redirect";
+                if(isset($_COOKIE[$cookie_name])) {
+                    wp_redirect( esc_url(home_url(urldecode($_COOKIE[$cookie_name]))) );
+                    exit;
+                } else {
+                    // We run our backup plan for redirecting back to previous page.
+                    // The downside this wont account for pages that were clicked during the redirect. So it will get the page that was previously visited.
+                    add_action('wp_footer', 'ronikdesigns_redirect_js');
+                    function ronikdesigns_redirect_js(){ ?>
+                        <script type="text/javascript">
+                            var x = JSON.parse(window.localStorage.getItem("ronik-url-reset"));
+                            window.location.replace(x.redirect);
+                        </script>
+                    <?php };
                 }
-        } else { ?>
-            <p><?= $get_auth_status; ?></p>
-            <?php
+            }
+        } else {
             // Based on the session conditions we check if valid if not we default back to the send SMS button.
-            if( isset($_SESSION["auth-select"]) && $_SESSION["auth-select"] == '2fa'){ ?>
-
-                <?php
-                var_dump($_SESSION);
+            if( isset($_SESSION["auth-select"]) && $_SESSION["auth-select"] == '2fa'){
                 // Get user phone number.
                 $get_phone_number = get_user_meta(get_current_user_id(), 'sms_user_phone', true);
-
                 if($get_phone_number ){
                     update_user_meta(get_current_user_id(), 'auth_status', 'auth_select_sms');
                 } else { ?>
@@ -77,9 +70,8 @@ add_action('auth-registration-page', function () {
                         <input type="hidden" name="action" value="ronikdesigns_admin_auth_verification">
                         <button type="submit" value="Send SMS Code">Submit phone number.</button>
                     </form>
-                <?php } ?>
-
-            <?php } else{ ?>
+                <?php } 
+            } else { ?>
                 <form action="<?php echo esc_url( admin_url('admin-post.php') ); ?>" method="post">      
                     <p>Please Select the type of authentication:</p>
                     <input type="radio" id="mfa" name="auth-select" value="mfa" checked="checked">
@@ -89,11 +81,7 @@ add_action('auth-registration-page', function () {
                     <input type="hidden" name="action" value="ronikdesigns_admin_auth_verification">
                     <input type="submit" value="Submit">
                 </form>
-            <?php 
-
+            <?php
             }
         }
     });
-
-
-

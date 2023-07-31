@@ -45,44 +45,29 @@ if($f_success){
 
 get_header(); 
 
-$f_header = apply_filters( 'ronikdesign_2fa_custom_header', false );
-$f_content = apply_filters( 'ronikdesign_2fa_custom_content', false );
+$f_header = apply_filters( 'ronikdesign_auth_custom_header', false );
+$f_content = apply_filters( 'ronikdesign_auth_custom_content', false );
 $f_instructions = apply_filters( 'ronikdesign_auth_custom_instructions', false );
-$f_footer = apply_filters( 'ronikdesign_2fa_custom_footer', false );
+$f_footer = apply_filters( 'ronikdesign_auth_custom_footer', false );
 $f_mfa_settings = get_field( 'mfa_settings', 'options');
 $f_error = isset($_GET['sms-error']) ? $_GET['sms-error'] : false;
 ?>
 	<?php if($f_header){ ?><?= $f_header(); ?><?php } ?>
-
-	<div class="twofa-wrapper">
-
-
-
-		<div class="twofa-message">
-			<?php if($f_success){ ?>
-				<div class="twofa-message__success">Verification Success!</div>
-			<?php } ?>
-			<?php if($f_error == 'nomatch'){ ?>
-				<div class="twofa-message__nomatch">Sorry your verification code does not match!</div>
-			<?php } ?>
-		</div>
-
-
-
+	<div class="auth-wrapper">
 		<?php if($f_content){ ?>
 			<?= $f_content(); ?>
 		<?php } 
 		if($f_mfa_settings['auth_content']){ ?>
 			<?= $f_mfa_settings['auth_content']; ?>
 		<?php } ?>
-
-
 		<br></br>
 		<?php if($f_instructions){ ?>
 			<?= $f_instructions(); ?>
 		<?php } else { ?>
 			<div class="instructions">
-				<?= $f_mfa_settings; ?>
+				<?php if($f_mfa_settings['auth_instructions_content']){ ?>
+					<?= $f_mfa_settings['auth_instructions_content']; ?>
+				<?php } ?>
 			</div>
 		<?php } ?>
 		<br><br>
